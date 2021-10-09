@@ -1,10 +1,9 @@
-package org.firstinspires.ftc.teamcode;
+package MirageOpMode;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
 
 @TeleOp(name = "teleop", group = "opMode")
-public class teleop extends hwMap {
+public class TankTeleOp extends MirageOpMode {
 
     public void loop() {
 

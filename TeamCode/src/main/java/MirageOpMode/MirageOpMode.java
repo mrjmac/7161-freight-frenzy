@@ -1,11 +1,10 @@
-package org.firstinspires.ftc.teamcode;
+package MirageOpMode;
 
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.hardware.bosch.BNO055IMU;
 
-public abstract class hwMap extends OpMode{
+public abstract class MirageOpMode extends OpMode {
 
     DcMotor BL; //back left - [port number]
     DcMotor ML; //middle left - [port number]
@@ -52,7 +51,7 @@ public abstract class hwMap extends OpMode{
         telemetry.update();
     }
 
-    //Drivetrain functions
+    //============================= Drivetrain =====================================================
 
     public void startMotors(double l, double r){
         FR.setPower(r);
@@ -80,6 +79,12 @@ public abstract class hwMap extends OpMode{
             return value;
     }
 
+    //============================= Intake =========================================================
+
+
+
+
+    //============================= Lift ===========================================================
 
 
 }
