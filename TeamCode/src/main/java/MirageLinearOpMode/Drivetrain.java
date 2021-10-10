@@ -1,6 +1,7 @@
 package MirageLinearOpMode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -14,7 +15,9 @@ public class Drivetrain {
     public DcMotor BR; //back right - [port number]
     public DcMotor MR; //middle right - [port number]
     public DcMotor FR; //front right - [port number]
-    // 2 vex motors
+
+    public CRServo duckL; //left duck - [port number]
+    public CRServo duckR; //right duck - [port number]
 
     LinearOpMode opMode;
     private final String LOG_TAG = "DriveTrain";
@@ -28,6 +31,9 @@ public class Drivetrain {
         BL = this.opMode.hardwareMap.dcMotor.get("BL");
         ML = this.opMode.hardwareMap.dcMotor.get("ML");
         MR = this.opMode.hardwareMap.dcMotor.get("MR");
+
+        duckL = this.opMode.hardwareMap.crservo.get("duckL");
+        duckR = this.opMode.hardwareMap.crservo.get("duckR");
 
         this.opMode.telemetry.addData(LOG_TAG + "init", "finished init");
         this.opMode.telemetry.update();

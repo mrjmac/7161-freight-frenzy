@@ -1,8 +1,10 @@
 package MirageOpMode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 
 public abstract class MirageOpMode extends OpMode {
 
@@ -15,6 +17,16 @@ public abstract class MirageOpMode extends OpMode {
     DcMotor intake; //intake - [port number]
     DcMotor lift; //lift - [port number]
 
+    Servo pivot1; //pivot servo - [port number]
+    Servo pivot2; //pivot servo - [port number]
+
+    Servo hatch; //output servo - [port number]
+    Servo cap; //cap servo - [port number]
+    Servo release; //release servo - [port number]
+
+    CRServo duckL; //left duck - [port number]
+    CRServo duckR; //right duck - [port number]
+
 
     public void init() {
 
@@ -24,9 +36,19 @@ public abstract class MirageOpMode extends OpMode {
         BL = hardwareMap.dcMotor.get("BL");
         ML = hardwareMap.dcMotor.get("ML");
         MR = hardwareMap.dcMotor.get("MR");
-        intake = hardwareMap.dcMotor.get("intake");
 
+        intake = hardwareMap.dcMotor.get("intake");
         lift = hardwareMap.dcMotor.get("lift");
+
+        pivot1 = hardwareMap.servo.get("servo1");
+        pivot2 = hardwareMap.servo.get("servo2");
+        hatch = hardwareMap.servo.get("hatch");
+
+        cap = hardwareMap.servo.get("cap");
+        release = hardwareMap.servo.get("release");
+
+        duckL = hardwareMap.crservo.get("duckL");
+        duckR = hardwareMap.crservo.get("duckR");
 
         FR.setDirection(DcMotorSimple.Direction.REVERSE);
         MR.setDirection(DcMotorSimple.Direction.REVERSE);
