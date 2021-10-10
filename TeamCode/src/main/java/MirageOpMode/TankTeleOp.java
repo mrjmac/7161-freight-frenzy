@@ -6,7 +6,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 public class TankTeleOp extends MirageOpMode {
 
     public void loop() {
-
+        //================================= DRIVE ==================================================
+        //speed constant allows driver 1 to scale the speed of the robot
         double speedControl;
         if (gamepad1.right_trigger > 0.1) {
             speedControl = .4;

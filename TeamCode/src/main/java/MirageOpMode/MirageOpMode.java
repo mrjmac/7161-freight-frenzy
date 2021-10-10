@@ -12,6 +12,9 @@ public abstract class MirageOpMode extends OpMode {
     DcMotor BR; //back right - [port number]
     DcMotor MR; //middle right - [port number]
     DcMotor FR; //front right - [port number]
+    DcMotor intake; //intake - [port number]
+    DcMotor lift; //lift - [port number]
+
 
     public void init() {
 
@@ -21,10 +24,14 @@ public abstract class MirageOpMode extends OpMode {
         BL = hardwareMap.dcMotor.get("BL");
         ML = hardwareMap.dcMotor.get("ML");
         MR = hardwareMap.dcMotor.get("MR");
+        intake = hardwareMap.dcMotor.get("intake");
+
+        lift = hardwareMap.dcMotor.get("lift");
 
         FR.setDirection(DcMotorSimple.Direction.REVERSE);
         MR.setDirection(DcMotorSimple.Direction.REVERSE);
         BR.setDirection(DcMotorSimple.Direction.REVERSE);
+        intake.setDirection(DcMotorSimple.Direction.REVERSE);
 
         FR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         BR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -33,6 +40,8 @@ public abstract class MirageOpMode extends OpMode {
         ML.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         BL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
+        lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
         FR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         BR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         FL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -40,12 +49,16 @@ public abstract class MirageOpMode extends OpMode {
         ML.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         BL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
+        lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
         FR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         BL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         BR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         FL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         ML.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         MR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         telemetry.addData("init ", "completed");
         telemetry.update();
@@ -69,6 +82,19 @@ public abstract class MirageOpMode extends OpMode {
         FL.setPower(0);
         ML.setPower(0);
         BL.setPower(0);
+    }
+
+    public void setLift(double power){
+        lift.setPower(power);
+    }
+
+    public int getLiftEncoder(){
+        return (Math.abs(lift.getCurrentPosition()));
+    }
+
+    public void resetLiftEncoder(){
+        lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     public float deadstick (float value){
