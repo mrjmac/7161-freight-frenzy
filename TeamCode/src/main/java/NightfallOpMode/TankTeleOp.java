@@ -2,7 +2,7 @@ package NightfallOpMode;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-@TeleOp(name = "tank", group = "opMode")
+@TeleOp(name = "TankTeleOp", group = "opMode")
 public class TankTeleOp extends NightfallOpMode {
 
     public void loop() {
