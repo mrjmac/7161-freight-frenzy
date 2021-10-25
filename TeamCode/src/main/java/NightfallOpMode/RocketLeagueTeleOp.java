@@ -22,10 +22,10 @@ public class RocketLeagueTeleOp extends NightfallOpMode {
         double power;
 
         if(gamepad1.right_trigger > 0.1) {
-            power = 0.5 + (gamepad1.left_stick_y/2);
+            power = 0.5 - (gamepad1.left_stick_y/2);
         }
         else if(gamepad1.left_trigger > 0.1) {
-            power = -0.5 - (gamepad1.left_stick_y/2);
+            power = -0.5 + (gamepad1.left_stick_y/2);
         }
         else {
             power = 0;
