@@ -7,12 +7,12 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 public class Drivetrain {
 
-    public DcMotor BL; //back left - [port number]
-    public DcMotor ML; //middle left - [port number]
-    public DcMotor FL; //front left - [port number]
-    public DcMotor BR; //back right - [port number]
-    public DcMotor MR; //middle right - [port number]
-    public DcMotor FR; //front right - [port number]
+    public DcMotor BL; //back left - [3 e1]
+    public DcMotor ML; //middle left - [3 e2]
+    public DcMotor FL; //front left - [2 e2]
+    public DcMotor BR; //back right - [2 e1]
+    public DcMotor MR; //middle right - [1 e1]
+    public DcMotor FR; //front right - [0 e1]
 
     public CRServo duckL; //left duck - [port number]
     public CRServo duckR; //right duck - [port number]
