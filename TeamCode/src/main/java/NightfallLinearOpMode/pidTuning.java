@@ -9,7 +9,7 @@ import NightfallLinearOpMode.Drivetrain;
 import NightfallLinearOpMode.Lift;
 import NightfallLinearOpMode.Vision;
 
-@Autonomous(name = "Blue Carry", group = "LinearOpMode")
+@Autonomous(name = "pid", group = "LinearOpMode")
 @Config
 public class pidTuning extends LinearOpMode {
 

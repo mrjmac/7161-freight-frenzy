@@ -24,7 +24,7 @@ public class Vision extends LinearOpMode {
 
     VuforiaLocalizer vuforia;
     LinearOpMode opMode;
-    String pos = "notFound";
+    String pos = "right";
 
     public Vision(LinearOpMode opMode){
         this.opMode = opMode;
@@ -56,9 +56,52 @@ public class Vision extends LinearOpMode {
     public String getTeamMarkerPos() throws InterruptedException {
         Bitmap rgbImage = getImage();
         ArrayList<Integer> xValues = new ArrayList<>();
-        ArrayList<Integer> yValues = new ArrayList<>();
+
+
+        for (int x = 0; x < 70; x++) {
+            int pixel = rgbImage.getPixel(x, 300);
+            if (isWhite(pixel))
+                xValues.add(x);
+        }
+        for (int x = 275; x < 330; x++) {
+            int pixel = rgbImage.getPixel(x, 230);
+            if (isWhite(pixel))
+                xValues.add(x);
+        }
+        for (int x = 500; x < 550; x++) {
+            int pixel = rgbImage.getPixel(x, 185);
+            if (isWhite(pixel))
+                xValues.add(x);
+        }
+
+        int avgX = 0;
+                for (int xCoor : xValues) {
+            avgX += xCoor;
+        }
+
+        if (xValues.size() != 0) {
+            avgX /= xValues.size();
+        }
+
+        if (avgX < 100)
+            pos = "left";
+        else if (avgX > 200 && avgX < 450)
+            pos = "middle";
+        else
+            pos = "right";
+
+        if (xValues.size() < 10 )
+            pos = "right";
 
         return pos;
+    }
+
+    public boolean isWhite(int pixel) throws InterruptedException {
+
+        if (red(pixel) > 175 && blue(pixel) > 175 && green(pixel) > 175)
+            return true;
+
+        return false;
     }
 
 }
