@@ -8,7 +8,7 @@ import NightfallLinearOpMode.Drivetrain;
 import NightfallLinearOpMode.Lift;
 import NightfallLinearOpMode.Vision;
 
-@Autonomous(name = "Blue Duck", group = "LinearOpMode")
+@Autonomous(name = "Blue Duck", group = "blue")
 public class Duck extends LinearOpMode {
 
     private Drivetrain drivetrain;

@@ -8,7 +8,7 @@ import NightfallLinearOpMode.Drivetrain;
 import NightfallLinearOpMode.Lift;
 import NightfallLinearOpMode.Vision;
 
-@Autonomous(name = "Blue Carry", group = "LinearOpMode")
+@Autonomous(name = "Blue Carry", group = "blue")
 public class Carry extends LinearOpMode {
 
     //private Drivetrain drivetrain;

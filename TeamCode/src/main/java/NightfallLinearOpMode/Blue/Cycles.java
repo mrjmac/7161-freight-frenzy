@@ -8,7 +8,7 @@ import NightfallLinearOpMode.Drivetrain;
 import NightfallLinearOpMode.Lift;
 import NightfallLinearOpMode.Vision;
 
-@Autonomous(name = "Blue Cycles", group = "LinearOpMode")
+@Autonomous(name = "Blue Cycles", group = "blue")
 public class Cycles extends LinearOpMode {
 
     private Drivetrain drivetrain;

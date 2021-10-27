@@ -9,9 +9,9 @@ import NightfallLinearOpMode.Drivetrain;
 import NightfallLinearOpMode.Lift;
 import NightfallLinearOpMode.Vision;
 
-@Autonomous(name = "pid", group = "LinearOpMode")
+@Autonomous(name = "Test", group = "test")
 @Config
-public class pidTuning extends LinearOpMode {
+public class TestAny extends LinearOpMode {
 
     private Drivetrain drivetrain;
     private Vision vision;
