@@ -83,4 +83,19 @@ public class Drivetrain {
         ML.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         FL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
+
+    //---------------------------------------DUCKS--------------------------------------------------
+
+    public void duckR(double pow) {
+        duckR.setPower(pow);
+    }
+
+    public void duckL(double pow) {
+        duckL.setPower(pow);
+    }
+
+    public void duckStop() {
+        duckR.setPower(0);
+        duckL.setPower(0);
+    }
 }
