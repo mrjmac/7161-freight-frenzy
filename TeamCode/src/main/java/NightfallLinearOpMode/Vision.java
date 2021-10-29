@@ -5,6 +5,7 @@ import static android.graphics.Color.green;
 import static android.graphics.Color.blue;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.configuration.ModernRoboticsMotorControllerParams;
 import com.vuforia.PIXEL_FORMAT;
 import com.vuforia.Vuforia;
 import com.vuforia.Image;
@@ -53,6 +54,7 @@ public class Vision extends LinearOpMode {
         return bm;
     }
 
+    /*
     public String getTeamMarkerPos() throws InterruptedException {
         Bitmap rgbImage = getImage();
         ArrayList<Integer> xValues = new ArrayList<>();
@@ -95,6 +97,61 @@ public class Vision extends LinearOpMode {
 
         return pos;
     }
+
+     */
+
+    public String getPosNewMethod() throws InterruptedException {
+
+        Bitmap rgbImage = getImage();
+        int leftWhite = 0;
+        int rightWhite = 0;
+        int midWhite = 0;
+
+        for (int y = 185; y < 250; y++) {
+            for (int x = 0; x < 75; x++) {
+                int pixel = rgbImage.getPixel(x, y);
+                if (isWhite(pixel)) {
+                    leftWhite += 1;
+                }
+            }
+            for (int x = 275; x < 350; x++) {
+                int pixel = rgbImage.getPixel(x, y);
+                if (isWhite(pixel)) {
+                    midWhite += 1;
+                }
+            }
+            for (int x = 500; x < 575; x++) {
+                int pixel = rgbImage.getPixel(x, y-50);
+                if (isWhite(pixel)) {
+                    rightWhite += 1;
+                }
+            }
+        }
+
+        int high = Math.max(Math.max(midWhite, leftWhite), rightWhite);
+        if (high == rightWhite) {
+            pos = "right";
+        }
+        else if (high == leftWhite) {
+            pos= "left";
+        }
+        else {
+            pos = "mid";
+        }
+        /*
+        opMode.telemetry.addData("leftWhite\n", leftWhite);
+        opMode.telemetry.addData("MiddleWhite\n", midWhite);
+        opMode.telemetry.addData("rightWhite\n", rightWhite);
+        opMode.telemetry.addData("pos", pos);
+        opMode.telemetry.update();
+
+         */
+        return pos;
+    }
+
+
+
+
 
     public boolean isWhite(int pixel) throws InterruptedException {
 
