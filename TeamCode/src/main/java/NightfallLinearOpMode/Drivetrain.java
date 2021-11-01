@@ -8,7 +8,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.robotcore.external.navigation.Temperature;
 
 public class Drivetrain {
 
@@ -225,5 +227,19 @@ public class Drivetrain {
     public void duckStop() {
         duckR.setPower(0);
         duckL.setPower(0);
+    }
+
+    //--------------------------------------TESTING-------------------------------------------------
+
+    public Acceleration getGravity() {
+
+        return imu.getGravity();
+
+    }
+
+    public Temperature getTemp() {
+
+        return imu.getTemperature();
+
     }
 }

@@ -29,6 +29,8 @@ public class Carry extends LinearOpMode {
         while (!isStarted()) {
             pos = vision.getPosNewMethod();
             telemetry.addData("team marker pos: ", pos);
+            telemetry.addData("gravity", drivetrain.getGravity());
+            telemetry.addData("Temp", drivetrain.getTemp());
             telemetry.update();
         }
         telemetry.addData("team marker pos: ", pos);
