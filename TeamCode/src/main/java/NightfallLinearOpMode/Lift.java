@@ -38,5 +38,13 @@ public class Lift {
         lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
+
+    public void hatchUp() {
+        hatch.setPosition(.5);
+    }
+
+    public void hatchDown() {
+        hatch.setPosition(.6);
+    }
 }
 
