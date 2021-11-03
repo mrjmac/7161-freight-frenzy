@@ -8,25 +8,24 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public abstract class NightfallOpMode extends OpMode {
 
-    DcMotor BL; //back left - [port number]
-    DcMotor ML; //middle left - [port number]
-    DcMotor FL; //front left - [port number]
-    DcMotor BR; //back right - [port number]
-    DcMotor MR; //middle right - [port number]
-    DcMotor FR; //front right - [port number]
- /*   DcMotor intake; //intake - [port number]
-    DcMotor lift; //lift - [port number]
+    DcMotor BL; //back left - [3 e2]
+    DcMotor ML; //middle left - [3 c]
+    DcMotor FL; //front left - [2 c]
+    DcMotor BR; //back right - [2 e2]
+    DcMotor MR; //middle right - [1 e2]
+    DcMotor FR; //front right - [0 e2]
+    DcMotor intake; //intake - [0 c]
+    DcMotor lift; //lift - [1 c]
 
-    Servo pivot1; //pivot servo - [port number]
-    Servo pivot2; //pivot servo - [port number]
+    Servo pivot1; //pivot servo - [3 c]
+    Servo pivot2; //pivot servo - [2 e2]
 
-    Servo hatch; //output servo - [port number]
-    Servo cap; //cap servo - [port number]
-    Servo release; //release servo - [port number]
+    Servo hatch; //output servo - [5 c]
+    Servo cap; //cap servo - [4 c]
 
-    CRServo duckL; //left duck - [port number]
-    CRServo duckR; //right duck - [port number]
-*/
+    CRServo duckL; //left duck - [0 e2]
+    CRServo duckR; //right duck - [1 e2]
+
 
     public void init() {
 
@@ -36,22 +35,22 @@ public abstract class NightfallOpMode extends OpMode {
         BL = hardwareMap.dcMotor.get("BL");
         ML = hardwareMap.dcMotor.get("ML");
         MR = hardwareMap.dcMotor.get("MR");
-/*
+
         intake = hardwareMap.dcMotor.get("intake");
         lift = hardwareMap.dcMotor.get("lift");
 
-        pivot1 = hardwareMap.servo.get("servo1");
-        pivot2 = hardwareMap.servo.get("servo2");
+        pivot1 = hardwareMap.servo.get("in1");
+        pivot2 = hardwareMap.servo.get("in2");
         hatch = hardwareMap.servo.get("hatch");
 
         cap = hardwareMap.servo.get("cap");
-        release = hardwareMap.servo.get("release");
+        hatch = hardwareMap.servo.get("hatch");
 
         duckL = hardwareMap.crservo.get("duckL");
         duckR = hardwareMap.crservo.get("duckR");
-*/
-        FR.setDirection(DcMotorSimple.Direction.REVERSE);
-        MR.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        FR.setDirection(DcMotorSimple.Direction.FORWARD);
+        MR.setDirection(DcMotorSimple.Direction.FORWARD);
         BR.setDirection(DcMotorSimple.Direction.FORWARD);
         ML.setDirection(DcMotorSimple.Direction.REVERSE);
 
@@ -62,8 +61,8 @@ public abstract class NightfallOpMode extends OpMode {
         ML.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         BL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        //  intake.setDirection(DcMotorSimple.Direction.REVERSE);
-   //     lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        intake.setDirection(DcMotorSimple.Direction.REVERSE);
+        lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         FR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         BR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -72,7 +71,7 @@ public abstract class NightfallOpMode extends OpMode {
         ML.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         BL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-     //   lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         FR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         BL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
@@ -81,7 +80,7 @@ public abstract class NightfallOpMode extends OpMode {
         ML.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         MR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
-       // lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         telemetry.addData("init ", "completed");
         telemetry.update();
@@ -119,11 +118,25 @@ public abstract class NightfallOpMode extends OpMode {
 
     //============================= Intake =========================================================
 
+    public void pivotCross() {
+        //pivot1.setPosition(.45);
+        pivot2.setPosition(.55);
+    }
+
+    public void pivotDown() {
+        pivot1.setPosition(.4);
+        pivot2.setPosition(.6);
+    }
+
+    public void pivotUp() {
+        pivot1.setPosition(0);
+        pivot2.setPosition(1);
+    }
 
 
 
     //============================= Lift ===========================================================
-    /*
+
     public void setLift(double power){
         lift.setPower(power);
     }
@@ -136,6 +149,33 @@ public abstract class NightfallOpMode extends OpMode {
         lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
-    */
+
+    public void zero() {
+        while (getLiftEncoder() > 100) {
+            lift.setPower(-.5);
+        }
+        resetLiftEncoder();
+    }
+
+    public void macro(double macroHeight) {
+        if (macroHeight == 1) {
+            //lift.setTargetPosition(2);
+        }
+        else if (macroHeight == 2) {
+            //lift.setTargetPosition(3);
+        }
+        else {
+            //lift.setTargetPosition(4);x
+        }
+    }
+
+    public void hatchUp() {
+        hatch.setPosition(.82);
+    }
+
+    public void hatchDown() {
+        hatch.setPosition(.55);
+    }
+
 
 }

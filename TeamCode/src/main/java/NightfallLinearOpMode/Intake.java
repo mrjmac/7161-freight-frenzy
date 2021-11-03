@@ -16,15 +16,15 @@ public class Intake {
     public Intake(LinearOpMode opMode) throws InterruptedException {
         this.opMode = opMode;
         intake = this.opMode.hardwareMap.dcMotor.get("intake");
-        pivot1 = this.opMode.hardwareMap.servo.get("servo1"); //lift side
-        pivot2 = this.opMode.hardwareMap.servo.get("servo2"); //non lift side
+        pivot1 = this.opMode.hardwareMap.servo.get("in1"); //lift side
+        pivot2 = this.opMode.hardwareMap.servo.get("in2"); //non lift side
         intake.setDirection(DcMotorSimple.Direction.REVERSE);
 
     }
 
     public void intakeDown() {
-        pivot1.setPosition(.3);
-        pivot2.setPosition(.7);
+        pivot1.setPosition(.45);
+        pivot2.setPosition(.55);
     }
 
     public void intakeUp() {

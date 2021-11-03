@@ -15,8 +15,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.Temperature;
 public class Drivetrain {
 
     public DcMotor BL; //back left - [3 e1]
-    public DcMotor ML; //middle left - [3 e2]
-    public DcMotor FL; //front left - [2 e2]
+    public DcMotor ML; //middle left - [3 c]
+    public DcMotor FL; //front left - [2 c]
     public DcMotor BR; //back right - [2 e1]
     public DcMotor MR; //middle right - [1 e1]
     public DcMotor FR; //front right - [0 e1]
@@ -50,7 +50,8 @@ public class Drivetrain {
 
         FR.setDirection(DcMotorSimple.Direction.REVERSE);
         MR.setDirection(DcMotorSimple.Direction.REVERSE);
-        BR.setDirection(DcMotorSimple.Direction.REVERSE);
+        BR.setDirection(DcMotorSimple.Direction.FORWARD);
+        FL.setDirection(DcMotorSimple.Direction.REVERSE);
 
         FR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         BL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);

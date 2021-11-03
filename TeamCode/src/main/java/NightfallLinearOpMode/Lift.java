@@ -10,7 +10,6 @@ public class Lift {
 
     public Servo hatch; //output servo - [port number]
     public Servo cap; //cap servo - [port number]
-    public Servo release; //release servo - [port number]
 
     LinearOpMode opMode;
 
@@ -20,7 +19,6 @@ public class Lift {
 
         hatch = this.opMode.hardwareMap.servo.get("hatch");
         cap = this.opMode.hardwareMap.servo.get("cap");
-        release = this.opMode.hardwareMap.servo.get("release");
 
         lift.setDirection(DcMotorSimple.Direction.REVERSE);
 
