@@ -10,15 +10,13 @@ public class TankTeleOp extends NightfallOpMode {
     boolean manual = true;
 
 
-
     public void loop() {
         //================================= DRIVE ==================================================
         //speed constant allows driver 1 to scale the speed of the robot
         //servo on lift side goes from 0 to 1; servo on non lift side goes from 1 to 0
         if (gamepad1.right_trigger > 0.1) {
             speedControl = .4;
-        }
-        else {
+        } else {
             speedControl = 1;
         }
 
@@ -26,8 +24,8 @@ public class TankTeleOp extends NightfallOpMode {
         double right = 0;
         double max;
 
-        double forward = deadstick ((gamepad1.left_stick_y * Math.abs(gamepad1.left_stick_y)));
-        double side= deadstick (gamepad1.right_stick_x * Math.abs(gamepad1.right_stick_x));
+        double forward = deadstick((gamepad1.left_stick_y * Math.abs(gamepad1.left_stick_y)));
+        double side = deadstick(gamepad1.right_stick_x * Math.abs(gamepad1.right_stick_x));
 
         left = forward - side;
         right = forward + side;
@@ -75,38 +73,44 @@ public class TankTeleOp extends NightfallOpMode {
 
 
         //================================= LIFT ===================================================
-    /*    if (gamepad2.x && !manual) {
-            while (gamepad2.x);
-                manual = true;
-        } else if (gamepad2.x && manual) {
-            while (gamepad2.x);
-                manual = false;
-        }
-*/
-        if (!manual) {
-            if (gamepad2.dpad_up && macroHeight < 4) {
-                while (gamepad2.dpad_up);
-                    macroHeight += 1;
-            } else if (gamepad2.dpad_down && macroHeight > 0) {
-                while (gamepad2.dpad_down);
-                    macroHeight -= 1;
-            }
 
-            if (gamepad2.a) {
-                macro(macroHeight);
-            }
-            if (gamepad2.b) {
-                zero();
-            }
-        } else {
+        //macros
+        if (gamepad2.x && !manual) {
+            while (gamepad2.x) ;
+            manual = true;
+        }
+        if (gamepad2.x && manual) {
+            while (gamepad2.x) ;
+            manual = false;
+        }
+        if (gamepad2.dpad_up && macroHeight < 4 && !manual) {
+            while (gamepad2.dpad_up) ;
+            macroHeight += 1;
+        }
+        if (gamepad2.dpad_down && macroHeight > 0 && !manual) {
+            while (gamepad2.dpad_down) ;
+            macroHeight -= 1;
+        }
+
+        if (gamepad2.a && !manual) {
+            macro(macroHeight);
+        }
+        if (gamepad2.b && !manual) {
+            zero();
+        }
+
+
+        //manual code
+        if (manual) {
             lift.setPower(deadstick(gamepad2.left_stick_y) + .03);
         }
 
         if (gamepad2.y) {
             hatchUp();
-        }
-        else if (gamepad2.x) {
+        } else if (gamepad2.x) {
             hatchDown();
         }
+
     }
 }
+
