@@ -1,5 +1,7 @@
 package NightfallLinearOpMode;
 
+import android.transition.ChangeBounds;
+
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -11,6 +13,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.Temperature;
+
+import java.util.logging.ConsoleHandler;
 
 public class Drivetrain {
 
@@ -48,10 +52,14 @@ public class Drivetrain {
         this.opMode.telemetry.addData(LOG_TAG + "init", "finished init");
         this.opMode.telemetry.update();
 
-        FR.setDirection(DcMotorSimple.Direction.REVERSE);
-        MR.setDirection(DcMotorSimple.Direction.REVERSE);
+        FR.setDirection(DcMotorSimple.Direction.FORWARD);
+        MR.setDirection(DcMotorSimple.Direction.FORWARD);
         BR.setDirection(DcMotorSimple.Direction.FORWARD);
-        FL.setDirection(DcMotorSimple.Direction.REVERSE);
+        FL.setDirection(DcMotorSimple.Direction.FORWARD);
+        ML.setDirection(DcMotorSimple.Direction.REVERSE);
+        BL.setDirection(DcMotorSimple.Direction.FORWARD);
+
+
 
         FR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         BL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -115,30 +123,57 @@ public class Drivetrain {
     public void gyroEncoderInch(double speed, double inches, double timeoutS, int heading) throws InterruptedException {
         while (this.opMode.opModeIsActive() && !this.opMode.isStopRequested()) {
             // Ticks is the math for the amount of inches, ticks is paired with getcurrentposition
-            double ticks = inches * (1440 / (1.49606 * Math.PI)); //TODO: need to calculate this
-            double kP = speed / 14; //TODO: tune, probably lower lol
+            double ticks = inches * 31.666666666; //TODO: need to calculate this
+            double kP = speed / 4; //TODO: tune, probably lower lol
             heading = -heading;
             //runtime isn't used, this is just a backup call which we don't need
             //if the position is less than the number of inches, than it sets the motors to speed
             runtime.reset();
             resetEncoders();
             while (getEncoderAvg() <= ticks && this.opMode.opModeIsActive()) {
-                double error = (ticks - getEncoderAvg()) / 1440; //1440 should be changed to whatever ^^^^^the 1st line has
+                double error = (ticks - getEncoderAvg()) / 31.66666666; //1440 should be changed to whatever ^^^^^the 1st line has
                 double ChangeP = error * kP;
                 double AngleDiff = getTrueDiff(heading);
-                double GyroScalePower = AngleDiff * .04;
+                //double GyroScalePower = AngleDiff * .02;
+               // double multiplierR = 1;
+                //double multiplierL = 1;
                 if (ChangeP > 1)
                     ChangeP = ChangeP / ChangeP;
-                BL.setPower(-ChangeP + GyroScalePower);
-                FL.setPower(-ChangeP + GyroScalePower);
-                ML.setPower(-ChangeP + GyroScalePower);
-                FR.setPower(ChangeP + GyroScalePower);
-                BR.setPower(ChangeP + GyroScalePower);
-                MR.setPower(ChangeP + GyroScalePower);
-                this.opMode.telemetry.addData("MotorPowLeft:", -ChangeP + GyroScalePower);
-                this.opMode.telemetry.addData("MotorPowRight:", ChangeP + GyroScalePower);
-                this.opMode.telemetry.addData("YawAngle:", getGyroYaw());
+                double fudgeFactor = 1.0 - AngleDiff / 40.0;
+
+                /*
+                if (Math.abs(AngleDiff) > 2) {
+                    multiplierR = 1.05;//more power left positive
+                    multiplierL = 0.95;
+                    GyroScalePower = 0;
+                }
+                else if (Math.abs(AngleDiff) < -2) {
+                    multiplierL = 1.05;
+                    multiplierR = 0.95;
+                    GyroScalePower = 0;
+                }
+                else {
+                    multiplierL = 1;
+                    multiplierR = 1;
+                    GyroScalePower = AngleDiff * .02;
+                }
+
+                 */
+                double left = (ChangeP * fudgeFactor);//GyroScalePower);
+                double right = (ChangeP * (1-fudgeFactor)); //GyroScalePower);
+                double max = Math.max(Math.abs(left), Math.abs(right));
+                if (max > 1.0) {
+                    left /= max;
+                    right /= max;
+                }
+                startMotors(left, right);
+                this.opMode.telemetry.addData("MotorPowLeft:", left);
+                this.opMode.telemetry.addData("MotorPowRight:", right);
+                this.opMode.telemetry.addData("fudge:", fudgeFactor);
                 this.opMode.telemetry.addData("encoders:", getEncoderAvg());
+                this.opMode.telemetry.addData("error:", error);
+                this.opMode.telemetry.addData("changeP", ChangeP);
+                this.opMode.telemetry.addData("gyro", getTrueDiff(heading));
                 this.opMode.telemetry.update();
                 if (Math.abs(ChangeP) < .15 || runtime.seconds() >= timeoutS) {
                     stopMotors();

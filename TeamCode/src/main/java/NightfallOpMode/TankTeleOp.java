@@ -14,7 +14,7 @@ public class TankTeleOp extends NightfallOpMode {
     public void loop() {
         //================================= DRIVE ==================================================
         //speed constant allows driver 1 to scale the speed of the robot
-        //servo on lift side goes from 0 to 1; servo on non lift side goes from 1 to 0
+        //servo on lift side goes from 0 to 1; esrvo on non lift side goes from 1 to 0
         if (gamepad1.right_trigger > 0.1) {
             speedControl = .4;
         }
@@ -48,9 +48,12 @@ public class TankTeleOp extends NightfallOpMode {
         telemetry.addData("ducks reverse?", gamepad2.left_bumper);
         telemetry.addData("hatch open", gamepad2.y);
         telemetry.addData("hatch closed", gamepad2.x);
+        telemetry.addData("leftmotor:", FL.getCurrentPosition());
+        telemetry.addData("right motor:", FR.getCurrentPosition());
         telemetry.update();
 
         //================================= INTAKE =================================================
+
         if (gamepad1.right_bumper) {
             pivotCross();
             intake.setPower(-1);
@@ -60,13 +63,15 @@ public class TankTeleOp extends NightfallOpMode {
             intake.setPower(1);
         }
 
+
+
         //================================= DUCKS ==================================================
         if (gamepad2.right_bumper) {
-            duckR.setPower(.2);
-            duckL.setPower(.2);
+            duckR.setPower(.8);
+            duckL.setPower(.8);
         } else if (gamepad2.left_bumper) {
-            duckR.setPower(-.2);
-            duckL.setPower(-.2);
+            duckR.setPower(-.8);
+            duckL.setPower(-.8 );
         } else {
             duckR.setPower(0);
             duckL.setPower(0);
