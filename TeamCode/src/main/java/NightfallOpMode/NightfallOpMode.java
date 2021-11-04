@@ -151,7 +151,7 @@ public abstract class NightfallOpMode extends OpMode {
     }
 
     public void zero() {
-        while (getLiftEncoder() > 100) {
+        while (getLiftEncoder() > 800) {
             lift.setPower(-.5);
         }
         resetLiftEncoder();
