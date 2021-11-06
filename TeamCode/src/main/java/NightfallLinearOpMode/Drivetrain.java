@@ -139,7 +139,7 @@ public class Drivetrain {
                 //double multiplierL = 1;
                 if (ChangeP > 1)
                     ChangeP = ChangeP / ChangeP;
-                double fudgeFactor = 1.0 - AngleDiff / 40.0;
+                double fudgeFactor = (1.0 - AngleDiff / 40.0)/.93;
 
                 /*
                 if (Math.abs(AngleDiff) > 2) {
@@ -159,8 +159,8 @@ public class Drivetrain {
                 }
 
                  */
-                double left = (ChangeP * fudgeFactor);//GyroScalePower);
-                double right = (ChangeP * (1-fudgeFactor)); //GyroScalePower);
+                double left = (ChangeP * fudgeFactor * .93);
+                double right = (ChangeP * (1) * 1.07);
                 double max = Math.max(Math.abs(left), Math.abs(right));
                 if (max > 1.0) {
                     left /= max;
