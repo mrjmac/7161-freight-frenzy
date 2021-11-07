@@ -2,6 +2,7 @@ package NightfallLinearOpMode;
 
 import android.transition.ChangeBounds;
 
+import com.acmerobotics.roadrunner.util.Angle;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -123,23 +124,21 @@ public class Drivetrain {
     public void gyroEncoderInch(double speed, double inches, double timeoutS, int heading) throws InterruptedException {
         while (this.opMode.opModeIsActive() && !this.opMode.isStopRequested()) {
             // Ticks is the math for the amount of inches, ticks is paired with getcurrentposition
-            double ticks = inches * 31.666666666; //TODO: need to calculate this
-            double kP = speed / 4; //TODO: tune, probably lower lol
+            double ticks = inches * 32;
+            double kP = speed / 29.3; //nice for 24 inches, should scale up to whatever movement up
             heading = -heading;
             //runtime isn't used, this is just a backup call which we don't need
             //if the position is less than the number of inches, than it sets the motors to speed
             runtime.reset();
             resetEncoders();
             while (getEncoderAvg() <= ticks && this.opMode.opModeIsActive()) {
-                double error = (ticks - getEncoderAvg()) / 31.66666666; //1440 should be changed to whatever ^^^^^the 1st line has
+                double error = (ticks - getEncoderAvg()) / 32 ;
                 double ChangeP = error * kP;
                 double AngleDiff = getTrueDiff(heading);
-                //double GyroScalePower = AngleDiff * .02;
-               // double multiplierR = 1;
+                // double multiplierR = 1;
                 //double multiplierL = 1;
-                if (ChangeP > 1)
-                    ChangeP = ChangeP / ChangeP;
-                double fudgeFactor = (1.0 - AngleDiff / 40.0)/.93;
+                // double fudgeFactor = (1.0 - AngleDiff / 40.0)/.93;
+                double gyroScalePower = AngleDiff * .03;
 
                 /*
                 if (Math.abs(AngleDiff) > 2) {
@@ -147,7 +146,7 @@ public class Drivetrain {
                     multiplierL = 0.95;
                     GyroScalePower = 0;
                 }
-                else if (Math.abs(AngleDiff) < -2) {
+                else if ((AngleDiff) < -2) {
                     multiplierL = 1.05;
                     multiplierR = 0.95;
                     GyroScalePower = 0;
@@ -159,8 +158,8 @@ public class Drivetrain {
                 }
 
                  */
-                double left = (ChangeP * fudgeFactor * .93);
-                double right = (ChangeP * (1) * 1.07);
+                double left = (ChangeP + gyroScalePower);
+                double right = (ChangeP - gyroScalePower);
                 double max = Math.max(Math.abs(left), Math.abs(right));
                 if (max > 1.0) {
                     left /= max;
@@ -169,13 +168,13 @@ public class Drivetrain {
                 startMotors(left, right);
                 this.opMode.telemetry.addData("MotorPowLeft:", left);
                 this.opMode.telemetry.addData("MotorPowRight:", right);
-                this.opMode.telemetry.addData("fudge:", fudgeFactor);
+         //     this.opMode.telemetry.addData("fudge:", fudgeFactor);
                 this.opMode.telemetry.addData("encoders:", getEncoderAvg());
                 this.opMode.telemetry.addData("error:", error);
                 this.opMode.telemetry.addData("changeP", ChangeP);
                 this.opMode.telemetry.addData("gyro", getTrueDiff(heading));
                 this.opMode.telemetry.update();
-                if (Math.abs(ChangeP) < .15 || runtime.seconds() >= timeoutS) {
+                if (error < .25 || runtime.seconds() >= timeoutS || Math.abs(ChangeP) < .02) {
                     stopMotors();
                     break;
                 }

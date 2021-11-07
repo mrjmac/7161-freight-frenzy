@@ -22,7 +22,7 @@ public class TestAny extends LinearOpMode {
     private String pos;
 
     public static double distance = 24;
-    public static double kpForwards = 0.4;
+    public static double kpForwards = 1;
     public static double timeout = 10;
     public static int heading = 0;
     
@@ -66,7 +66,6 @@ public class TestAny extends LinearOpMode {
             drivetrain.gyroEncoderInch(-kpForwards, distance, timeout, heading);
            sleep(2000);
          //   drivetrain.turnPD(angle, kpTurn5, kdTurn5, timeoutTurn);
-            sleep(5000);
         }
 
 
