@@ -203,6 +203,45 @@ public class Drivetrain {
             stopMotors();
             break;
         }
+
+
+    }
+
+    public void turnPI(double angle, double p, double i, double timeout) {
+        while (this.opMode.opModeIsActive() && !this.opMode.isStopRequested()) {
+            runtime.reset();
+            double kP = p / 33;
+            double kI = i / 100000;
+            double currentTime = runtime.milliseconds();
+            double pastTime = 0;
+            double angleDiff = getTrueDiff(-angle);
+            double changePID;
+            while (Math.abs(angleDiff) > .95 && runtime.seconds() < timeout && this.opMode.opModeIsActive()) {
+                pastTime = currentTime;
+                currentTime = runtime.milliseconds();
+                double dT = currentTime - pastTime;
+                angleDiff = getTrueDiff(angle);
+                changePID = (angleDiff * kP) + (dT * angleDiff * kI);
+                if (changePID <= 0) {
+                    startMotors(changePID - .10, -changePID + .10);
+                } else {
+                    startMotors(changePID + .10, -changePID - .10);
+                }
+                opMode.telemetry.addData("PID: ", changePID);
+                opMode.telemetry.addData("diff", angleDiff);
+                opMode.telemetry.addData("P", angleDiff * kP);
+                opMode.telemetry.addData("I", dT * angleDiff * kI);
+                opMode.telemetry.update();
+
+            }
+            stopMotors();
+
+            angleDiff = getTrueDiff(-angle);
+            if (!(Math.abs(angleDiff) > .95)) {
+                break;
+            }
+
+        }
     }
 
 
