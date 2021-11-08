@@ -37,6 +37,8 @@ public class Drivetrain {
     public BNO055IMU imu;
     private BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
 
+
+
     public Drivetrain(LinearOpMode opMode)throws InterruptedException {
 
         this.opMode = opMode;
@@ -130,11 +132,29 @@ public class Drivetrain {
             //runtime isn't used, this is just a backup call which we don't need
             //if the position is less than the number of inches, than it sets the motors to speed
             runtime.reset();
+
+            double leftChange = 0;
+            double rightChange = 0;
+            double prevLeft = 0;
+            double prevRight = 0;
+
             resetEncoders();
             while (getEncoderAvg() <= ticks && this.opMode.opModeIsActive()) {
                 double error = (ticks - getEncoderAvg()) / 32 ;
                 double ChangeP = error * kP;
                 double AngleDiff = getTrueDiff(heading);
+
+                double currentInchesL = Math.abs(FL.getCurrentPosition());
+                leftChange = currentInchesL - prevLeft;
+                prevLeft = currentInchesL;
+
+                double currentInchesR = Math.abs(FR.getCurrentPosition());
+                rightChange = currentInchesR - prevRight;
+                prevRight = currentInchesR;
+
+                double angleChangeRad = ((leftChange * 32) - (rightChange * 32)) / 14.72145669;
+                double angleChangeDeg = getTrueDiff(Math.toDegrees(angleChangeRad));
+
                 // double multiplierR = 1;
                 //double multiplierL = 1;
                 // double fudgeFactor = (1.0 - AngleDiff / 40.0)/.93;
@@ -167,6 +187,7 @@ public class Drivetrain {
                 }
                 startMotors(left, right);
                 this.opMode.telemetry.addData("MotorPowLeft:", left);
+                this.opMode.telemetry.addData("angle change manual", angleChangeDeg);
                 this.opMode.telemetry.addData("MotorPowRight:", right);
          //     this.opMode.telemetry.addData("fudge:", fudgeFactor);
                 this.opMode.telemetry.addData("encoders:", getEncoderAvg());
@@ -183,6 +204,7 @@ public class Drivetrain {
             break;
         }
     }
+
 
     public void turnPD(double angle, double p, double d, double timeout) {
         while (this.opMode.opModeIsActive() && !this.opMode.isStopRequested()) {
