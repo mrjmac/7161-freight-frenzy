@@ -61,11 +61,7 @@ public class TestAny extends LinearOpMode {
         if (isStopRequested()) return;
 
         while (!isStopRequested()) {
-            drivetrain.gyroEncoderInch(kpForwards, distance, timeout, heading);
-            sleep(2000);
-            drivetrain.gyroEncoderInch(-kpForwards, distance, timeout, heading);
-           sleep(2000);
-         //   drivetrain.turnPD(angle, kpTurn5, kdTurn5, timeoutTurn);
+            drivetrain.arcTurnPD(90, kpTurn90, kdTurn90,5);
         }
 
 

@@ -284,6 +284,46 @@ public class Drivetrain {
         }
     }
 
+    public void arcTurnPD(double angle, double p, double d, double timeout) {
+        while (this.opMode.opModeIsActive() && !this.opMode.isStopRequested()) {
+            runtime.reset();
+            double kP = p / 33;            //TODO: tune this
+            double kD = d / .70;
+            double currentTime = runtime.milliseconds();
+            double pastTime = 0;
+            double prevAngleDiff = getTrueDiff(-angle);
+            double angleDiff = prevAngleDiff;
+            double changePID;
+            while (Math.abs(angleDiff) > .95 && runtime.seconds() < timeout && this.opMode.opModeIsActive()) {
+                pastTime = currentTime;
+                currentTime = runtime.milliseconds();
+                double dT = currentTime - pastTime;
+                angleDiff = getTrueDiff(-angle);
+                changePID = (angleDiff * kP) + ((angleDiff - prevAngleDiff) / dT * kD);
+                if (changePID <= 0) {
+                    startMotors(0, -changePID + .10);
+                } else {
+                    startMotors(changePID + .10, 0);
+                }
+                this.opMode.telemetry.addData("P", (angleDiff * kP));
+                this.opMode.telemetry.addData("D", ((Math.abs(angleDiff) - Math.abs(prevAngleDiff)) / dT * kD));
+                this.opMode.telemetry.addData("angle:", getGyroYaw());
+                this.opMode.telemetry.update();
+
+                prevAngleDiff = angleDiff;
+            }
+            stopMotors();
+
+            angleDiff = getTrueDiff(-angle);
+            if (!(Math.abs(angleDiff) > .95)) {
+                break;
+            }
+
+
+        }
+    }
+
+
     public void updateGyroValues() {
         angles = imu.getAngularOrientation();
     }
@@ -312,11 +352,8 @@ public class Drivetrain {
 
     //---------------------------------------DUCKS--------------------------------------------------
 
-    public void duckR(double pow) {
+    public void duckStart(double pow) {
         duckR.setPower(pow);
-    }
-
-    public void duckL(double pow) {
         duckL.setPower(pow);
     }
 

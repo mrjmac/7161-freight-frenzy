@@ -130,13 +130,13 @@ public class Vision extends LinearOpMode {
 
         int high = Math.max(Math.max(midWhite, leftWhite), rightWhite);
         if (high == rightWhite) {
-            pos = "right";
+            pos = "3";
         }
         else if (high == leftWhite) {
-            pos= "left";
+            pos= "1";
         }
         else {
-            pos = "mid";
+            pos = "2";
         }
         /*
         opMode.telemetry.addData("leftWhite\n", leftWhite);

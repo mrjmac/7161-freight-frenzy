@@ -10,6 +10,8 @@ public class Lift {
 
     public Servo hatch; //output servo - [port number]
     public Servo cap; //cap servo - [port number]
+    private int heightModifier = 1400;
+
 
     LinearOpMode opMode;
 
@@ -21,6 +23,7 @@ public class Lift {
         cap = this.opMode.hardwareMap.servo.get("cap");
 
         lift.setDirection(DcMotorSimple.Direction.REVERSE);
+        lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
     }
 
@@ -37,12 +40,34 @@ public class Lift {
         lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
+    public void capUp() {cap.setPosition(.5); }
+
+    public void capDown() {cap.setPosition(.7); }
+
     public void hatchUp() {
         hatch.setPosition(.5);
     }
 
     public void hatchDown() {
         hatch.setPosition(.6);
+    }
+
+    public void setLift(int height) {
+        while (getEncoder() < (height - 1) * heightModifier) {
+            lift.setPower(1);
+        }
+        lift.setPower(0);
+        hatchDown();
+        this.opMode.sleep(2000);
+        hatchUp();
+        liftReset();
+    }
+
+    public void liftReset() {
+        while (getEncoder() > 0) {
+            lift.setPower(-1);
+        }
+        lift.setPower(0);
     }
 }
 
