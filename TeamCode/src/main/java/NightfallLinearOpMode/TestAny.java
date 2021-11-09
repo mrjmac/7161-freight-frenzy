@@ -18,7 +18,7 @@ public class TestAny extends LinearOpMode {
     private Drivetrain drivetrain;
     private Vision vision;
     private Lift lift;
-  //  private Intake intake;
+    private Intake intake;
     private String pos;
 
     public static double distance = 24;
@@ -43,8 +43,8 @@ public class TestAny extends LinearOpMode {
 
         drivetrain = new Drivetrain(this);
         vision = new Vision(this);
-    //    lift = new Lift(this);
-       // intake = new Intake(this);
+        lift = new Lift(this);
+        intake = new Intake(this);
 
         while (!isStarted()) {
             pos = vision.getPosNewMethod();
@@ -61,7 +61,16 @@ public class TestAny extends LinearOpMode {
         if (isStopRequested()) return;
 
         while (!isStopRequested()) {
-            drivetrain.arcTurnPD(90, kpTurn90, kdTurn90,5);
+
+            intake.intakeDown();
+            sleep(1000);
+            intake.intakeCross();
+            sleep(1000);
+            intake.intakeUp();
+            sleep(1000);
+
+         //   lift.setLift(3, 1);
+          //  drivetrain.arcTurnPD(90, kpTurn90, kdTurn90,5);
         }
 
 

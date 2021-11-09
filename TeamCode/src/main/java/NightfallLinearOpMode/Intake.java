@@ -22,9 +22,14 @@ public class Intake {
 
     }
 
+    public void intakeCross() {
+        pivot1.setPosition(.2);
+        pivot2.setPosition(.8);
+    }
+
     public void intakeDown() {
-        pivot1.setPosition(.45);
-        pivot2.setPosition(.55);
+        pivot1.setPosition(.4);
+        pivot2.setPosition(.6);
     }
 
     public void intakeUp() {

@@ -10,7 +10,7 @@ public class Lift {
 
     public Servo hatch; //output servo - [port number]
     public Servo cap; //cap servo - [port number]
-    private int heightModifier = 1400;
+    private int heightModifier = 700;
 
 
     LinearOpMode opMode;
@@ -45,14 +45,48 @@ public class Lift {
     public void capDown() {cap.setPosition(.7); }
 
     public void hatchUp() {
-        hatch.setPosition(.5);
+        hatch.setPosition(.82);
     }
 
     public void hatchDown() {
-        hatch.setPosition(.6);
+        hatch.setPosition(.55);
     }
 
-    public void setLift(int height) {
+    public void setLift(int height, double p) {
+        /*lift.setTargetPosition(ticks);
+        hatchDown();
+        this.opMode.sleep(2000);
+        hatchUp();
+        nonJankLiftReset();
+
+*/
+        double ticks = (height - 1) * heightModifier;
+        while (this.opMode.opModeIsActive() && !this.opMode.isStopRequested()) {
+
+            double kP = p / 10;
+            while (getEncoder() <= ticks && this.opMode.opModeIsActive()) {
+                double error = (ticks - getEncoder());
+                double ChangeP = error * kP;
+                double power = ChangeP;
+                power /= power;
+                lift.setPower(power);
+                this.opMode.telemetry.addData("error:", error);
+                this.opMode.telemetry.addData("changeP", ChangeP);
+                this.opMode.telemetry.update();
+                if (error < 50 || Math.abs(ChangeP) < .02) {
+                    lift.setPower(0);
+                    break;
+                }
+                hatchDown();
+            }
+            lift.setPower(.06);
+            break;
+        }
+        this.opMode.sleep(1000);
+        hatchUp();
+        liftReset(.5);
+    }
+        /*
         while (getEncoder() < (height - 1) * heightModifier) {
             lift.setPower(1);
         }
@@ -61,11 +95,20 @@ public class Lift {
         this.opMode.sleep(2000);
         hatchUp();
         liftReset();
+
+         */
+
+    public void nonJankLiftReset() {
+        lift.setTargetPosition(0);
     }
 
-    public void liftReset() {
-        while (getEncoder() > 0) {
-            lift.setPower(-1);
+    public void liftReset(double kP) {
+        while (getEncoder() > 50) {
+            double power = getEncoder() * kP;
+            power /= power;
+            lift.setPower(-power);
+            if (Math.abs(power) < .05)
+                break;
         }
         lift.setPower(0);
     }

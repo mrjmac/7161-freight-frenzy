@@ -61,7 +61,7 @@ public class Duck extends LinearOpMode {
         lift.capUp();
         drivetrain.turnPD(45, kpTurn45, kdTurn45, 1.5);
         drivetrain.gyroEncoderInch(1, 22, 2, 45);
-        lift.setLift(liftHeight);
+        lift.setLift(liftHeight, 0);
         // CAROUSEL, PICK UP DUCK AND SCORE
         drivetrain.gyroEncoderInch(-1, 68, 3, 45);
         drivetrain.duckStart(1);
@@ -74,7 +74,7 @@ public class Duck extends LinearOpMode {
         intake.intakeStop();
         drivetrain.turnPD(45, kpTurn45, kdTurn45, 1.5);
         drivetrain.gyroEncoderInch(1, 68, 3, 45);
-        lift.setLift(liftHeight);
+        lift.setLift(1600, 0);
         // ARCTURN TOWARDS ALLIANCE PRELOAD AND SCORE
         drivetrain.gyroEncoderInch(-.5, 8, 1.5, 45);
         drivetrain.turnPD(0, kpTurn45, kdTurn45, 1.5);
@@ -84,67 +84,13 @@ public class Duck extends LinearOpMode {
         drivetrain.turnPD(-25, kpTurn90, kdTurn90, 1.5);
         intake.intakeStop();
         drivetrain.gyroEncoderInch(1, 35, 3, -25);
-        lift.setLift(3);
+        lift.setLift(1600, 0);
         // PARK INSIDE CRATER
         drivetrain.turnPD(90, kpTurn90, kdTurn90, 1.5);
         drivetrain.gyroEncoderInch(1, 50, 2.5, 90);
 
 
 
-
-//======================= DEPOSIT MINERAL AND INTAKE TEAM MARKER =========================================
-        //drivetrain.move(12);
-        if (pos.equals("1")) {
-            //lift.setheight(1);
-            //lift.drop;
-            //lift.setheight(0);
-            //drivetrain.turn(-90);
-            //intake.intake(5);
-            //drivetrain.turn(90);
-        }
-        else if (pos.equals("2")) {
-            //lift.setheight(2);
-            //lift.drop;
-            //lift.setheight(0);
-            //drivetrain.turn(-90);
-            //drivetrain.move(6);
-            //intake.intake(5);
-            //drivetrain.move(-6);
-            //drivetrain.turn(90);
-        }
-        else {
-            //lift.setheight(2);
-            //lift.drop;
-            //lift.setheight(0);
-            //drivetrain.turn(-90);
-            //drivetrain.move(10);
-            //intake.intake(5);
-            //drivetrain.move(-10);
-            //drivetrain.turn(90);
-        }
-//======================= DUCK =========================================
-        //drivetrain.move(-10);
-        //drivetrain.turn(90);
-        //drivetrain.move(-18);
-        //drivetrain.duck(4);
-        //drivetrain.turn(-45);
-        //intake.intake(5);
-
-//======================= PARK =========================================
-        //drivetrain.turn(-45);
-        //drivetrain.move(60);
-        //drivetrain.turn(90);
-        //drivetrain.move(90);
-        //drivetrain.turn(90);
-        //drivetrain.move(52);
-        //drivetrain.turn(-90);
-        //TODO: add odom retract
-        //drivetrain.forwards(48);
-        //drivetrain.turn(90)
-        //drivetrain.forwards(12);
-//======================= COLLECT MINERAL AND TURN =========================================
-        //intake.intake(5);
-        //drivetrain.turn(90);
 
 
     }

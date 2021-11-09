@@ -52,13 +52,15 @@ public class TankTeleOp extends NightfallOpMode {
 
         //================================= INTAKE =================================================
 
-        if (gamepad1.right_bumper) {
+        if (gamepad1.left_bumper && gamepad1.right_bumper) {
+            pivotDown();
+            intake.setPower(1);
+        } else if (gamepad1.right_bumper) {
             pivotCross();
             intake.setPower(-1);
         } else if (gamepad1.left_bumper) {
+            pivotUp();
             intake.setPower(0);
-        } else if (gamepad1.left_bumper && gamepad1.right_bumper) {
-            intake.setPower(1);
         }
 
 

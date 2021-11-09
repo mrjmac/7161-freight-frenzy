@@ -17,8 +17,8 @@ public abstract class NightfallOpMode extends OpMode {
     DcMotor intake; //intake - [0 c]
     DcMotor lift; //lift - [1 c]
 
-    //Servo pivot1; //pivot servo - [3 c]
-    //Servo pivot2; //pivot servo - [2 e2]
+    Servo pivot1; //pivot servo - [3 c]
+    Servo pivot2; //pivot servo - [2 e2]
 
     Servo hatch; //output servo - [5 c]
     Servo cap; //cap servo - [4 c]
@@ -39,8 +39,8 @@ public abstract class NightfallOpMode extends OpMode {
         intake = hardwareMap.dcMotor.get("intake");
         lift = hardwareMap.dcMotor.get("lift");
 
-       // pivot1 = hardwareMap.servo.get("in1");
-        //pivot2 = hardwareMap.servo.get("in2");
+        pivot1 = hardwareMap.servo.get("in1");
+        pivot2 = hardwareMap.servo.get("in2");
         hatch = hardwareMap.servo.get("hatch");
 
         cap = hardwareMap.servo.get("cap");
@@ -119,18 +119,18 @@ public abstract class NightfallOpMode extends OpMode {
     //============================= Intake =========================================================
 
     public void pivotCross() {
-        //pivot1.setPosition(.45);
-        //pivot2.setPosition(.55);
+        pivot1.setPosition(.3);
+        pivot2.setPosition(.1);
     }
 
     public void pivotDown() {
-        //pivot1.setPosition(.4);
-        //pivot2.setPosition(.6);
+        pivot1.setPosition(.45);
+        pivot2.setPosition(.55);
     }
 
     public void pivotUp() {
-        //pivot1.setPosition(0);
-        //pivot2.setPosition(1);
+        pivot1.setPosition(0);
+        pivot2.setPosition(1); //1
     }
 
 
