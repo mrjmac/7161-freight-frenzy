@@ -1,14 +1,28 @@
 package NightfallOpMode;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp(name = "TankTeleOp", group = "opMode")
 public class TankTeleOp extends NightfallOpMode {
 
+    boolean capup = true;
     double speedControl;
     double macroHeight = 3;
-    boolean manual = true;
+    boolean manual = false;
+    public enum LiftState {
+        LIFT_START,
+        LIFT_RAISE,
+        LIFT_LOWER
 
+    };
+    int heightModifier = 550;
+
+    ElapsedTime capbruh = new ElapsedTime();
+    ElapsedTime heightMod = new ElapsedTime();
+    boolean liftActive = false;
+
+    LiftState liftState = LiftState.LIFT_START;
 
     public void loop() {
         //================================= DRIVE ==================================================
@@ -52,72 +66,97 @@ public class TankTeleOp extends NightfallOpMode {
 
         //================================= INTAKE =================================================
 
-        if (gamepad1.left_bumper && gamepad1.right_bumper) {
+        if (gamepad1.a) {
             pivotDown();
+        }
+
+        if (gamepad1.left_bumper && gamepad1.right_bumper) {
             intake.setPower(1);
         } else if (gamepad1.right_bumper) {
             pivotCross();
             intake.setPower(-1);
         } else if (gamepad1.left_bumper) {
-            pivotUp();
+            pivotCross();
             intake.setPower(0);
         }
 
 
 
         //================================= DUCKS ==================================================
-        if (gamepad2.right_bumper) {
+        if (Math.abs(gamepad2.right_trigger) > 0.1) {
             duckR.setPower(.8);
             duckL.setPower(.8);
-        } else if (gamepad2.left_bumper) {
+        } else if (Math.abs(gamepad2.left_trigger) > 0.1) {
             duckR.setPower(-.8);
             duckL.setPower(-.8 );
         } else {
             duckR.setPower(0);
             duckL.setPower(0);
-
         }
 
 
         //================================= LIFT ===================================================
 
         //macros
-        if (gamepad2.x && !manual) {
-            while (gamepad2.x) ;
-            manual = true;
-        }
-        if (gamepad2.x && manual) {
-            while (gamepad2.x) ;
-            manual = false;
-        }
-        if (gamepad2.dpad_up && macroHeight < 4 && !manual) {
-            while (gamepad2.dpad_up) ;
+        if (gamepad2.dpad_up && macroHeight < 4 && !manual && heightMod.milliseconds() > 200) {
             macroHeight += 1;
+            heightMod.reset();
         }
-        if (gamepad2.dpad_down && macroHeight > 0 && !manual) {
-            while (gamepad2.dpad_down) ;
+        if (gamepad2.dpad_down && macroHeight > 0 && !manual && heightMod.milliseconds() > 200) {
             macroHeight -= 1;
+            heightMod.reset();
         }
 
-        if (gamepad2.a && !manual) {
-            macro(macroHeight);
+        switch (liftState) {
+            case LIFT_START:
+                if (gamepad2.left_bumper && !liftActive) {
+                    liftActive = true;
+                    liftState = LiftState.LIFT_RAISE;
+                    manual = false;
+                }
+                break;
+            case LIFT_RAISE:
+                setLiftReal(macroHeight);
+                liftState = LiftState.LIFT_LOWER;
+                break;
+            case LIFT_LOWER:
+                hatchUp();
+                if (macroHeight != 1)
+                    liftReset(0.5);
+                liftState = LiftState.LIFT_START;
+                liftActive = false;
+                break;
+            default:
+                liftState = LiftState.LIFT_START;
         }
-        if (gamepad2.b && !manual) {
-            zero();
+
+        if (gamepad1.y && liftState != LiftState.LIFT_START) {
+            liftState = LiftState.LIFT_START;
+            manual = true;
         }
 
 
         //manual code
         if (manual) {
-            lift.setPower(deadstick(gamepad2.left_stick_y) + .03);
+            lift.setPower(-deadstick(gamepad2.left_stick_y));
+            if (gamepad2.b) {
+                hatchUp();
+            } else if (gamepad2.a) {
+                hatchDown();
+            }
         }
 
-        if (gamepad2.y) {
-            hatchUp();
-        } else if (gamepad2.x) {
-            hatchDown();
-        }
 
+        if (gamepad2.x && capup && capbruh.milliseconds() > 200) {
+            capDown();
+            capup = false;
+            capbruh.reset();
+        }
+        if (gamepad2.x && !capup && capbruh.milliseconds() > 200) {
+            capUp();
+            capup = true;
+            capbruh.reset();
+        }
     }
 }
 

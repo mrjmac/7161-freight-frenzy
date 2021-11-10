@@ -10,7 +10,6 @@ public class Lift {
 
     public Servo hatch; //output servo - [port number]
     public Servo cap; //cap servo - [port number]
-    private int heightModifier = 700;
 
 
     LinearOpMode opMode;
@@ -24,6 +23,7 @@ public class Lift {
 
         lift.setDirection(DcMotorSimple.Direction.REVERSE);
         lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        capUp();
 
     }
 
@@ -40,9 +40,9 @@ public class Lift {
         lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    public void capUp() {cap.setPosition(.5); }
+    public void capUp() {cap.setPosition(.7); }
 
-    public void capDown() {cap.setPosition(.7); }
+    public void capDown() {cap.setPosition(.3); }
 
     public void hatchUp() {
         hatch.setPosition(.82);
@@ -60,6 +60,7 @@ public class Lift {
         nonJankLiftReset();
 
 */
+        int heightModifier = 550;
         double ticks = (height - 1) * heightModifier;
         while (this.opMode.opModeIsActive() && !this.opMode.isStopRequested()) {
 
@@ -74,11 +75,11 @@ public class Lift {
                 this.opMode.telemetry.addData("changeP", ChangeP);
                 this.opMode.telemetry.update();
                 if (error < 50 || Math.abs(ChangeP) < .02) {
-                    lift.setPower(0);
+                    lift.setPower(0.06);
                     break;
                 }
-                hatchDown();
             }
+            hatchDown();
             lift.setPower(.06);
             break;
         }

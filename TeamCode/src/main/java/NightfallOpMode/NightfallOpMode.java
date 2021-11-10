@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 public abstract class NightfallOpMode extends OpMode {
 
@@ -26,6 +27,7 @@ public abstract class NightfallOpMode extends OpMode {
     CRServo duckL; //left duck - [0 e2]
     CRServo duckR; //right duck - [1 e2]
 
+    ElapsedTime macro = new ElapsedTime();
 
     public void init() {
 
@@ -63,6 +65,7 @@ public abstract class NightfallOpMode extends OpMode {
 
         intake.setDirection(DcMotorSimple.Direction.REVERSE);
         lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        lift.setDirection(DcMotorSimple.Direction.REVERSE);
 
         FR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         BR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -84,11 +87,12 @@ public abstract class NightfallOpMode extends OpMode {
 
         telemetry.addData("init ", "completed");
         telemetry.update();
+        capUp();
     }
 
     //============================= Drivetrain =====================================================
 
-    public void startMotors(double l, double r){
+    public void startMotors(double l, double r) {
         FR.setPower(r);
         MR.setPower(r);
         BR.setPower(r);
@@ -97,7 +101,7 @@ public abstract class NightfallOpMode extends OpMode {
         BL.setPower(l);
     }
 
-    public void stopMotors(){
+    public void stopMotors() {
         FR.setPower(0);
         MR.setPower(0);
         BR.setPower(0);
@@ -107,11 +111,10 @@ public abstract class NightfallOpMode extends OpMode {
     }
 
 
-
-    public float deadstick (float value){
+    public float deadstick(float value) {
 
         if (value > -0.1 && value < 0.1)
-            return 0 ;
+            return 0;
         else
             return value;
     }
@@ -119,13 +122,13 @@ public abstract class NightfallOpMode extends OpMode {
     //============================= Intake =========================================================
 
     public void pivotCross() {
-        pivot1.setPosition(.3);
-        pivot2.setPosition(.1);
+        pivot1.setPosition(.28);
+        pivot2.setPosition(.72);
     }
 
     public void pivotDown() {
-        pivot1.setPosition(.45);
-        pivot2.setPosition(.55);
+        pivot1.setPosition(.41);
+        pivot2.setPosition(.59);
     }
 
     public void pivotUp() {
@@ -134,15 +137,53 @@ public abstract class NightfallOpMode extends OpMode {
     }
 
 
-
     //============================= Lift ===========================================================
 
-    public void setLift(double power){
+    public void setLift(double power) {
         lift.setPower(power);
     }
 
-    public int getLiftEncoder(){
+    public int getLiftEncoder() {
         return (Math.abs(lift.getCurrentPosition()));
+    }
+
+    public void setLiftReal(double macroHeight) {
+        double heightModifier = 550;
+        double ticks = (macroHeight - 1) * heightModifier;
+        double kP = 1 / 10.0;
+        while (getLiftEncoder() <= ticks) {
+            double error = (ticks - getLiftEncoder());
+            double ChangeP = error * kP;
+            double power = ChangeP;
+            power /= power;
+            lift.setPower(power);
+            if (error < 50 || Math.abs(ChangeP) < .02) {
+                lift.setPower(0.06);
+
+                break;
+            }
+        }
+        hatchDown();
+        macro.reset();
+        lift.setPower(.06);
+        while (macro.milliseconds() < 1000) {
+
+        }
+    }
+
+
+
+
+    public void liftReset(double kP) {
+        while (getLiftEncoder() > 10) {
+            double power = getLiftEncoder() * kP;
+            power /= power;
+            lift.setPower(-power);
+            if (Math.abs(power) < .05)
+                break;
+        }
+        lift.setPower(0);
+        resetLiftEncoder();
     }
 
     public void resetLiftEncoder(){
@@ -175,6 +216,14 @@ public abstract class NightfallOpMode extends OpMode {
 
     public void hatchDown() {
         hatch.setPosition(.55);
+    }
+
+    public void capUp() {
+        cap.setPosition(.7);
+    }
+
+    public void capDown(){
+        cap.setPosition(.3);
     }
 
 

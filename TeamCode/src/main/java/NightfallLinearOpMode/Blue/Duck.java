@@ -71,7 +71,7 @@ public class Duck extends LinearOpMode {
         intake.intakeStop();
         drivetrain.turnPD(-45, kpTurn45, kdTurn45, 1.5);
         drivetrain.gyroEncoderInch(1, 68, 3, -45);
-        lift.setLift(1600, 0);
+        lift.setLift(3, 0);
         // ARCTURN TOWARDS ALLIANCE PRELOAD AND SCORE
         drivetrain.gyroEncoderInch(-.5, 8, 1.5, -45);
         drivetrain.turnPD(0, kpTurn45, kdTurn45, 1.5);
@@ -81,7 +81,7 @@ public class Duck extends LinearOpMode {
         drivetrain.turnPD(25, kpTurn90, kdTurn90, 1.5);
         intake.intakeStop();
         drivetrain.gyroEncoderInch(1, 35, 3, 25);
-        lift.setLift(1600, 0);
+        lift.setLift(3, 0);
         // PARK INSIDE CRATER
         drivetrain.turnPD(-90, kpTurn90, kdTurn90, 1.5);
         drivetrain.gyroEncoderInch(1, 50, 2.5, -90);

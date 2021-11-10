@@ -61,15 +61,13 @@ public class TestAny extends LinearOpMode {
         if (isStopRequested()) return;
 
         while (!isStopRequested()) {
-
-            intake.intakeDown();
-            sleep(1000);
-            intake.intakeCross();
-            sleep(1000);
-            intake.intakeUp();
-            sleep(1000);
-
-         //   lift.setLift(3, 1);
+            lift.setLift(1,1);
+            sleep(2000);
+           lift.setLift(2, 1);
+           sleep(2000);
+           lift.setLift(3,1);
+           sleep(2000);
+           break;
           //  drivetrain.arcTurnPD(90, kpTurn90, kdTurn90,5);
         }
 

@@ -19,7 +19,7 @@ public class Intake {
         pivot1 = this.opMode.hardwareMap.servo.get("in1"); //lift side
         pivot2 = this.opMode.hardwareMap.servo.get("in2"); //non lift side
         intake.setDirection(DcMotorSimple.Direction.REVERSE);
-
+        intakeUp();
     }
 
     public void intakeCross() {
@@ -38,7 +38,7 @@ public class Intake {
     }
 
     public void intakePow(double pow) {
-        intake.setPower(pow);
+        intake.setPower(-pow);
     }
 
     public void intakeStop() {
