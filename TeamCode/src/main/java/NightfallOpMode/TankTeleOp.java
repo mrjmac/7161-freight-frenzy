@@ -16,7 +16,7 @@ public class TankTeleOp extends NightfallOpMode {
         LIFT_LOWER
 
     };
-    int heightModifier = 550;
+    int heightModifier = 570;
 
     ElapsedTime capbruh = new ElapsedTime();
     ElapsedTime heightMod = new ElapsedTime();
@@ -62,6 +62,12 @@ public class TankTeleOp extends NightfallOpMode {
         telemetry.addData("hatch closed", gamepad2.x);
         telemetry.addData("leftmotor:", FL.getCurrentPosition());
         telemetry.addData("right motor:", FR.getCurrentPosition());
+        telemetry.addData("liftstate: ", liftState);
+        telemetry.addData("liftEncoder:", lift.getCurrentPosition());
+        telemetry.addData("liftPower:", lift.getPower());
+        telemetry.addData("macroTime:", macro.milliseconds());
+        telemetry.addData("heightModTime:", heightMod.milliseconds());
+        telemetry.addData("capbruhTime:", capbruh.milliseconds());
         telemetry.update();
 
         //================================= INTAKE =================================================
@@ -116,20 +122,42 @@ public class TankTeleOp extends NightfallOpMode {
                     }
                     break;
                 case LIFT_RAISE:
-                    setLiftReal(macroHeight);
-                    liftState = LiftState.LIFT_LOWER;
+                    if (lift.getCurrentPosition() < (heightModifier * (macroHeight - 1) - 50)) {
+                        setLiftReal(macroHeight);
+                    } else {
+                        hatchDown();
+                        lift.setPower(.06);
+                        if (macro.milliseconds() > 1000) {
+                            liftState = LiftState.LIFT_LOWER;
+                        }
+                    }
                     break;
                 case LIFT_LOWER:
+     /*               hatchDown();
+                    lift.setPower(.06);
+        took this out, but it might have been what made it work            if (macro.milliseconds() < 1000) {
+                    }
+
+      */
                     hatchUp();
-                    if (macroHeight != 1)
-                        liftReset(0.5);
+                    if (macroHeight != 1) {
+                        if (lift.getCurrentPosition() > 10)
+                            liftReset(1);
+                        else {
+                            lift.setPower(0);
+                            resetLiftEncoder();
+                            liftState = LiftState.LIFT_START;
+                            liftActive = false;
+                        }
+                        break;
+                    }
                     liftState = LiftState.LIFT_START;
-                    liftActive = false;
                     break;
                 default:
                     liftState = LiftState.LIFT_START;
             }
         }
+
 
         if (gamepad1.y && liftState != LiftState.LIFT_START) {
             liftState = LiftState.LIFT_START;

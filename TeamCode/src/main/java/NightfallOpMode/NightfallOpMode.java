@@ -152,39 +152,28 @@ public abstract class NightfallOpMode extends OpMode {
         double heightModifier = 570;
         double ticks = (macroHeight - 1) * heightModifier;
         double kP = 1 / 10.0;
-        while (getLiftEncoder() <= ticks) {
-            double error = (ticks - getLiftEncoder());
-            double ChangeP = error * kP;
-            double power = ChangeP;
-            power /= power;
-            lift.setPower(power);
-            if (error < 50 || Math.abs(ChangeP) < .02) {
+        if (getLiftEncoder() <= ticks - 50) {
+            //     double error = (ticks - getLiftEncoder());
+            //  double ChangeP = error * kP;
+            //  double power = ChangeP;
+            //  power /= power;
+            lift.setPower(1);
+        /*   if (error < 50 || Math.abs(ChangeP) < .02) {
                 lift.setPower(0.06);
-
-                break;
             }
+         */
         }
-        hatchDown();
         macro.reset();
-        lift.setPower(.06);
-        while (macro.milliseconds() < 1000) {
-            //do nothing
-        }
     }
 
 
 
 
     public void liftReset(double kP) {
-        while (getLiftEncoder() > 10) {
-            double power = getLiftEncoder() * kP;
-            power /= power;
-            lift.setPower(-power);
-            if (Math.abs(power) < .05)
-                break;
-        }
-        lift.setPower(0);
-        resetLiftEncoder();
+        if (getLiftEncoder() > 10)
+        //    double power = getLiftEncoder() * kP;
+        //    power /= power;
+            lift.setPower(-1);
     }
 
     public void resetLiftEncoder(){
