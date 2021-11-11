@@ -223,7 +223,7 @@ public class Drivetrain {
                 pastTime = currentTime;
                 currentTime = runtime.milliseconds();
                 double dT = currentTime - pastTime;
-                angleDiff = getTrueDiff(angle);
+                angleDiff = getTrueDiff(- angle);
                 changePID = (angleDiff * kP) + (dT * angleDiff * kI);
                 if (changePID <= 0) {
                     startMotors(changePID - .10, -changePID + .10);
@@ -234,6 +234,47 @@ public class Drivetrain {
                 opMode.telemetry.addData("diff", angleDiff);
                 opMode.telemetry.addData("P", angleDiff * kP);
                 opMode.telemetry.addData("I", dT * angleDiff * kI);
+                opMode.telemetry.update();
+
+            }
+            stopMotors();
+
+            angleDiff = getTrueDiff(-angle);
+            if (!(Math.abs(angleDiff) > .95)) {
+                break;
+            }
+
+        }
+    }
+
+    public void turnPID(double angle, double p, double i, double d, double timeout) {
+        while (this.opMode.opModeIsActive() && !this.opMode.isStopRequested()) {
+            runtime.reset();
+            double kP = p / 33;
+            double kI = i / 100000;
+            double kD = d / .70;
+            double currentTime = runtime.milliseconds();
+            double pastTime = 0;
+            double prevAngleDiff = getTrueDiff(-angle);
+            double angleDiff = prevAngleDiff;
+            double changePID;
+            while (Math.abs(angleDiff) > .95 && runtime.seconds() < timeout && this.opMode.opModeIsActive()) {
+                pastTime = currentTime;
+                currentTime = runtime.milliseconds();
+                double dT = currentTime - pastTime;
+                angleDiff = getTrueDiff(-angle);
+                changePID = (angleDiff * kP) + (dT * angleDiff * kI) + ((angleDiff - prevAngleDiff) / dT * kD);
+                if (changePID <= 0) {
+                    startMotors(changePID - .10, -changePID + .10);
+                } else {
+                    startMotors(changePID + .10, -changePID - .10);
+                }
+                opMode.telemetry.addData("PID: ", changePID);
+                opMode.telemetry.addData("diff", angleDiff);
+                opMode.telemetry.addData("P", angleDiff * kP);
+                opMode.telemetry.addData("I", dT * angleDiff * kI);
+                this.opMode.telemetry.addData("D", ((Math.abs(angleDiff) - Math.abs(prevAngleDiff)) / dT * kD));
+                this.opMode.telemetry.addData("angle:", getGyroYaw());
                 opMode.telemetry.update();
 
             }

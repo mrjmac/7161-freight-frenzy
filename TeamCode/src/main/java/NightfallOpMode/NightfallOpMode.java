@@ -112,7 +112,7 @@ public abstract class NightfallOpMode extends OpMode {
     }
 
 
-    public float deadstick(float value) {
+    public double deadstick(double value) {
 
         if (value > -0.1 && value < 0.1)
             return 0;
@@ -168,7 +168,7 @@ public abstract class NightfallOpMode extends OpMode {
         macro.reset();
         lift.setPower(.06);
         while (macro.milliseconds() < 1000) {
-
+            //do nothing
         }
     }
 

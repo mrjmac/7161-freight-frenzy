@@ -27,7 +27,7 @@ public class TankTeleOp extends NightfallOpMode {
     public void loop() {
         //================================= DRIVE ==================================================
         //speed constant allows driver 1 to scale the speed of the robot
-        //servo on lift side goes from 0 to 1; esrvo on non lift side goes from 1 to 0
+        //servo on lift side goes from 0 to 1; servo on non lift side goes from 1 to 0
         if (gamepad1.right_trigger > 0.1) {
             speedControl = .4;
         } else {
@@ -106,6 +106,7 @@ public class TankTeleOp extends NightfallOpMode {
             macroHeight -= 1;
             heightMod.reset();
         }
+
         if (!manual) {
             switch (liftState) {
                 case LIFT_START:
