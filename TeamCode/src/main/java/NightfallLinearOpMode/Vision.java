@@ -25,7 +25,7 @@ public class Vision extends LinearOpMode {
 
     VuforiaLocalizer vuforia;
     LinearOpMode opMode;
-    String pos = "right";
+    int pos = 3;
 
     public Vision(LinearOpMode opMode){
         this.opMode = opMode;
@@ -100,7 +100,7 @@ public class Vision extends LinearOpMode {
 
      */
 
-    public String getPosNewMethod() throws InterruptedException {
+    public int getPosNewMethod() throws InterruptedException {
 
         Bitmap rgbImage = getImage();
         int leftWhite = 0;
@@ -130,13 +130,13 @@ public class Vision extends LinearOpMode {
 
         int high = Math.max(Math.max(midWhite, leftWhite), rightWhite);
         if (high == rightWhite) {
-            pos = "3";
+            pos = 3;
         }
         else if (high == leftWhite) {
-            pos= "1";
+            pos= 1;
         }
         else {
-            pos = "2";
+            pos = 2;
         }
         /*
         opMode.telemetry.addData("leftWhite\n", leftWhite);
@@ -148,6 +148,50 @@ public class Vision extends LinearOpMode {
          */
         return pos;
     }
+
+    public int getPosNewMethodBlue() throws InterruptedException {
+
+        Bitmap rgbImage = getImage();
+        int rightWhite = 0;
+        int midWhite = 0;
+
+        for (int y = 200; y < 260; y++) {
+            for (int x = 0  ; x < 100; x++) {
+                int pixel = rgbImage.getPixel(x, y);
+                if (isWhite(pixel)) {
+                    midWhite += 1;
+                }
+            }
+            for (int x = 250; x < 350; x++) {
+                int pixel = rgbImage.getPixel(x, y-50);
+                if (isWhite(pixel)) {
+                    rightWhite += 1;
+                }
+            }
+
+        }
+
+        int high = Math.max(midWhite, rightWhite);
+        if (high < 20) {
+            pos = 1;
+        }
+        else if (high == midWhite) {
+            pos= 2;
+        }
+        else if (high == rightWhite){
+            pos = 3;
+        }
+        /*
+        opMode.telemetry.addData("leftWhite\n", leftWhite);
+        opMode.telemetry.addData("MiddleWhite\n", midWhite);
+        opMode.telemetry.addData("rightWhite\n", rightWhite);
+        opMode.telemetry.addData("pos", pos);
+        opMode.telemetry.update();
+
+         */
+        return pos;
+    }
+
 
 
 

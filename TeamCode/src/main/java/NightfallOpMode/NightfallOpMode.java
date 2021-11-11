@@ -88,6 +88,7 @@ public abstract class NightfallOpMode extends OpMode {
         telemetry.addData("init ", "completed");
         telemetry.update();
         capUp();
+        hatchUp();
     }
 
     //============================= Drivetrain =====================================================
@@ -148,7 +149,7 @@ public abstract class NightfallOpMode extends OpMode {
     }
 
     public void setLiftReal(double macroHeight) {
-        double heightModifier = 550;
+        double heightModifier = 570;
         double ticks = (macroHeight - 1) * heightModifier;
         double kP = 1 / 10.0;
         while (getLiftEncoder() <= ticks) {

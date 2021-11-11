@@ -15,7 +15,7 @@ public class Cycles extends LinearOpMode {
     private Vision vision;
     private Lift lift;
     private Intake intake;
-    private String pos;
+    private int pos;
 
 
     @Override
@@ -27,7 +27,7 @@ public class Cycles extends LinearOpMode {
         intake = new Intake(this);
 
         while (!isStarted()) {
-            pos = vision.getPosNewMethod();
+            pos = vision.getPosNewMethodBlue();
             telemetry.addData("team marker pos: ", pos);
             telemetry.update();
         }

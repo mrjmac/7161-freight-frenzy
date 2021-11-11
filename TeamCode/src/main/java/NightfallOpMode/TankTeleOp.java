@@ -73,7 +73,7 @@ public class TankTeleOp extends NightfallOpMode {
         if (gamepad1.left_bumper && gamepad1.right_bumper) {
             intake.setPower(1);
         } else if (gamepad1.right_bumper) {
-            pivotCross();
+            pivotDown();
             intake.setPower(-1);
         } else if (gamepad1.left_bumper) {
             pivotCross();
@@ -106,28 +106,28 @@ public class TankTeleOp extends NightfallOpMode {
             macroHeight -= 1;
             heightMod.reset();
         }
-
-        switch (liftState) {
-            case LIFT_START:
-                if (gamepad2.left_bumper && !liftActive) {
-                    liftActive = true;
-                    liftState = LiftState.LIFT_RAISE;
-                    manual = false;
-                }
-                break;
-            case LIFT_RAISE:
-                setLiftReal(macroHeight);
-                liftState = LiftState.LIFT_LOWER;
-                break;
-            case LIFT_LOWER:
-                hatchUp();
-                if (macroHeight != 1)
-                    liftReset(0.5);
-                liftState = LiftState.LIFT_START;
-                liftActive = false;
-                break;
-            default:
-                liftState = LiftState.LIFT_START;
+        if (!manual) {
+            switch (liftState) {
+                case LIFT_START:
+                    if (gamepad2.left_bumper && !liftActive) {
+                        liftActive = true;
+                        liftState = LiftState.LIFT_RAISE;
+                    }
+                    break;
+                case LIFT_RAISE:
+                    setLiftReal(macroHeight);
+                    liftState = LiftState.LIFT_LOWER;
+                    break;
+                case LIFT_LOWER:
+                    hatchUp();
+                    if (macroHeight != 1)
+                        liftReset(0.5);
+                    liftState = LiftState.LIFT_START;
+                    liftActive = false;
+                    break;
+                default:
+                    liftState = LiftState.LIFT_START;
+            }
         }
 
         if (gamepad1.y && liftState != LiftState.LIFT_START) {
@@ -145,6 +145,7 @@ public class TankTeleOp extends NightfallOpMode {
                 hatchDown();
             }
         }
+
 
 
         if (gamepad2.x && capup && capbruh.milliseconds() > 200) {

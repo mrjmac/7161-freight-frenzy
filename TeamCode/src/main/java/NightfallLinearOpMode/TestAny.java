@@ -19,7 +19,7 @@ public class TestAny extends LinearOpMode {
     private Vision vision;
     private Lift lift;
     private Intake intake;
-    private String pos;
+    private int pos;
 
     public static double distance = 24;
     public static double kpForwards = 1;
@@ -59,14 +59,13 @@ public class TestAny extends LinearOpMode {
         waitForStart();
 
         if (isStopRequested()) return;
-
         while (!isStopRequested()) {
-            lift.setLift(1,1);
+           lift.setLift(3, 1);
+           sleep(2000);
+            lift.setLift(2, 1);
             sleep(2000);
-           lift.setLift(2, 1);
-           sleep(2000);
-           lift.setLift(3,1);
-           sleep(2000);
+            lift.setLift(1, 1);
+            sleep(2000);
            break;
           //  drivetrain.arcTurnPD(90, kpTurn90, kdTurn90,5);
         }

@@ -15,7 +15,7 @@ public class Cycles extends LinearOpMode {
     private Vision vision;
     private Lift lift;
     private Intake intake;
-    private String pos;
+    private int pos;
 
 
     @Override

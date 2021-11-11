@@ -15,7 +15,7 @@ public class Duck extends LinearOpMode {
     private Vision vision;
     private Lift lift;
     private Intake intake;
-    private String pos;
+    private int pos;
 
     public static double kpTurn5 = 0.2386; //PID
     public static double kdTurn5 = 0.1; //PID
@@ -38,7 +38,7 @@ public class Duck extends LinearOpMode {
         intake = new Intake(this);
 
         while (!isStarted()) {
-            pos = vision.getPosNewMethod();
+            pos = vision.getPosNewMethodBlue();
             telemetry.addData("team marker pos: ", pos);
             telemetry.update();
         }
@@ -48,44 +48,47 @@ public class Duck extends LinearOpMode {
         //trajectories/pose go here
 
         idle();
-        liftHeight = Integer.parseInt(pos);
-
+        liftHeight = pos;
         // PICK UP CAP AND SCORE PRE LOADED
-        drivetrain.gyroEncoderInch(1, 30, 2, 0);
+        drivetrain.gyroEncoderInch(1, 18, 2, 0);
         lift.capDown();
         intake.intakeDown();
         sleep(300);
         lift.capUp();
-        drivetrain.turnPD(-45, kpTurn45, kdTurn45, 1.5);
-        drivetrain.gyroEncoderInch(1, 22, 2, -45);
-        lift.setLift(liftHeight, 0);
+        drivetrain.turnPD(-50, kpTurn45, kdTurn45, 1.5);
+        drivetrain.gyroEncoderInch(1, 19, 2, -50);
+        lift.setLift(liftHeight, 1);
         // CAROUSEL, PICK UP DUCK AND SCORE
-        drivetrain.gyroEncoderInch(-1, 68, 3, -45);
+        drivetrain.gyroEncoderInch(-0.5, 41, 3, -58);
+        drivetrain.turnPD(0, kpTurn45, kdTurn45, 1.5);
+        drivetrain.gyroEncoderInch(-1, 5.75, 3, 0);
         drivetrain.duckStart(1);
-        sleep(1500);
+        sleep(5000);
         drivetrain.duckStop();
-        intake.intakePow(1);
-        drivetrain.turnPD(0, kpTurn45, kdTurn45, 1.5);
-        drivetrain.gyroEncoderInch(-.3, 5, 3, 0);
-        drivetrain.gyroEncoderInch(.3, 5, 3, 0);
+        drivetrain.gyroEncoderInch(0.8, 22, 1.2, 5);
+    /*    drivetrain.turnPD(30, kpTurn90, kdTurn90, 1.5);
+        drivetrain.gyroEncoderInch(-.7, 8, 3, 30);
         intake.intakeStop();
-        drivetrain.turnPD(-45, kpTurn45, kdTurn45, 1.5);
-        drivetrain.gyroEncoderInch(1, 68, 3, -45);
-        lift.setLift(3, 0);
+        drivetrain.turnPD(-50, kpTurn45, kdTurn45, 1.5);
+        drivetrain.gyroEncoderInch(1, 28, 3, -50);
+        lift.setLift(3, 1);
+        */
+
         // ARCTURN TOWARDS ALLIANCE PRELOAD AND SCORE
-        drivetrain.gyroEncoderInch(-.5, 8, 1.5, -45);
+     /*   drivetrain.gyroEncoderInch(-.5, 8, 1.5, 45);
         drivetrain.turnPD(0, kpTurn45, kdTurn45, 1.5);
         intake.intakePow(1);
-        drivetrain.arcTurnPD(90, kpTurn90, kdTurn90, 3);
+        drivetrain.arcTurnPD(-90, kpTurn90, kdTurn90, 3);
         sleep(500);
-        drivetrain.turnPD(25, kpTurn90, kdTurn90, 1.5);
+        drivetrain.turnPD(-25, kpTurn90, kdTurn90, 1.5);
         intake.intakeStop();
-        drivetrain.gyroEncoderInch(1, 35, 3, 25);
-        lift.setLift(3, 0);
+        drivetrain.gyroEncoderInch(1, 35, 3, -25);
+        lift.setLift(3, 1);
+        */
         // PARK INSIDE CRATER
-        drivetrain.turnPD(-90, kpTurn90, kdTurn90, 1.5);
-        drivetrain.gyroEncoderInch(1, 50, 2.5, -90);
-
-
+    /*    drivetrain.gyroEncoderInch(-.5, 10, 1, 50);
+        drivetrain.turnPD(-80, kpTurn180, kdTurn180, 1.5);
+        drivetrain.gyroEncoderInch(1, 26, 2.5, -90);
+*/
     }
 }
