@@ -28,6 +28,12 @@ public class TankTeleOp extends NightfallOpMode {
         //================================= DRIVE ==================================================
         //speed constant allows driver 1 to scale the speed of the robot
         //servo on lift side goes from 0 to 1; servo on non lift side goes from 1 to 0
+        if (macroHeight == 4) {
+            heightModifier = 533;
+        } else {
+            heightModifier = 570;
+        }
+
         if (gamepad1.right_trigger > 0.1) {
             speedControl = .4;
         } else {
@@ -123,7 +129,7 @@ public class TankTeleOp extends NightfallOpMode {
                     break;
                 case LIFT_RAISE:
                     if (lift.getCurrentPosition() < (heightModifier * (macroHeight - 1) - 50)) {
-                        setLiftReal(macroHeight);
+                        setLiftReal(macroHeight, heightModifier);
                     } else {
                         hatchDown();
                         lift.setPower(.06);
@@ -141,11 +147,12 @@ public class TankTeleOp extends NightfallOpMode {
       */
                     hatchUp();
                     if (macroHeight != 1) {
-                        if (lift.getCurrentPosition() > 10)
-                            liftReset(1);
+                        if (lift.getCurrentPosition() > 65)
+                            liftReset(.5);
                         else {
                             lift.setPower(0);
-                            resetLiftEncoder();
+                            if (lift.getCurrentPosition() < 15)
+                                resetLiftEncoder();
                             liftState = LiftState.LIFT_START;
                             liftActive = false;
                         }

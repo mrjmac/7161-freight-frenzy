@@ -128,8 +128,8 @@ public abstract class NightfallOpMode extends OpMode {
     }
 
     public void pivotDown() {
-        pivot1.setPosition(.41);
-        pivot2.setPosition(.59);
+        pivot1.setPosition(.425);
+        pivot2.setPosition(.575);
     }
 
     public void pivotUp() {
@@ -148,10 +148,9 @@ public abstract class NightfallOpMode extends OpMode {
         return (Math.abs(lift.getCurrentPosition()));
     }
 
-    public void setLiftReal(double macroHeight) {
-        double heightModifier = 570;
+    public void setLiftReal(double macroHeight, double heightModifier) {
         double ticks = (macroHeight - 1) * heightModifier;
-        double kP = 1 / 10.0;
+        //double kP = 1 / 10.0;
         if (getLiftEncoder() <= ticks - 50) {
             //     double error = (ticks - getLiftEncoder());
             //  double ChangeP = error * kP;
@@ -170,10 +169,10 @@ public abstract class NightfallOpMode extends OpMode {
 
 
     public void liftReset(double kP) {
-        if (getLiftEncoder() > 10)
+        if (getLiftEncoder() > 65)
         //    double power = getLiftEncoder() * kP;
         //    power /= power;
-            lift.setPower(-1);
+            lift.setPower(-.8);
     }
 
     public void resetLiftEncoder(){

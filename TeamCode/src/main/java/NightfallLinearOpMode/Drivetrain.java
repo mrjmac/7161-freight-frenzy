@@ -124,15 +124,14 @@ public class Drivetrain {
     }
 
     public void gyroEncoderInch(double speed, double inches, double timeoutS, int heading) throws InterruptedException {
-        while (this.opMode.opModeIsActive() && !this.opMode.isStopRequested()) {
+        runtime.reset();
+        while (this.opMode.opModeIsActive() && !this.opMode.isStopRequested() && runtime.seconds() >= timeoutS) {
             // Ticks is the math for the amount of inches, ticks is paired with getcurrentposition
             double ticks = inches * 32;
             double kP = speed / 29.3; //nice for 24 inches, should scale up to whatever movement up
             heading = -heading;
             //runtime isn't used, this is just a backup call which we don't need
             //if the position is less than the number of inches, than it sets the motors to speed
-            runtime.reset();
-
             double leftChange = 0;
             double rightChange = 0;
             double prevLeft = 0;
@@ -290,9 +289,9 @@ public class Drivetrain {
 
 
     public void turnPD(double angle, double p, double d, double timeout) {
-        while (this.opMode.opModeIsActive() && !this.opMode.isStopRequested()) {
-            runtime.reset();
-            double kP = p / 33;            //TODO: tune this
+        runtime.reset();
+        while (this.opMode.opModeIsActive() && !this.opMode.isStopRequested() && runtime.seconds() <= timeout) {
+            double kP = p / 33;
             double kD = d / .70;
             double currentTime = runtime.milliseconds();
             double pastTime = 0;
@@ -314,7 +313,7 @@ public class Drivetrain {
                 this.opMode.telemetry.addData("D", ((Math.abs(angleDiff) - Math.abs(prevAngleDiff)) / dT * kD));
                 this.opMode.telemetry.addData("angle:", getGyroYaw());
                 this.opMode.telemetry.update();
-                if (runtime.seconds() > timeout)
+                if (runtime.seconds() > timeout || changePID < 0.06)
                     break;
                 prevAngleDiff = angleDiff;
             }
