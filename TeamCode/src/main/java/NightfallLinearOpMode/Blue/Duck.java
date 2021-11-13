@@ -20,7 +20,7 @@ public class Duck extends LinearOpMode {
     public static double kpTurn5 = 0.2386; //PID
     public static double kdTurn5 = 0.1; //PID
     public static double kpTurn45 = 0.2386;
-    public static double kdTurn45 = 0.1;
+    public static double kdTurn45 = 0.06;
     public static double timeoutTurn = 1.5;
     public static double kpTurn90 = 0.176;
     public static double kdTurn90 = 0.07;
@@ -48,27 +48,30 @@ public class Duck extends LinearOpMode {
         //trajectories/pose go here
 
         idle();
+        liftHeight = pos;
+
+        // PICK UP CAP AND SCORE PRE LOADED
         drivetrain.gyroEncoderInch(1, 18, 2, 0);
         lift.capDown();
         intake.intakeDown();
         sleep(300);
         lift.capUp();
         drivetrain.turnPD(-50, kpTurn45, kdTurn45, 1.5);
-        drivetrain.gyroEncoderInch(1, 16, 2, -50);
+        drivetrain.gyroEncoderInch(1, 17, 2, -50);
         lift.setLift(liftHeight, 1);
         // CAROUSEL, PICK UP DUCK AND SCORE
-        drivetrain.gyroEncoderInch(-.5, 45.5, 3, -58);
+        drivetrain.gyroEncoderInch(-.5, 45.5, 3, -60);
         drivetrain.duckStart(-1);
         sleep(5000);
         drivetrain.duckStop();
-        drivetrain.gyroEncoderInch(0.8, 12, 1.2, -58);
         intake.intakePow(1);
+        drivetrain.gyroEncoderInch(0.8, 12, 1.2, -60);
         drivetrain.turnPD(30, kpTurn90, kdTurn90, 1.5);
-        drivetrain.gyroEncoderInch(-1, 8, 3, 30);
+        drivetrain.gyroEncoderInch(-1, 8, 3, 22);
         intake.intakeStop();
         drivetrain.turnPD(-50, kpTurn90+.03, 0.004, 1.5);
         drivetrain.gyroEncoderInch(1, 30, 3, -50);
-        sleep(100);
+        sleep(500);
         lift.setLift(3, 1);
         // ARCTURN TOWARDS ALLIANCE PRELOAD AND SCORE
      /*   drivetrain.gyroEncoderInch(-.5, 8, 1.5, 45);
@@ -82,10 +85,9 @@ public class Duck extends LinearOpMode {
         lift.setLift(3, 1);
         */
         // PARK INSIDE CRATER
-        drivetrain.gyroEncoderInch(-.5, 10, 1, -50);
+        drivetrain.gyroEncoderInch(-.5, 12, 1, -50);
         drivetrain.turnPD(60, kpTurn180, kdTurn180, 1.5);
-        drivetrain.gyroEncoderInch(1, 38, 2.5, 90);
-    //    drivetrain.turnPI(90, 1, .0005, 1);
+        drivetrain.gyroEncoderInch(1, 33, 2.5, 90);
 
     }
 }
