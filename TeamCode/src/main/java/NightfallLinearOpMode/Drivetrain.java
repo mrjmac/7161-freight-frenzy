@@ -79,7 +79,7 @@ public class Drivetrain {
         parameters.loggingTag = "IMU";
         parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
 
-        imu = this.opMode.hardwareMap.get(BNO055IMU.class, "imu");
+        imu = this.opMode.hardwareMap.get(BNO055IMU.class, "imu2");
         imu.initialize(parameters);
 
     }
@@ -125,7 +125,7 @@ public class Drivetrain {
 
     public void gyroEncoderInch(double speed, double inches, double timeoutS, int heading) throws InterruptedException {
         runtime.reset();
-        while (this.opMode.opModeIsActive() && !this.opMode.isStopRequested() && runtime.seconds() >= timeoutS) {
+        while (this.opMode.opModeIsActive() && !this.opMode.isStopRequested() && runtime.seconds() <= timeoutS) {
             // Ticks is the math for the amount of inches, ticks is paired with getcurrentposition
             double ticks = inches * 32;
             double kP = speed / 29.3; //nice for 24 inches, should scale up to whatever movement up
@@ -157,7 +157,7 @@ public class Drivetrain {
                 // double multiplierR = 1;
                 //double multiplierL = 1;
                 // double fudgeFactor = (1.0 - AngleDiff / 40.0)/.93;
-                double gyroScalePower = AngleDiff * .02;
+                double gyroScalePower = AngleDiff * .01;
 
                 /*
                 if (Math.abs(AngleDiff) > 2) {
@@ -313,7 +313,7 @@ public class Drivetrain {
                 this.opMode.telemetry.addData("D", ((Math.abs(angleDiff) - Math.abs(prevAngleDiff)) / dT * kD));
                 this.opMode.telemetry.addData("angle:", getGyroYaw());
                 this.opMode.telemetry.update();
-                if (runtime.seconds() > timeout || changePID < 0.06)
+                if (runtime.seconds() > timeout)
                     break;
                 prevAngleDiff = angleDiff;
             }
@@ -398,7 +398,7 @@ public class Drivetrain {
 
     public void duckStart(double pow) {
         duckR.setPower(pow * .8);
-        duckL.setPower(pow * .8);
+        duckL.setPower(-pow * .8);
     }
 
     public void duckStop() {

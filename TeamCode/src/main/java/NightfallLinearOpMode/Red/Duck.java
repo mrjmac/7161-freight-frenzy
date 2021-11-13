@@ -57,21 +57,22 @@ public class Duck extends LinearOpMode {
         intake.intakeDown();
         sleep(300);
         lift.capUp();
-        drivetrain.turnPD(45, kpTurn45, kdTurn45, 1.5);
-        drivetrain.gyroEncoderInch(1, 17, 2, 45);
+        drivetrain.turnPD(50, kpTurn45, kdTurn45, 1.5);
+        drivetrain.gyroEncoderInch(1, 17, 2, 50);
         lift.setLift(liftHeight, 1);
         // CAROUSEL, PICK UP DUCK AND SCORE
-        drivetrain.gyroEncoderInch(-0.5, 46, 3, 58);
+        drivetrain.gyroEncoderInch(-.5, 45.5, 3, 60);
         drivetrain.duckStart(-1);
         sleep(5000);
         drivetrain.duckStop();
-        drivetrain.gyroEncoderInch(0.8, 12, 1.2, 58);
         intake.intakePow(1);
+        drivetrain.gyroEncoderInch(0.8, 12, 1.2, 60);
         drivetrain.turnPD(-30, kpTurn90, kdTurn90, 1.5);
-        drivetrain.gyroEncoderInch(-1, 8, 3, -30);
+        drivetrain.gyroEncoderInch(-1, 8, 3, -22);
         intake.intakeStop();
         drivetrain.turnPD(50, kpTurn90+.03, 0.004, 1.5);
         drivetrain.gyroEncoderInch(1, 30, 3, 50);
+        sleep(500);
         lift.setLift(3, 1);
         // ARCTURN TOWARDS ALLIANCE PRELOAD AND SCORE
      /*   drivetrain.gyroEncoderInch(-.5, 8, 1.5, 45);
@@ -85,9 +86,9 @@ public class Duck extends LinearOpMode {
         lift.setLift(3, 1);
         */
         // PARK INSIDE CRATER
-        drivetrain.gyroEncoderInch(-.5, 10, 1, 50);
-        drivetrain.turnPD(-80, kpTurn180, kdTurn180, 1.5);
-        drivetrain.gyroEncoderInch(1, 26, 2.5, -90);
+        drivetrain.gyroEncoderInch(-.5, 12, 1, 50);
+        drivetrain.turnPD(-60, kpTurn180, kdTurn180, 1.5);
+        drivetrain.gyroEncoderInch(1, 33, 2.5, -90);
 
 
 

@@ -10,6 +10,7 @@ public class TankTeleOp extends NightfallOpMode {
     double speedControl;
     double macroHeight = 3;
     boolean manual = false;
+    boolean hatchDown = false;
     public enum LiftState {
         LIFT_START,
         LIFT_RAISE,
@@ -97,10 +98,10 @@ public class TankTeleOp extends NightfallOpMode {
         //================================= DUCKS ==================================================
         if (Math.abs(gamepad2.right_trigger) > 0.1) {
             duckR.setPower(.8);
-            duckL.setPower(.8);
+            duckL.setPower(-.8);
         } else if (Math.abs(gamepad2.left_trigger) > 0.1) {
             duckR.setPower(-.8);
-            duckL.setPower(-.8 );
+            duckL.setPower(.8 );
         } else {
             duckR.setPower(0);
             duckL.setPower(0);
@@ -166,19 +167,29 @@ public class TankTeleOp extends NightfallOpMode {
         }
 
 
-        if (gamepad1.y && liftState != LiftState.LIFT_START) {
+        if (gamepad2.y && macro.milliseconds() > 1000 && !manual) {
+            macro.reset();
             liftState = LiftState.LIFT_START;
             manual = true;
+        } else if (gamepad2.y && macro.milliseconds() > 1000 && manual) {
+            macro.reset();
+            manual = false;
         }
 
 
         //manual code
         if (manual) {
             lift.setPower(-deadstick(gamepad2.left_stick_y));
-            if (gamepad2.b) {
+            if (lift.getCurrentPosition() > 100 && Math.abs(gamepad2.left_stick_y) < .05)
+                lift.setPower(0.06);
+            if (gamepad2.a && macro.milliseconds() > 250 && hatchDown) {
+                macro.reset();
                 hatchUp();
-            } else if (gamepad2.a) {
+                hatchDown = false;
+            } else if (gamepad2.a && macro.milliseconds() > 250 && !hatchDown) {
+                macro.reset();
                 hatchDown();
+                hatchDown = true;
             }
         }
 
