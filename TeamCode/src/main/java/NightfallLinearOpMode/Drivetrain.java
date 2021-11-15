@@ -157,7 +157,7 @@ public class Drivetrain {
                 // double multiplierR = 1;
                 //double multiplierL = 1;
                 // double fudgeFactor = (1.0 - AngleDiff / 40.0)/.93;
-                double gyroScalePower = AngleDiff * .01;
+                double gyroScalePower = AngleDiff * .015;
 
                 /*
                 if (Math.abs(AngleDiff) > 2) {

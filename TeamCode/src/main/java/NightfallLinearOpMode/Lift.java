@@ -84,7 +84,7 @@ public class Lift {
             lift.setPower(.06);
             break;
         }
-        this.opMode.sleep(1000);
+        this.opMode.sleep(1500);
         hatchUp();
         liftReset(.5);
     }

@@ -61,7 +61,7 @@ public class Duck extends LinearOpMode {
         lift.setLift(liftHeight, 1);
         // CAROUSEL, PICK UP DUCK AND SCORE
         drivetrain.gyroEncoderInch(-.5, 45.5, 3, -60);
-        drivetrain.duckStart(-1);
+        drivetrain.duckStart(1);
         sleep(5000);
         drivetrain.duckStop();
         intake.intakePow(1);
@@ -70,7 +70,7 @@ public class Duck extends LinearOpMode {
         drivetrain.gyroEncoderInch(-1, 8, 3, 22);
         intake.intakeStop();
         drivetrain.turnPD(-50, kpTurn90+.03, 0.004, 1.5);
-        drivetrain.gyroEncoderInch(1, 30, 3, -50);
+        drivetrain.gyroEncoderInch(1, 28.5, 3, -50);
         sleep(500);
         lift.setLift(3, 1);
         // ARCTURN TOWARDS ALLIANCE PRELOAD AND SCORE
@@ -85,7 +85,7 @@ public class Duck extends LinearOpMode {
         lift.setLift(3, 1);
         */
         // PARK INSIDE CRATER
-        drivetrain.gyroEncoderInch(-.5, 12, 1, -50);
+        drivetrain.gyroEncoderInch(-.5, 6, 1, -50);
         drivetrain.turnPD(60, kpTurn180, kdTurn180, 1.5);
         drivetrain.gyroEncoderInch(1, 33, 2.5, 90);
 
