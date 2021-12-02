@@ -1,48 +1,82 @@
 package NightfallLinearOpMode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class Intake {
-    public DcMotor intake; //intake motor - [port number]
+    DcMotor intake; //intake - [0 c]
 
-    public Servo pivot1; //pivot servo - [port number]
-    public Servo pivot2; //pivot servo - [port number]
+    CRServo spinRight; //surgical tubing servo - [0 c]
+    CRServo spinLeft; //surgical tubing servo - [3 e2]
+    Servo gate; //gate servo - [2 e2]
 
     LinearOpMode opMode;
 
     public Intake(LinearOpMode opMode) throws InterruptedException {
         this.opMode = opMode;
         intake = this.opMode.hardwareMap.dcMotor.get("intake");
-        pivot1 = this.opMode.hardwareMap.servo.get("in1"); //lift side
-        pivot2 = this.opMode.hardwareMap.servo.get("in2"); //non lift side
+
+        //    pivot1 = hardwareMap.servo.get("in1");
+        //    pivot2 = hardwareMap.servo.get("in2");
+        gate = this.opMode.hardwareMap.servo.get("gate");
+        spinRight = this.opMode.hardwareMap.crservo.get("sR");
+        spinLeft = this.opMode.hardwareMap.crservo.get("lR");
+        intake.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         intake.setDirection(DcMotorSimple.Direction.REVERSE);
-        intakeUp();
+        spinRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        gateUp();
     }
 
-    public void intakeCross() {
-        pivot1.setPosition(.28);
-        pivot2.setPosition(.72);
+    public void gateDown() {
+        gate.setPosition(1);
+    }
+    public void gateUp() {
+        gate.setPosition(.9);
     }
 
-    public void intakeDown() {
-        pivot1.setPosition(.41);
-        pivot2.setPosition(.59);
+    public void runIntake(double power) {
+        spinLeft.setPower(-power);
+        spinRight.setPower(-power);
     }
 
-    public void intakeUp() {
-        pivot1.setPosition(0);
-        pivot2.setPosition(1);
+    public int getIntakeEncoder() {
+        return (Math.abs(intake.getCurrentPosition()));
     }
 
-    public void intakePow(double pow) {
-        intake.setPower(-pow);
+    public void setIntake() {
+        //double kP = 1 / 10.0;
+        double error = (300 - getIntakeEncoder());
+        if (getIntakeEncoder() <= 300)
+            intake.setPower(-.5);
+                //  double ChangeP = error * kP;
+        //  double power = ChangeP;
+        //  power /= power;
+        /*   if (error < 50 || Math.abs(ChangeP) < .02) {
+                lift.setPower(0.06);
+            }
+         */
+
+        //  macro.reset();
     }
 
-    public void intakeStop() {
-        intake.setPower(0);
+
+
+
+    public void intakeReset(double kP) {
+        if (getIntakeEncoder() > 20)
+            //    double power = getLiftEncoder() * kP;
+            //    power /= power;
+            intake.setPower(.5);
+        runIntake(-1);
+    }
+
+    public void resetIntakeEncoder() {
+        intake.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     /* //TODO: I thought I wasn't plugging into an encoder here but I can if we have extras

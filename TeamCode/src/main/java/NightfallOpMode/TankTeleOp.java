@@ -3,6 +3,8 @@ package NightfallOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import NightfallLinearOpMode.Intake;
+
 @TeleOp(name = "TankTeleOp", group = "opMode")
 public class TankTeleOp extends NightfallOpMode {
 
@@ -15,15 +17,21 @@ public class TankTeleOp extends NightfallOpMode {
         LIFT_START,
         LIFT_RAISE,
         LIFT_LOWER
-
-    };
-    int heightModifier = 570;
+    }
+    int heightModifier = 610;
+    public enum IntakeState {
+        INTAKE_START,
+        INTAKE_MOVE,
+        INTAKE_BACK
+    }
 
     ElapsedTime capbruh = new ElapsedTime();
     ElapsedTime heightMod = new ElapsedTime();
     boolean liftActive = false;
+    boolean intakeActive = false;
 
     LiftState liftState = LiftState.LIFT_START;
+    IntakeState intakeState = IntakeState.INTAKE_START;
 
     public void loop() {
         //================================= DRIVE ==================================================
@@ -78,7 +86,7 @@ public class TankTeleOp extends NightfallOpMode {
         telemetry.update();
 
         //================================= INTAKE =================================================
-
+/*
         if (gamepad1.a) {
             pivotDown();
         }
@@ -92,6 +100,77 @@ public class TankTeleOp extends NightfallOpMode {
             pivotCross();
             intake.setPower(0);
         }
+ */
+        //TODO: test this, if you want to make a manual toggle please do, other than that test auto and tune it
+        // BE VERY CAREFUL ESPECIALLY WITH THE INTAKE MOTOR SPINNING TOO MUCH, START WITH SMALL VALUES WHEN MOVING IT, OR AT LEAST TEST IN TELEOP
+        // FIRST, IF YOU SPIN IT TOO MUCH, THE INTAKE WALL WILL SNAP, AND I WILL CRY SO DONT DO THAT
+ /*       if (gamepad1.right_bumper){
+            runIntake(1);
+        }
+        else {
+            runIntake(0);
+        }
+        if (gamepad2.a) {
+            gateUp();
+        }
+        if (gamepad2.b) {
+            gateDown();
+        }
+
+
+
+        if (gamepad1.a) {
+            intake.setPower(-.4);
+        } else if (gamepad1.b) {
+            intake.setPower(.4);
+        } else {
+            intake.setPower(0);
+        }
+        telemetry.addData("intakeEncoder:", getIntakeEncoder());
+
+  */
+
+
+        switch (intakeState) {
+            case INTAKE_START:
+                if (gamepad1.right_bumper && !intakeActive) {
+                    intakeActive = true;
+                    intakeState = IntakeState.INTAKE_MOVE;
+                }
+                break;
+            case INTAKE_MOVE:
+                gateDown();
+                if (getIntakeEncoder() <= 290) {
+                    setIntake();
+                } else {
+                    runIntake(1);
+                    intake.setPower(.06);
+                    if (gamepad1.right_bumper) {
+                        intakeState = IntakeState.INTAKE_BACK;
+                    }
+                }
+                break;
+            case INTAKE_BACK:
+                if (getIntakeEncoder() > 20) {
+                    intakeReset(1);
+                } else {
+                    runIntake(0);
+                    gateUp();
+                    intake.setPower(0);
+                    if (intake.getCurrentPosition() < 5)
+                        resetIntakeEncoder();
+                    intakeState = IntakeState.INTAKE_START;
+                    intakeActive = false;
+                }
+                break;
+            default:
+                intakeState = IntakeState.INTAKE_START;
+        }
+
+
+
+
+
 
 
 
@@ -194,7 +273,7 @@ public class TankTeleOp extends NightfallOpMode {
         }
 
 
-
+/*
         if (gamepad2.x && capup && capbruh.milliseconds() > 200) {
             capDown();
             capup = false;
@@ -205,6 +284,8 @@ public class TankTeleOp extends NightfallOpMode {
             capup = true;
             capbruh.reset();
         }
+
+ */
     }
 }
 

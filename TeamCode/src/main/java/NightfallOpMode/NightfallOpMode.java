@@ -18,16 +18,24 @@ public abstract class NightfallOpMode extends OpMode {
     DcMotor intake; //intake - [0 c]
     DcMotor lift; //lift - [1 c]
 
-    Servo pivot1; //pivot servo - [3 c]
-    Servo pivot2; //pivot servo - [2 e2]
+    CRServo spinRight; //surgical tubing servo - [0 c]
+    CRServo spinLeft; //surgical tubing servo - [3 e2]
+    Servo gate; //gate servo - [2 e2]
+//    Servo pivot1; //pivot servo - [3 c]
+//    Servo pivot2; //pivot servo - [2 e2]
 
     Servo hatch; //output servo - [5 c]
-    Servo cap; //cap servo - [4 c]
+ //   Servo cap; //cap servo - [4 c]
 
     CRServo duckL; //left duck - [0 e2]
     CRServo duckR; //right duck - [1 e2]
 
     ElapsedTime macro = new ElapsedTime();
+
+
+    // lowest EXPANSION HUB = surgicalright
+    // C HUB 0 = surgical left
+    // one above lowest on expansion - gate
 
     public void init() {
 
@@ -41,11 +49,13 @@ public abstract class NightfallOpMode extends OpMode {
         intake = hardwareMap.dcMotor.get("intake");
         lift = hardwareMap.dcMotor.get("lift");
 
-        pivot1 = hardwareMap.servo.get("in1");
-        pivot2 = hardwareMap.servo.get("in2");
-        hatch = hardwareMap.servo.get("hatch");
+    //    pivot1 = hardwareMap.servo.get("in1");
+    //    pivot2 = hardwareMap.servo.get("in2");
+        gate = hardwareMap.servo.get("gate");
+        spinRight = hardwareMap.crservo.get("sR");
+        spinLeft = hardwareMap.crservo.get("lR");
 
-        cap = hardwareMap.servo.get("cap");
+    //    cap = hardwareMap.servo.get("cap");
         hatch = hardwareMap.servo.get("hatch");
 
         duckL = hardwareMap.crservo.get("duckL");
@@ -63,7 +73,9 @@ public abstract class NightfallOpMode extends OpMode {
         ML.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         BL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
+        intake.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         intake.setDirection(DcMotorSimple.Direction.REVERSE);
+        spinRight.setDirection(DcMotorSimple.Direction.REVERSE);
         lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         lift.setDirection(DcMotorSimple.Direction.REVERSE);
 
@@ -75,6 +87,7 @@ public abstract class NightfallOpMode extends OpMode {
         BL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         FR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         BL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
@@ -84,11 +97,14 @@ public abstract class NightfallOpMode extends OpMode {
         MR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
         lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         telemetry.addData("init ", "completed");
         telemetry.update();
-        capUp();
+      //  capUp();
         hatchUp();
+        gateUp();
+
     }
 
     //============================= Drivetrain =====================================================
@@ -121,7 +137,7 @@ public abstract class NightfallOpMode extends OpMode {
     }
 
     //============================= Intake =========================================================
-
+/*
     public void pivotCross() {
         pivot1.setPosition(.28);
         pivot2.setPosition(.72);
@@ -136,7 +152,56 @@ public abstract class NightfallOpMode extends OpMode {
         pivot1.setPosition(0);
         pivot2.setPosition(1); //1
     }
+ */
+    public void gateDown() {
+        gate.setPosition(1);
+    }
+    public void gateUp() {
+        gate.setPosition(.9);
+    }
 
+    public void runIntake(double power) {
+        spinLeft.setPower(-power);
+        spinRight.setPower(-power);
+    }
+
+    public int getIntakeEncoder() {
+        return (Math.abs(intake.getCurrentPosition()));
+    }
+
+    public void setIntake() {
+        //double kP = 1 / 10.0;
+        double error = (300 - getIntakeEncoder());
+        if (getIntakeEncoder() <= 300)
+            intake.setPower(-.5);
+        if (error < 50)
+            intake.setPower(0.06);
+            //  double ChangeP = error * kP;
+            //  double power = ChangeP;
+            //  power /= power;
+        /*   if (error < 50 || Math.abs(ChangeP) < .02) {
+                lift.setPower(0.06);
+            }
+         */
+
+      //  macro.reset();
+    }
+
+
+
+
+    public void intakeReset(double kP) {
+        if (getIntakeEncoder() > 20)
+            //    double power = getLiftEncoder() * kP;
+            //    power /= power;
+            intake.setPower(.5);
+            runIntake(-1);
+    }
+
+    public void resetIntakeEncoder() {
+        intake.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
 
     //============================= Lift ===========================================================
 
@@ -186,7 +251,7 @@ public abstract class NightfallOpMode extends OpMode {
         }
         resetLiftEncoder();
     }
-
+/*
     public void macro(double macroHeight) {
         if (macroHeight == 1) {
             //lift.setTargetPosition(2);
@@ -198,15 +263,16 @@ public abstract class NightfallOpMode extends OpMode {
             //lift.setTargetPosition(4);x
         }
     }
+ */
 
     public void hatchUp() {
-        hatch.setPosition(.82);
+        hatch.setPosition(.87);
     }
 
     public void hatchDown() {
         hatch.setPosition(.55);
     }
-
+/*
     public void capUp() {
         cap.setPosition(.7);
     }
@@ -214,6 +280,8 @@ public abstract class NightfallOpMode extends OpMode {
     public void capDown(){
         cap.setPosition(.3);
     }
+
+ */
 
 
 }

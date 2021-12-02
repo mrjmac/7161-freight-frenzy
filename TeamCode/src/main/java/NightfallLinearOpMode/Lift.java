@@ -60,7 +60,7 @@ public class Lift {
         nonJankLiftReset();
 
 */
-        int heightModifier = 575;
+        int heightModifier = 700;
         double ticks = (height - 1) * heightModifier;
         while (this.opMode.opModeIsActive() && !this.opMode.isStopRequested()) {
 

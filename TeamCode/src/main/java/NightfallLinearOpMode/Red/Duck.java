@@ -54,7 +54,7 @@ public class Duck extends LinearOpMode {
         // PICK UP CAP AND SCORE PRE LOADED
         drivetrain.gyroEncoderInch(1, 18, 2, 0);
         lift.capDown();
-        intake.intakeDown();
+        //intake.intakeDown();
         sleep(300);
         lift.capUp();
         drivetrain.turnPD(50, kpTurn45, kdTurn45, 1.5);
@@ -65,11 +65,13 @@ public class Duck extends LinearOpMode {
         drivetrain.duckStart(-1);
         sleep(5000);
         drivetrain.duckStop();
-        intake.intakePow(1);
+        drivetrain.gyroEncoderInch(.5, 26, 3, 0);
+        /*
+        //intake.intakePow(1);
         drivetrain.gyroEncoderInch(0.8, 12, 1.2, 60);
         drivetrain.turnPD(-30, kpTurn90, kdTurn90, 1.5);
         drivetrain.gyroEncoderInch(-1, 8, 3, -22);
-        intake.intakeStop();
+        //intake.intakeStop();
         drivetrain.turnPD(50, kpTurn90+.03, 0.004, 1.5);
         drivetrain.gyroEncoderInch(1, 30, 3, 50);
         sleep(500);
@@ -84,11 +86,13 @@ public class Duck extends LinearOpMode {
         intake.intakeStop();
         drivetrain.gyroEncoderInch(1, 35, 3, -25);
         lift.setLift(3, 1);
-        */
+        //comment goes here
         // PARK INSIDE CRATER
         drivetrain.gyroEncoderInch(-.5, 12, 1, 50);
         drivetrain.turnPD(-60, kpTurn180, kdTurn180, 1.5);
         drivetrain.gyroEncoderInch(1, 33, 2.5, -90);
+
+         */
 
 
 
