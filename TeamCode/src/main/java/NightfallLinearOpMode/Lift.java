@@ -102,7 +102,7 @@ public class Lift {
 
     public void nonJankLiftReset() {
         lift.setTargetPosition(0);
-    }
+    } //jank
 
     public void liftReset(double kP) {
         while (getEncoder() > 50) {

@@ -10,9 +10,10 @@ public class TankTeleOp extends NightfallOpMode {
 
     boolean capup = true;
     double speedControl;
-    double macroHeight = 3;
+    int macroHeight = 3;
     boolean manual = false;
     boolean hatchDown = false;
+    double macro2 = 0;
     public enum LiftState {
         LIFT_START,
         LIFT_RAISE,
@@ -86,6 +87,23 @@ public class TankTeleOp extends NightfallOpMode {
         telemetry.update();
 
         //================================= INTAKE =================================================
+
+        /*
+        if (gamepad1.a)
+        {
+            spinLeft.setPower(-1);
+            spinRight.setPower(-1);
+        }
+        else if(gamepad1.b) {
+            spinRight.setPower(1);
+            spinLeft.setPower(-1);
+        }
+        else{
+            spinLeft.setPower(0);
+            spinRight.setPower(0);
+        }
+
+         */
 /*
         if (gamepad1.a) {
             pivotDown();
@@ -131,6 +149,7 @@ public class TankTeleOp extends NightfallOpMode {
   */
 
 
+
         switch (intakeState) {
             case INTAKE_START:
                 if (gamepad1.right_bumper && !intakeActive) {
@@ -174,6 +193,8 @@ public class TankTeleOp extends NightfallOpMode {
 
 
 
+
+
         //================================= DUCKS ==================================================
         if (Math.abs(gamepad2.right_trigger) > 0.1) {
             duckR.setPower(.8);
@@ -198,6 +219,18 @@ public class TankTeleOp extends NightfallOpMode {
             macroHeight -= 1;
             heightMod.reset();
         }
+        switch (macroHeight) {
+            case 1:
+                macro2 = 330;
+                break;
+            case 2:
+                macro2 = 890;
+                break;
+            case 3:
+                macro2 = 1570;
+                break;
+
+        }
 
         if (!manual) {
             switch (liftState) {
@@ -208,8 +241,8 @@ public class TankTeleOp extends NightfallOpMode {
                     }
                     break;
                 case LIFT_RAISE:
-                    if (lift.getCurrentPosition() < (heightModifier * (macroHeight - 1) - 50)) {
-                        setLiftReal(macroHeight, heightModifier);
+                    if (lift.getCurrentPosition() < (macro2 - 50)) {//heightModifier * (macroHeight - 1) - 50)) {
+                        setLiftReal(macro2);
                     } else {
                         hatchDown();
                         lift.setPower(.06);

@@ -213,8 +213,8 @@ public abstract class NightfallOpMode extends OpMode {
         return (Math.abs(lift.getCurrentPosition()));
     }
 
-    public void setLiftReal(double macroHeight, double heightModifier) {
-        double ticks = (macroHeight - 1) * heightModifier;
+    public void setLiftReal(double macro2) {
+        double ticks = macro2;//(macroHeight - 1) * heightModifier;
         //double kP = 1 / 10.0;
         if (getLiftEncoder() <= ticks - 50) {
             //     double error = (ticks - getLiftEncoder());
