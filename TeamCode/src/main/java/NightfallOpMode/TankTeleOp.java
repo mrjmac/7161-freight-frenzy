@@ -68,16 +68,17 @@ public class TankTeleOp extends NightfallOpMode {
 
         startMotors(left * speedControl, right * speedControl);
 
-        telemetry.addData("gamepad2 left stick:", gamepad2.left_stick_y);
+        telemetry.addData("macro height", macro2);
+        //telemetry.addData("gamepad2 left stick:", gamepad2.left_stick_y);
         telemetry.addData("manual:", manual);
         telemetry.addData("macroHeight:", macroHeight);
         telemetry.addData("lift height", getLiftEncoder());
-        telemetry.addData("ducks on?", gamepad2.right_bumper);
-        telemetry.addData("ducks reverse?", gamepad2.left_bumper);
-        telemetry.addData("hatch open", gamepad2.y);
-        telemetry.addData("hatch closed", gamepad2.x);
-        telemetry.addData("leftmotor:", FL.getCurrentPosition());
-        telemetry.addData("right motor:", FR.getCurrentPosition());
+        //telemetry.addData("ducks on?", gamepad2.right_bumper);
+        //telemetry.addData("ducks reverse?", gamepad2.left_bumper);
+        //telemetry.addData("hatch open", gamepad2.y);
+        //telemetry.addData("hatch closed", gamepad2.x);
+        //telemetry.addData("leftmotor:", FL.getCurrentPosition());
+        //telemetry.addData("right motor:", FR.getCurrentPosition());
         telemetry.addData("liftstate: ", liftState);
         telemetry.addData("liftEncoder:", lift.getCurrentPosition());
         telemetry.addData("liftPower:", lift.getPower());
@@ -221,13 +222,13 @@ public class TankTeleOp extends NightfallOpMode {
         }
         switch (macroHeight) {
             case 1:
-                macro2 = 330;
+                macro2 = 210;
                 break;
             case 2:
-                macro2 = 890;
+                macro2 = 785;
                 break;
             case 3:
-                macro2 = 1570;
+                macro2 = 1440;
                 break;
 
         }

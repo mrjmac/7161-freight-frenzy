@@ -57,16 +57,19 @@ public class Duck extends LinearOpMode {
         sleep(300);
         lift.capUp();
         drivetrain.turnPD(-50, kpTurn45, kdTurn45, 1.5);
-        drivetrain.gyroEncoderInch(1, 17, 2, -50);
+        drivetrain.gyroEncoderInch(1, 18, 2, -50);
         lift.setLift(liftHeight, 1);
         // CAROUSEL, PICK UP DUCK AND SCORE
-        drivetrain.gyroEncoderInch(-.5, 45.5, 3, -60);
+        drivetrain.gyroEncoderInch(-.5, 46.5, 3, -60);
         drivetrain.duckStart(1);
         sleep(5000);
         drivetrain.duckStop();
-        drivetrain.gyroEncoderInch(.5, 10, 3, -60);
-        drivetrain.turnPD(0, kpTurn45, kdTurn45, 2);
-        drivetrain.gyroEncoderInch(.5, 20, 3, 0);
+        drivetrain.gyroEncoderInch(.5, 60, 3, -85);
+        drivetrain.turnPD(-90, kpTurn5, kdTurn5, 2);
+        drivetrain.gyroEncoderInch(.85, 53, 3, -90);
+        intake.intake.setPower(.2);
+        sleep(500);
+        intake.intake.setPower(0);
         /*
         //intake.intakePow(1);
 

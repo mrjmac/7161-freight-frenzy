@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class Intake {
-    DcMotor intake; //intake - [0 c]
+    public DcMotor intake; //intake - [0 c]
 
     CRServo spinRight; //surgical tubing servo - [0 c]
     CRServo spinLeft; //surgical tubing servo - [3 e2]
@@ -29,6 +29,8 @@ public class Intake {
         spinRight.setDirection(DcMotorSimple.Direction.REVERSE);
         intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         gateUp();
+        intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        intake.setPower(0);
     }
 
     public void gateDown() {

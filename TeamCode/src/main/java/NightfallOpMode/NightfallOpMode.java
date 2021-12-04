@@ -98,6 +98,7 @@ public abstract class NightfallOpMode extends OpMode {
 
         lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        intake.setPower(0);
 
         telemetry.addData("init ", "completed");
         telemetry.update();
@@ -215,7 +216,7 @@ public abstract class NightfallOpMode extends OpMode {
 
     public void setLiftReal(double macro2) {
         double ticks = macro2;//(macroHeight - 1) * heightModifier;
-        //double kP = 1 / 10.0;
+        double kP = 1 / 10.0;
         if (getLiftEncoder() <= ticks - 50) {
             //     double error = (ticks - getLiftEncoder());
             //  double ChangeP = error * kP;

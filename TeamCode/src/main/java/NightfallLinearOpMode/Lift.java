@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class Lift {
     public DcMotor lift; //lift motor - [port number]
@@ -11,6 +12,7 @@ public class Lift {
     public Servo hatch; //output servo - [port number]
     public Servo cap; //cap servo - [port number]
 
+    ElapsedTime liftTime = new ElapsedTime();
 
     LinearOpMode opMode;
 
@@ -51,17 +53,27 @@ public class Lift {
     public void hatchDown() {
         hatch.setPosition(.55);
     }
+    public void topHatchDown() {hatch.setPosition(.63);}
 
     public void setLift(int height, double p) {
+        liftTime.reset();
         /*lift.setTargetPosition(ticks);
         hatchDown();
         this.opMode.sleep(2000);
         hatchUp();
         nonJankLiftReset();
+         */
+        double ticks;
+        if (height == 1) {
+            ticks = 330;
+        } else if (height == 2) {
+            ticks = 890;
+        } else {
+            ticks = 1480;
+        }
 
-*/
-        int heightModifier = 700;
-        double ticks = (height - 1) * heightModifier;
+        //int heightModifier = 700;
+     //   double ticks = (height - 1) * heightModifier;
         while (this.opMode.opModeIsActive() && !this.opMode.isStopRequested()) {
 
             double kP = p / 10;
@@ -78,9 +90,15 @@ public class Lift {
                     lift.setPower(0.06);
                     break;
                 }
+                if (height == 3)
+                    if (liftTime.milliseconds() > 750)
+                        topHatchDown();
+            }
+            if (height == 3) {
+                topHatchDown();
+            } else {
                 hatchDown();
             }
-            hatchDown();
             lift.setPower(.06);
             break;
         }
