@@ -12,7 +12,9 @@ public class TankTeleOp extends NightfallOpMode {
     double speedControl;
     int macroHeight = 3;
     boolean manual = false;
+    boolean intakeManual = false;
     boolean hatchDown = false;
+    boolean gateDown = false;
     double macro2 = 0;
     public enum LiftState {
         LIFT_START,
@@ -85,6 +87,7 @@ public class TankTeleOp extends NightfallOpMode {
         telemetry.addData("macroTime:", macro.milliseconds());
         telemetry.addData("heightModTime:", heightMod.milliseconds());
         telemetry.addData("capbruhTime:", capbruh.milliseconds());
+        telemetry.addData("intakeManual: ", intakeManual);
         telemetry.update();
 
         //================================= INTAKE =================================================
@@ -149,42 +152,70 @@ public class TankTeleOp extends NightfallOpMode {
 
   */
 
-
-
-        switch (intakeState) {
-            case INTAKE_START:
-                if (gamepad1.right_bumper && !intakeActive) {
-                    intakeActive = true;
-                    intakeState = IntakeState.INTAKE_MOVE;
-                }
-                break;
-            case INTAKE_MOVE:
-                gateDown();
-                if (getIntakeEncoder() <= 290) {
-                    setIntake();
-                } else {
-                    runIntake(1);
-                    intake.setPower(.06);
-                    if (gamepad1.right_bumper) {
-                        intakeState = IntakeState.INTAKE_BACK;
+        if (!intakeManual) {
+            switch (intakeState) {
+                case INTAKE_START:
+                    if (gamepad1.right_bumper && !intakeActive) {
+                        intakeActive = true;
+                        intakeState = IntakeState.INTAKE_MOVE;
                     }
-                }
-                break;
-            case INTAKE_BACK:
-                if (getIntakeEncoder() > 20) {
-                    intakeReset(1);
-                } else {
-                    runIntake(0);
-                    gateUp();
-                    intake.setPower(0);
-                    if (intake.getCurrentPosition() < 5)
-                        resetIntakeEncoder();
+                    break;
+                case INTAKE_MOVE:
+                    gateDown();
+                    if (getIntakeEncoder() <= 290) {
+                        setIntake();
+                    } else {
+                        runIntake(1);
+                        intake.setPower(.06);
+                        if (gamepad1.right_bumper) {
+                            intakeState = IntakeState.INTAKE_BACK;
+                        }
+                    }
+                    break;
+                case INTAKE_BACK:
+                    if (getIntakeEncoder() > 20) {
+                        intakeReset(1);
+                    } else {
+                        runIntake(0);
+                        gateUp();
+                        intake.setPower(0);
+                        if (intake.getCurrentPosition() < 5)
+                            resetIntakeEncoder();
+                        intakeState = IntakeState.INTAKE_START;
+                        intakeActive = false;
+                    }
+                    break;
+                default:
                     intakeState = IntakeState.INTAKE_START;
-                    intakeActive = false;
-                }
-                break;
-            default:
-                intakeState = IntakeState.INTAKE_START;
+            }
+        }
+
+        if (gamepad1.y && !intakeManual && macro.milliseconds() > 500) {
+            intakeManual = true;
+            macro.reset();
+        } else if (gamepad1.y && intakeManual && macro.milliseconds() > 500) {
+            intakeManual = false;
+            macro.reset();
+        }
+
+        if (intakeManual) {
+            if (Math.abs(gamepad1.right_trigger) > .1) {
+                intake.setPower(-.2);
+            } else if (Math.abs(gamepad1.left_trigger) > .1) {
+                intake.setPower(.2);
+            } else {
+                intake.setPower(0);
+            }
+
+            if (gamepad1.a && gateDown && macro.milliseconds() > 500) {
+                gateUp();
+                macro.reset();
+                gateDown = false;
+            } else if (gamepad1.a && !gateDown && macro.milliseconds() > 500) {
+                gateDown();
+                macro.reset();
+                gateDown = true;
+            }
         }
 
 

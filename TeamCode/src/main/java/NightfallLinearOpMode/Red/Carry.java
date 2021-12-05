@@ -57,7 +57,7 @@ public class Carry extends LinearOpMode {
         sleep(300);
         lift.capUp();
         drivetrain.turnPD(50, kpTurn45, kdTurn45, 1.5);
-        drivetrain.gyroEncoderInch(1, 17, 2, 50);
+        drivetrain.gyroEncoderInch(1, 16, 2, 50);
         lift.setLift(liftHeight, 1);
         // CAROUSEL, PICK UP DUCK AND SCORE
         drivetrain.gyroEncoderInch(-.5, 45.5, 3, 60);

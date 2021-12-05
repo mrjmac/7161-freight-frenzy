@@ -53,7 +53,7 @@ public class Carry extends LinearOpMode {
         liftHeight = pos;
 
         // PICK UP CAP AND SCORE PRE LOADED (blue)
-        drivetrain.gyroEncoderInch(1, 18, 2, 0);
+        drivetrain.gyroEncoderInch(1, 1], 2, 0);
         lift.capDown();
         //intake.intakeDown();
         sleep(300);
