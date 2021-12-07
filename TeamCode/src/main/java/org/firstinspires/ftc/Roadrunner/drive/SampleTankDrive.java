@@ -21,6 +21,7 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
@@ -95,14 +96,16 @@ public class SampleTankDrive extends TankDrive {
         // BNO055IMUUtil.remapAxes(imu, AxesOrder.XYZ, AxesSigns.NPN);
 
         // add/remove motors depending on your robot (e.g., 6WD)
-        DcMotorEx leftFront = hardwareMap.get(DcMotorEx.class, "leftFront");
-        DcMotorEx leftRear = hardwareMap.get(DcMotorEx.class, "leftRear");
-        DcMotorEx rightRear = hardwareMap.get(DcMotorEx.class, "rightRear");
-        DcMotorEx rightFront = hardwareMap.get(DcMotorEx.class, "rightFront");
+        DcMotorEx leftFront = hardwareMap.get(DcMotorEx.class, "FL");
+        DcMotorEx leftMiddle = hardwareMap.get(DcMotorEx.class, "ML");
+        DcMotorEx leftRear = hardwareMap.get(DcMotorEx.class, "BL");
+        DcMotorEx rightRear = hardwareMap.get(DcMotorEx.class, "BR");
+        DcMotorEx rightMiddle = hardwareMap.get(DcMotorEx.class, "MR");
+        DcMotorEx rightFront = hardwareMap.get(DcMotorEx.class, "FR");
 
-        motors = Arrays.asList(leftFront, leftRear, rightRear, rightFront);
-        leftMotors = Arrays.asList(leftFront, leftRear);
-        rightMotors = Arrays.asList(rightFront, rightRear);
+        motors = Arrays.asList(leftFront, leftMiddle, leftRear, rightRear, rightMiddle, rightFront);
+        leftMotors = Arrays.asList(leftFront, leftMiddle, leftRear);
+        rightMotors = Arrays.asList(rightFront, rightMiddle, rightRear);
 
         for (DcMotorEx motor : motors) {
             MotorConfigurationType motorConfigurationType = motor.getMotorType().clone();
@@ -121,7 +124,12 @@ public class SampleTankDrive extends TankDrive {
         }
 
         // TODO: reverse any motors using DcMotor.setDirection()
-
+        rightFront.setDirection(DcMotorSimple.Direction.FORWARD);
+        rightMiddle.setDirection(DcMotorSimple.Direction.FORWARD);
+        rightRear.setDirection(DcMotorSimple.Direction.FORWARD);
+        leftFront.setDirection(DcMotorSimple.Direction.FORWARD);
+        leftMiddle.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftRear.setDirection(DcMotorSimple.Direction.FORWARD);
         // TODO: if desired, use setLocalizer() to change the localization method
         // for instance, setLocalizer(new ThreeTrackingWheelLocalizer(...));
 
@@ -302,7 +310,7 @@ public class SampleTankDrive extends TankDrive {
         // Rotate about the z axis is the default assuming your REV Hub/Control Hub is laying
         // flat on a surface
 
-        return (double) imu.getAngularVelocity().zRotationRate;
+        return (double) imu.getAngularVelocity().yRotationRate;
     }
 
     public static TrajectoryVelocityConstraint getVelocityConstraint(double maxVel, double maxAngularVel, double trackWidth) {
