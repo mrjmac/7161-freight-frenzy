@@ -168,25 +168,6 @@ public class SampleTankDrive extends TankDrive {
         turnAsync(angle);
         waitForIdle();
     }
-    public void startMotors(double l, double r) {
-
-        for (DcMotorEx motor : leftMotors) {
-            motor.setPower(l);
-
-        }
-        for (DcMotorEx motor : rightMotors) {
-            motor.setPower(r);
-        }
-
-    }
-
-    public double deadstick(double value) {
-
-        if (value > -0.1 && value < 0.1)
-            return 0;
-        else
-            return value;
-    }
 
     public void followTrajectoryAsync(Trajectory trajectory) {
         trajectorySequenceRunner.followTrajectorySequenceAsync(
@@ -280,7 +261,7 @@ public class SampleTankDrive extends TankDrive {
         for (DcMotorEx rightMotor : rightMotors) {
             rightSum += encoderTicksToInches(rightMotor.getCurrentPosition());
         }
-        return Arrays.asList(leftSum / leftMotors.size(), rightSum / rightMotors.size());
+        return Arrays.asList((leftSum / leftMotors.size()) * -1, (rightSum / rightMotors.size()) * -1);
     }
 
     public List<Double> getWheelVelocities() {

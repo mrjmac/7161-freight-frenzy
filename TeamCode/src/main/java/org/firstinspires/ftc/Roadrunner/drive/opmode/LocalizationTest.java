@@ -27,26 +27,13 @@ public class LocalizationTest extends LinearOpMode {
 
         while (!isStopRequested()) {
 
-            double left = 0;
-            double right = 0;
-            double max;
-
-            double forward = drive.deadstick((gamepad1.left_stick_y * Math.abs(gamepad1.left_stick_y)));
-            double side = drive.deadstick(gamepad1.right_stick_x * Math.abs(gamepad1.right_stick_x));
-
-            left = forward - side;
-            right = forward + side;
-
-            max = Math.max(Math.abs(left), Math.abs(right));
-            if (max > 1.0) {
-                left /= max;
-                right /= max;
-            }
-
-            drive.startMotors(left, right);
-
-
-
+            drive.setWeightedDrivePower(
+                    new Pose2d(
+                            -gamepad1.left_stick_y,
+                            0,
+                            -gamepad1.right_stick_x
+                    )
+            );
 
             drive.update();
 
