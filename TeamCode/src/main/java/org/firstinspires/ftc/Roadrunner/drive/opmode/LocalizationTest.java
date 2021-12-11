@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.Roadrunner.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.Roadrunner.drive.SampleTankDrive;
 
 /**
  * This is a simple teleop routine for testing localization. Drive the robot around like a normal
@@ -18,20 +19,34 @@ import org.firstinspires.ftc.Roadrunner.drive.SampleMecanumDrive;
 public class LocalizationTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
-        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+        SampleTankDrive drive = new SampleTankDrive(hardwareMap);
 
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         waitForStart();
 
         while (!isStopRequested()) {
-            drive.setWeightedDrivePower(
-                    new Pose2d(
-                            -gamepad1.left_stick_y,
-                            -gamepad1.left_stick_x,
-                            -gamepad1.right_stick_x
-                    )
-            );
+
+            double left = 0;
+            double right = 0;
+            double max;
+
+            double forward = drive.deadstick((gamepad1.left_stick_y * Math.abs(gamepad1.left_stick_y)));
+            double side = drive.deadstick(gamepad1.right_stick_x * Math.abs(gamepad1.right_stick_x));
+
+            left = forward - side;
+            right = forward + side;
+
+            max = Math.max(Math.abs(left), Math.abs(right));
+            if (max > 1.0) {
+                left /= max;
+                right /= max;
+            }
+
+            drive.startMotors(left, right);
+
+
+
 
             drive.update();
 
@@ -42,4 +57,5 @@ public class LocalizationTest extends LinearOpMode {
             telemetry.update();
         }
     }
+
 }
