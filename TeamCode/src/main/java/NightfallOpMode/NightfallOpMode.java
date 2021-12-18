@@ -137,6 +137,21 @@ public abstract class NightfallOpMode extends OpMode {
             return value;
     }
 
+    public void resetDT() {
+        FR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        BR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        FL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        MR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        ML.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        BL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        FR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        BR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        FL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        MR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        ML.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        BL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
+
     //============================= Intake =========================================================
 /*
     public void pivotCross() {

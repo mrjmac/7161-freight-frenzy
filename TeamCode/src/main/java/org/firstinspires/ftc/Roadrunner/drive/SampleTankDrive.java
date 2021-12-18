@@ -2,6 +2,7 @@ package org.firstinspires.ftc.Roadrunner.drive;
 
 import androidx.annotation.NonNull;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.acmerobotics.roadrunner.drive.DriveSignal;
@@ -18,6 +19,7 @@ import com.acmerobotics.roadrunner.trajectory.constraints.TankVelocityConstraint
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAccelerationConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
 import com.qualcomm.hardware.bosch.BNO055IMU;
+
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -70,6 +72,7 @@ public class SampleTankDrive extends TankDrive {
     private BNO055IMU imu;
 
     private VoltageSensor batteryVoltageSensor;
+
 
     public SampleTankDrive(HardwareMap hardwareMap) {
         super(kV, kA, kStatic, TRACK_WIDTH);
@@ -132,8 +135,8 @@ public class SampleTankDrive extends TankDrive {
         leftRear.setDirection(DcMotorSimple.Direction.FORWARD);
         // TODO: if desired, use setLocalizer() to change the localization method
         // for instance, setLocalizer(new ThreeTrackingWheelLocalizer(...));
-
         trajectorySequenceRunner = new TrajectorySequenceRunner(follower, HEADING_PID);
+
     }
 
     public TrajectoryBuilder trajectoryBuilder(Pose2d startPose) {
@@ -261,10 +264,10 @@ public class SampleTankDrive extends TankDrive {
         for (DcMotorEx rightMotor : rightMotors) {
             rightSum += encoderTicksToInches(rightMotor.getCurrentPosition());
         }
-        return Arrays.asList((leftSum / leftMotors.size()) * -1, (rightSum / rightMotors.size()) * -1);
+        return Arrays.asList((leftSum / 2.0) * -1, (rightSum / 2.0) * -1*.01);
     }
 
-    public List<Double> getWheelVelocities() {
+    public List<Double> getWheelVelocities() { // Me when the when the me when the me me when the during the me when the the me when the me when the during the me when the mew when the me when the before me when during after me when the me me when
         double leftSum = 0, rightSum = 0;
         for (DcMotorEx leftMotor : leftMotors) {
             leftSum += encoderTicksToInches(leftMotor.getVelocity());
@@ -272,7 +275,7 @@ public class SampleTankDrive extends TankDrive {
         for (DcMotorEx rightMotor : rightMotors) {
             rightSum += encoderTicksToInches(rightMotor.getVelocity());
         }
-        return Arrays.asList(leftSum / leftMotors.size(), rightSum / rightMotors.size());
+        return Arrays.asList(leftSum / 2.0, rightSum / 2.0);
     }
 
     @Override

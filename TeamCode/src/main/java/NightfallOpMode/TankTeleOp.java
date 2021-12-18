@@ -16,6 +16,7 @@ public class TankTeleOp extends NightfallOpMode {
     boolean hatchDown = false;
     boolean gateDown = false;
     double macro2 = 0;
+    int motor = 1;
     public enum LiftState {
         LIFT_START,
         LIFT_RAISE,
@@ -51,7 +52,7 @@ public class TankTeleOp extends NightfallOpMode {
         } else {
             speedControl = 1;
         }
-
+/*
         double left = 0;
         double right = 0;
         double max;
@@ -69,7 +70,7 @@ public class TankTeleOp extends NightfallOpMode {
         }
 
         startMotors(left * speedControl, right * speedControl);
-
+/*
         telemetry.addData("macro height", macro2);
         //telemetry.addData("gamepad2 left stick:", gamepad2.left_stick_y);
         telemetry.addData("manual:", manual);
@@ -88,6 +89,15 @@ public class TankTeleOp extends NightfallOpMode {
         telemetry.addData("heightModTime:", heightMod.milliseconds());
         telemetry.addData("capbruhTime:", capbruh.milliseconds());
         telemetry.addData("intakeManual: ", intakeManual);
+        */
+        telemetry.addData("leftFront:", FL.getCurrentPosition());
+        telemetry.addData("leftMiddle:", ML.getCurrentPosition());
+        telemetry.addData("leftBack:", BL.getCurrentPosition());
+        telemetry.addData("rightFront:", FR.getCurrentPosition());
+        telemetry.addData("rightMiddle:", MR.getCurrentPosition());
+        telemetry.addData("rightBack:", BR.getCurrentPosition());
+        telemetry.addData("motor:", motor);
+        telemetry.addData("time:", macro);
         telemetry.update();
 
         //================================= INTAKE =================================================
@@ -351,6 +361,39 @@ public class TankTeleOp extends NightfallOpMode {
         }
 
  */
-    }
+        if (gamepad1.x)
+        {
+            if (motor == 1) {
+                FL.setPower(1);
+            } else if (motor == 2) {
+                ML.setPower(1);
+            } else if (motor == 3) {
+                BL.setPower(1);
+            } else if (motor == 4) {
+                FR.setPower(1);
+            } else if (motor == 5) {
+                MR.setPower(1);
+            } else if (motor == 6) {
+                BR.setPower(1);
+            }
+        } else {
+            stopMotors();
+        }
+
+        if (gamepad1.dpad_up && macro.milliseconds() > 250) {
+            macro.reset();
+            motor++;
+        } else if (gamepad1.dpad_down && macro.milliseconds() > 250) {
+            motor--;
+            macro.reset();
+        }
+
+        if (gamepad1.dpad_right)
+            resetDT();
+
+
+
+        }
+
 }
 
