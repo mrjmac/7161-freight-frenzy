@@ -10,6 +10,8 @@ import com.acmerobotics.roadrunner.kinematics.Kinematics;
 import com.acmerobotics.roadrunner.kinematics.MecanumKinematics;
 import com.acmerobotics.roadrunner.kinematics.TankKinematics;
 import com.acmerobotics.roadrunner.localization.Localizer;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.acmerobotics.roadrunner.profile.MotionProfile;
 import com.acmerobotics.roadrunner.profile.MotionProfileBuilder;
 import com.acmerobotics.roadrunner.profile.MotionSegment;
@@ -35,7 +37,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class TankLocalizer implements Localizer {
+public class BruhLocalizer implements Localizer {
 
     public static double TICKS_PER_REV = DriveConstants.TICKS_PER_REV;
     public static double WHEEL_RADIUS = DriveConstants.WHEEL_RADIUS; // in
@@ -46,9 +48,10 @@ public class TankLocalizer implements Localizer {
     TankDrive drive;
     private Encoder leftEncoder, rightEncoder;
 
-    public TankLocalizer(HardwareMap hardwareMap) {
+    public BruhLocalizer(HardwareMap hardwareMap, SampleTankDrive drive) {
         leftEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "FR"));
         rightEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "FL"));
+        this.drive = drive;
     }
 
     double theta = 0;
@@ -60,6 +63,7 @@ public class TankLocalizer implements Localizer {
     double prevRight = 0;
     double leftChange = 0;
     double rightChange = 0;
+
 
     public static double encoderTicksToInches(double ticks) {
         return WHEEL_RADIUS * 2 * Math.PI * GEAR_RATIO * ticks / TICKS_PER_REV;
@@ -145,14 +149,16 @@ public class TankLocalizer implements Localizer {
 
         Vector2d deltaVector = new Vector2d(sineTerm * movement, cosTerm * movement); //translation
         deltaVector = deltaVector.rotated(initialHeadingRad);
-
-        poseEstimate = new Pose2d(deltaVector.getX(), deltaVector.getY(), theta);
+        //heading in rad
+        poseEstimate = new Pose2d(50, 50, 50);//deltaVector.getX(), deltaVector.getY(), 0);
         poseVelocity = calculatePoseDeltaEncoders();
     }
 
+
     public Pose2d calculatePoseDeltaEncoders() {
         Pose2d poseVelocity;
-        List<Double> wheelVelocities = drive.getWheelVelocities();
+        List<Double> wheelVelocities = new ArrayList<>();
+        wheelVelocities = getWheelVelocities();
         if (wheelVelocities != null) {
             poseVelocity = TankKinematics.wheelToRobotVelocities(
                     wheelVelocities,
@@ -162,8 +168,10 @@ public class TankLocalizer implements Localizer {
 
             return poseVelocity;
         }
-        return null; //should be return 0, 0, 0 imo
+        return new Pose2d(0,0,0); //should be return 0, 0, 0 imo
     }
+
+
 
     public List<Double> getWheelVelocities() {
         return drive.getWheelVelocities();

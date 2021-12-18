@@ -88,11 +88,14 @@ public class SampleTankDrive extends TankDrive {
             module.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
         }
 
-        // TODO: adjust the names of the following hardware devices to match your configuration
+
+        /*// TODO: adjust the names of the following hardware devices to match your configuration
         imu = hardwareMap.get(BNO055IMU.class, "imu");
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
         imu.initialize(parameters);
+
+         */
 
         // TODO: if your hub is mounted vertically, remap the IMU axes so that the z-axis points
         // upward (normal to the floor) using a command like the following:
@@ -135,6 +138,7 @@ public class SampleTankDrive extends TankDrive {
         leftRear.setDirection(DcMotorSimple.Direction.FORWARD);
         // TODO: if desired, use setLocalizer() to change the localization method
         // for instance, setLocalizer(new ThreeTrackingWheelLocalizer(...));
+        setLocalizer(new BruhLocalizer(hardwareMap, this));
         trajectorySequenceRunner = new TrajectorySequenceRunner(follower, HEADING_PID);
 
     }
@@ -267,6 +271,7 @@ public class SampleTankDrive extends TankDrive {
         return Arrays.asList((leftSum / 2.0) * -1, (rightSum / 2.0) * -1*.01);
     }
 
+
     public List<Double> getWheelVelocities() { // Me when the when the me when the me me when the during the me when the the me when the me when the during the me when the mew when the me when the before me when during after me when the me me when
         double leftSum = 0, rightSum = 0;
         for (DcMotorEx leftMotor : leftMotors) {
@@ -277,6 +282,8 @@ public class SampleTankDrive extends TankDrive {
         }
         return Arrays.asList(leftSum / 2.0, rightSum / 2.0);
     }
+
+
 
     @Override
     public void setMotorPowers(double v, double v1) {
@@ -290,7 +297,7 @@ public class SampleTankDrive extends TankDrive {
 
     @Override
     public double getRawExternalHeading() {
-        return imu.getAngularOrientation().firstAngle;
+        return 0;//imu.getAngularOrientation().firstAngle;
     }
 
     @Override
@@ -313,7 +320,7 @@ public class SampleTankDrive extends TankDrive {
         // Rotate about the z axis is the default assuming your REV Hub/Control Hub is laying
         // flat on a surface
 
-        return (double) imu.getAngularVelocity().yRotationRate;
+        return (double) 0;//imu.getAngularVelocity().yRotationRate;
     }
 
     public static TrajectoryVelocityConstraint getVelocityConstraint(double maxVel, double maxAngularVel, double trackWidth) {
