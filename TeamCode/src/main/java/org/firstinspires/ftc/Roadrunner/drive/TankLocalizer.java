@@ -8,6 +8,7 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.kinematics.Kinematics;
 import com.acmerobotics.roadrunner.kinematics.MecanumKinematics;
+import com.acmerobotics.roadrunner.kinematics.TankKinematics;
 import com.acmerobotics.roadrunner.localization.Localizer;
 import com.acmerobotics.roadrunner.profile.MotionProfile;
 import com.acmerobotics.roadrunner.profile.MotionProfileBuilder;
@@ -50,8 +51,6 @@ public class TankLocalizer implements Localizer {
         rightEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "FL"));
     }
 
-    double x = 0;
-    double y = 0;
     double theta = 0;
     Pose2d previousPose = new Pose2d(0, 0, 0);
     Pose2d poseEstimate = new Pose2d(0, 0, 0);
@@ -62,6 +61,39 @@ public class TankLocalizer implements Localizer {
     double leftChange = 0;
     double rightChange = 0;
 
+    public static double encoderTicksToInches(double ticks) {
+        return WHEEL_RADIUS * 2 * Math.PI * GEAR_RATIO * ticks / TICKS_PER_REV;
+    }
+
+    public double getLeftEncoder() {
+        double currentInches = encoderTicksToInches(leftEncoder.getCurrentPosition());
+        leftChange = currentInches - prevLeft;
+        prevLeft = currentInches;
+        return currentInches;
+
+    }
+
+    public double getRightEncoder() {
+        double currentInches = encoderTicksToInches(rightEncoder.getCurrentPosition());
+        rightChange = currentInches - prevRight;
+        prevRight = currentInches;
+        return currentInches;
+    }
+    public double angleWrapDeg(double angle) {
+        double zeroTo360 = angle + 180;      //convert to 0-360
+        double start = zeroTo360 % 360; //will work for positive angles
+        //angle is (-360, 0), add 360 to make it from 0-360
+        if (start < 0)
+        {
+            start += 360;
+        }
+        return start - 180; //bring it back to -180 to 180
+    }
+
+    boolean epsilonEquals(double value1, double value2)
+    {
+        return (Math.abs(value1 - value2) < 1.0e-6);
+    }
     @NotNull
     @Override
     public Pose2d getPoseEstimate() {
@@ -82,6 +114,58 @@ public class TankLocalizer implements Localizer {
 
     @Override
     public void update() {
+        getLeftEncoder();
+        getRightEncoder();
+        double initialHeading = theta;
+        double initialHeadingRad = Math.toRadians(initialHeading);
 
+        double angleChangeRad = (leftChange - rightChange) / TRACKWIDTH;
+        double angleChangeDeg = Math.toDegrees(angleChangeRad);
+        theta = angleWrapDeg(theta + angleChangeDeg);
+
+        double movement = (leftChange + rightChange) / 2.0; // total change in movement by robot (dx)
+        double dTheta = angleChangeRad;
+
+        double sinTheta = Math.sin(dTheta);
+        double cosTheta = Math.cos(dTheta);
+
+        double sineTerm;
+        double cosTerm;
+
+        if (epsilonEquals(dTheta, 0))
+        {
+            sineTerm = 1.0 - 1.0 / 6.0 * dTheta * dTheta;
+            cosTerm = dTheta / 2.0;
+        }
+        else //we have angle change
+        {
+            sineTerm = sinTheta / dTheta;
+            cosTerm = (1 - cosTheta) / dTheta;
+        }
+
+        Vector2d deltaVector = new Vector2d(sineTerm * movement, cosTerm * movement); //translation
+        deltaVector = deltaVector.rotated(initialHeadingRad);
+
+        poseEstimate = new Pose2d(deltaVector.getX(), deltaVector.getY(), theta);
+        poseVelocity = calculatePoseDeltaEncoders();
+    }
+
+    public Pose2d calculatePoseDeltaEncoders() {
+        Pose2d poseVelocity;
+        List<Double> wheelVelocities = drive.getWheelVelocities();
+        if (wheelVelocities != null) {
+            poseVelocity = TankKinematics.wheelToRobotVelocities(
+                    wheelVelocities,
+                    DriveConstants.TRACK_WIDTH
+            );
+            poseVelocity = new Pose2d(poseVelocity.vec(), drive.getExternalHeadingVelocity()!=null?drive.getExternalHeadingVelocity():0);
+
+            return poseVelocity;
+        }
+        return null; //should be return 0, 0, 0 imo
+    }
+
+    public List<Double> getWheelVelocities() {
+        return drive.getWheelVelocities();
     }
 }
