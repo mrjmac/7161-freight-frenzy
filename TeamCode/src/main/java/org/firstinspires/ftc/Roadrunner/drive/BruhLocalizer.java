@@ -35,7 +35,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class TankLocalizer implements Localizer {
+//copyright 2021 bigmac
+
+public class BruhLocalizer implements Localizer {
 
     public static double TICKS_PER_REV = DriveConstants.TICKS_PER_REV;
     public static double WHEEL_RADIUS = DriveConstants.WHEEL_RADIUS; // in
@@ -46,12 +48,14 @@ public class TankLocalizer implements Localizer {
     TankDrive drive;
     private Encoder leftEncoder, rightEncoder;
 
-    public TankLocalizer(HardwareMap hardwareMap) {
+    public BruhLocalizer(HardwareMap hardwareMap, TankDrive drive) {
         leftEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "FR"));
         rightEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "FL"));
+        this.drive = drive;
     }
 
     double theta = 0;
+    double angle = 0;
     Pose2d previousPose = new Pose2d(0, 0, 0);
     Pose2d poseEstimate = new Pose2d(0, 0, 0);
     Pose2d poseVelocity;
@@ -61,16 +65,18 @@ public class TankLocalizer implements Localizer {
     double leftChange = 0;
     double rightChange = 0;
 
+    double globalX = 0;
+    double globalY = 0;
+
     public static double encoderTicksToInches(double ticks) {
         return WHEEL_RADIUS * 2 * Math.PI * GEAR_RATIO * ticks / TICKS_PER_REV;
     }
 
     public double getLeftEncoder() {
-        double currentInches = encoderTicksToInches(leftEncoder.getCurrentPosition());
+        double currentInches = -1 * encoderTicksToInches(leftEncoder.getCurrentPosition());
         leftChange = currentInches - prevLeft;
         prevLeft = currentInches;
         return currentInches;
-
     }
 
     public double getRightEncoder() {
@@ -80,18 +86,17 @@ public class TankLocalizer implements Localizer {
         return currentInches;
     }
     public double angleWrapDeg(double angle) {
-        double zeroTo360 = angle + 180;      //convert to 0-360
-        double start = zeroTo360 % 360; //will work for positive angles
-        //angle is (-360, 0), add 360 to make it from 0-360
-        if (start < 0)
-        {
-            start += 360;
+        double correctAngle = angle;      //convert to 0-360
+        while (correctAngle > 180) {
+            correctAngle -=360;
         }
-        return start - 180; //bring it back to -180 to 180
+        while (correctAngle < -180) {
+            correctAngle += 360;
+        }
+        return correctAngle;
     }
 
-    boolean epsilonEquals(double value1, double value2)
-    {
+    boolean epsilonEquals(double value1, double value2) {
         return (Math.abs(value1 - value2) < 1.0e-6);
     }
     @NotNull
@@ -116,12 +121,13 @@ public class TankLocalizer implements Localizer {
     public void update() {
         getLeftEncoder();
         getRightEncoder();
-        double initialHeading = theta;
-        double initialHeadingRad = Math.toRadians(initialHeading);
+        double initialHeadingRad = angle;
+        //double initialHeadingRad = Math.toRadians(initialHeading);
 
         double angleChangeRad = (leftChange - rightChange) / TRACKWIDTH;
-        double angleChangeDeg = Math.toDegrees(angleChangeRad);
-        theta = angleWrapDeg(theta + angleChangeDeg);
+        angle = (angle + angleChangeRad);
+        //double angleChangeDeg = Math.toDegrees(angleChangeRad);
+        //theta = angleWrapDeg(theta + angleChangeDeg);
 
         double movement = (leftChange + rightChange) / 2.0; // total change in movement by robot (dx)
         double dTheta = angleChangeRad;
@@ -132,21 +138,25 @@ public class TankLocalizer implements Localizer {
         double sineTerm;
         double cosTerm;
 
-        if (epsilonEquals(dTheta, 0))
-        {
+        if (epsilonEquals(dTheta, 0)) {
             sineTerm = 1.0 - 1.0 / 6.0 * dTheta * dTheta;
             cosTerm = dTheta / 2.0;
         }
-        else //we have angle change
-        {
+        else{ //we have angle change{
             sineTerm = sinTheta / dTheta;
             cosTerm = (1 - cosTheta) / dTheta;
         }
 
+
+
         Vector2d deltaVector = new Vector2d(sineTerm * movement, cosTerm * movement); //translation
         deltaVector = deltaVector.rotated(initialHeadingRad);
 
-        poseEstimate = new Pose2d(deltaVector.getX(), deltaVector.getY(), theta);
+        globalX += deltaVector.getX();
+        globalY += deltaVector.getY();
+
+        poseEstimate = new Pose2d(globalX, globalY, angle);
+        //poseEstimate = new Pose2d(0, 0, angle);
         poseVelocity = calculatePoseDeltaEncoders();
     }
 
@@ -167,5 +177,13 @@ public class TankLocalizer implements Localizer {
 
     public List<Double> getWheelVelocities() {
         return drive.getWheelVelocities();
+    }
+
+    public String toString() {
+        String bruh = "left encoder: " + getLeftEncoder() + "\n" + "right encoder: " + getRightEncoder() + "\n"
+                + "prev left: " + prevLeft + "\n" + "prev right: " + prevRight + "\n"
+                + "angle change rad: " + ((leftChange - rightChange) / TRACKWIDTH) + angle + "\n" +
+                "heading" + angle;
+        return bruh;
     }
 }
