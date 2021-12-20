@@ -128,7 +128,7 @@ public class BruhLocalizer implements Localizer {
         angle = (angle + angleChangeRad);
         //double angleChangeDeg = Math.toDegrees(angleChangeRad);
         //theta = angleWrapDeg(theta + angleChangeDeg);
-
+        angle = Math.toRadians(angleWrapDeg(Math.toDegrees(angle)));
         double movement = (leftChange + rightChange) / 2.0; // total change in movement by robot (dx)
         double dTheta = angleChangeRad;
 
