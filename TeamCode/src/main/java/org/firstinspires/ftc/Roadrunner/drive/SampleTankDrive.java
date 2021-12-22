@@ -136,6 +136,8 @@ public class SampleTankDrive extends TankDrive {
         leftFront.setDirection(DcMotorSimple.Direction.FORWARD);
         leftMiddle.setDirection(DcMotorSimple.Direction.REVERSE);
         leftRear.setDirection(DcMotorSimple.Direction.FORWARD);
+        leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         // TODO: if desired, use setLocalizer() to change the localization method
         // for instance, setLocalizer(new ThreeTrackingWheelLocalizer(...));
         setLocalizer(new BruhLocalizer(hardwareMap, this));
@@ -212,6 +214,10 @@ public class SampleTankDrive extends TankDrive {
     public void waitForIdle() {
         while (!Thread.currentThread().isInterrupted() && isBusy())
             update();
+    }
+
+    public String getData(){
+        return getLocalizer().toString();
     }
 
     public boolean isBusy() {
