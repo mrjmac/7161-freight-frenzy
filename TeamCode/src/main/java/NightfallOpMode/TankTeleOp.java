@@ -52,7 +52,7 @@ public class TankTeleOp extends NightfallOpMode {
         } else {
             speedControl = 1;
         }
-/*
+
         double left = 0;
         double right = 0;
         double max;
@@ -360,14 +360,14 @@ public class TankTeleOp extends NightfallOpMode {
             capbruh.reset();
         }
 
- */
+
         if (gamepad1.x)
         {
             if (motor == 1) {
                 FL.setPower(1);
             } else if (motor == 2) {
                 ML.setPower(1);
-            } else if (motor == 3) {
+            } else if (motor == 3) {//R
                 BL.setPower(1);
             } else if (motor == 4) {
                 FR.setPower(1);
@@ -392,6 +392,8 @@ public class TankTeleOp extends NightfallOpMode {
             resetDT();
 
 
+
+ */
 
         }
 
