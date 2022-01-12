@@ -155,7 +155,7 @@ public class Vision extends LinearOpMode {
         int rightWhite = 0;
         int midWhite = 0;
 
-        for (int y = 200; y < 260; y++) {
+        for (int y = 100; y < 175; y++) {
             for (int x = 0  ; x < 100; x++) {
                 int pixel = rgbImage.getPixel(x, y);
                 if (isWhite(pixel)) {

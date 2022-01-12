@@ -52,10 +52,10 @@ public class Duck extends LinearOpMode {
 
         // PICK UP CAP AND SCORE PRE LOADED
         drivetrain.gyroEncoderInch(1, 18, 2, 0);
-        lift.capDown();
+       // lift.capDown();
         //intake.intakeDown();
         sleep(300);
-        lift.capUp();
+       // lift.capUp();
         drivetrain.turnPD(-50, kpTurn45, kdTurn45, 1.5);
         drivetrain.gyroEncoderInch(1, 18, 2, -50);
         lift.setLift(liftHeight, 1);

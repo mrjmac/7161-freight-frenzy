@@ -26,6 +26,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
@@ -108,6 +109,7 @@ public class SampleTankDrive extends TankDrive {
         DcMotorEx rightRear = hardwareMap.get(DcMotorEx.class, "BR");
         DcMotorEx rightMiddle = hardwareMap.get(DcMotorEx.class, "MR");
         DcMotorEx rightFront = hardwareMap.get(DcMotorEx.class, "FR");
+        Servo hatch = hardwareMap.get(Servo.class, "hatch");
 
         motors = Arrays.asList(leftFront, leftMiddle, leftRear, rightRear, rightMiddle, rightFront);
         leftMotors = Arrays.asList(leftFront, leftMiddle, leftRear);
@@ -133,9 +135,11 @@ public class SampleTankDrive extends TankDrive {
         rightFront.setDirection(DcMotorSimple.Direction.FORWARD);
         rightMiddle.setDirection(DcMotorSimple.Direction.FORWARD);
         rightRear.setDirection(DcMotorSimple.Direction.FORWARD);
+        leftMiddle.setDirection(DcMotorSimple.Direction.REVERSE);//*
+        leftRear.setDirection(DcMotorSimple.Direction.REVERSE);
         leftFront.setDirection(DcMotorSimple.Direction.FORWARD);
-        leftMiddle.setDirection(DcMotorSimple.Direction.REVERSE);
-        leftRear.setDirection(DcMotorSimple.Direction.FORWARD);
+        hatch.setPosition(.87);
+
         leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         // TODO: if desired, use setLocalizer() to change the localization method

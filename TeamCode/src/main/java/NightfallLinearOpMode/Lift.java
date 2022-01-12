@@ -1,17 +1,18 @@
 package NightfallLinearOpMode;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
+@Config
 public class Lift {
     public DcMotor lift; //lift motor - [port number]
 
     public Servo hatch; //output servo - [port number]
     public Servo cap; //cap servo - [port number]
-
+    public static double pMulti = 103;
     ElapsedTime liftTime = new ElapsedTime();
 
     LinearOpMode opMode;
@@ -65,46 +66,40 @@ public class Lift {
          */
         double ticks;
         if (height == 1) {
-            ticks = 330;
+            ticks = 200;
         } else if (height == 2) {
-            ticks = 890;
+            ticks = 700;
         } else {
-            ticks = 1480;
+            ticks = 1300;
         }
 
         //int heightModifier = 700;
      //   double ticks = (height - 1) * heightModifier;
         while (this.opMode.opModeIsActive() && !this.opMode.isStopRequested()) {
 
-            double kP = p / 10;
+            double kP = p / pMulti;
             while (getEncoder() <= ticks && this.opMode.opModeIsActive()) {
                 double error = (ticks - getEncoder());
                 double ChangeP = error * kP;
-                double power = ChangeP;
-                power /= power;
-                lift.setPower(power);
+                lift.setPower(ChangeP);
                 this.opMode.telemetry.addData("error:", error);
                 this.opMode.telemetry.addData("changeP", ChangeP);
                 this.opMode.telemetry.update();
                 if (error < 50 || Math.abs(ChangeP) < .02) {
-                    lift.setPower(0.06);
+                    lift.setPower(0.08);
                     break;
                 }
                 if (height == 3)
                     if (liftTime.milliseconds() > 750)
-                        topHatchDown();
+                        hatchDown();
             }
-            if (height == 3) {
-                topHatchDown();
-            } else {
-                hatchDown();
-            }
+            hatchDown();
             lift.setPower(.06);
             break;
         }
         this.opMode.sleep(1500);
         hatchUp();
-        liftReset(.5);
+        liftReset(1/150.0);
     }
         /*
         while (getEncoder() < (height - 1) * heightModifier) {
@@ -125,7 +120,6 @@ public class Lift {
     public void liftReset(double kP) {
         while (getEncoder() > 50) {
             double power = getEncoder() * kP;
-            power /= power;
             lift.setPower(-power);
             if (Math.abs(power) < .05)
                 break;

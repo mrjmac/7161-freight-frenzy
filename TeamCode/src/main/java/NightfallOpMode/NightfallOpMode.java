@@ -98,7 +98,7 @@ public abstract class NightfallOpMode extends OpMode {
         MR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
         lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         intake.setPower(0);
 
         telemetry.addData("init ", "completed");
@@ -186,6 +186,7 @@ public abstract class NightfallOpMode extends OpMode {
         return (Math.abs(intake.getCurrentPosition()));
     }
 
+    /*
     public void setIntake() {
         //double kP = 1 / 10.0;
         double error = (300 - getIntakeEncoder());
@@ -199,14 +200,15 @@ public abstract class NightfallOpMode extends OpMode {
         /*   if (error < 50 || Math.abs(ChangeP) < .02) {
                 lift.setPower(0.06);
             }
-         */
+
 
       //  macro.reset();
     }
+    */
 
 
 
-
+    /*
     public void intakeReset(double kP) {
         if (getIntakeEncoder() > 20)
             //    double power = getLiftEncoder() * kP;
@@ -214,6 +216,8 @@ public abstract class NightfallOpMode extends OpMode {
             intake.setPower(.5);
             runIntake(-1);
     }
+
+     */
 
     public void resetIntakeEncoder() {
         intake.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

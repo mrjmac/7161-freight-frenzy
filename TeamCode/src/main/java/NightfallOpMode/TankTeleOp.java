@@ -1,18 +1,21 @@
 package NightfallOpMode;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import NightfallLinearOpMode.Intake;
 
+@Config
 @TeleOp(name = "TankTeleOp", group = "opMode")
 public class TankTeleOp extends NightfallOpMode {
 
+    public static double intakeSpeed = .65;
     boolean capup = true;
     double speedControl;
     int macroHeight = 3;
     boolean manual = false;
-    boolean intakeManual = false;
+   // boolean intakeManual = false;
     boolean hatchDown = false;
     boolean gateDown = false;
     double macro2 = 0;
@@ -23,11 +26,14 @@ public class TankTeleOp extends NightfallOpMode {
         LIFT_LOWER
     }
     int heightModifier = 610;
+    /*
     public enum IntakeState {
         INTAKE_START,
         INTAKE_MOVE,
         INTAKE_BACK
     }
+
+     */
 
     ElapsedTime capbruh = new ElapsedTime();
     ElapsedTime heightMod = new ElapsedTime();
@@ -35,7 +41,7 @@ public class TankTeleOp extends NightfallOpMode {
     boolean intakeActive = false;
 
     LiftState liftState = LiftState.LIFT_START;
-    IntakeState intakeState = IntakeState.INTAKE_START;
+   // IntakeState intakeState = IntakeState.INTAKE_START;
 
     public void loop() {
         //================================= DRIVE ==================================================
@@ -70,7 +76,7 @@ public class TankTeleOp extends NightfallOpMode {
         }
 
         startMotors(left * speedControl, right * speedControl);
-/*
+
         telemetry.addData("macro height", macro2);
         //telemetry.addData("gamepad2 left stick:", gamepad2.left_stick_y);
         telemetry.addData("manual:", manual);
@@ -88,8 +94,7 @@ public class TankTeleOp extends NightfallOpMode {
         telemetry.addData("macroTime:", macro.milliseconds());
         telemetry.addData("heightModTime:", heightMod.milliseconds());
         telemetry.addData("capbruhTime:", capbruh.milliseconds());
-        telemetry.addData("intakeManual: ", intakeManual);
-        */
+        /*
         telemetry.addData("leftFront:", FL.getCurrentPosition());
         telemetry.addData("leftMiddle:", ML.getCurrentPosition());
         telemetry.addData("leftBack:", BL.getCurrentPosition());
@@ -99,7 +104,7 @@ public class TankTeleOp extends NightfallOpMode {
         telemetry.addData("motor:", motor);
         telemetry.addData("time:", macro);
         telemetry.update();
-
+        */
         //================================= INTAKE =================================================
 
         /*
@@ -162,6 +167,7 @@ public class TankTeleOp extends NightfallOpMode {
 
   */
 
+        /*
         if (!intakeManual) {
             switch (intakeState) {
                 case INTAKE_START:
@@ -228,6 +234,17 @@ public class TankTeleOp extends NightfallOpMode {
             }
         }
 
+         */
+        if(gamepad1.right_bumper){
+            intake.setPower(intakeSpeed);
+        }
+        if (gamepad1.left_bumper){
+            intake.setPower(0);
+        }
+        if (gamepad1.left_bumper && gamepad1.right_bumper) {
+            intake.setPower(-intakeSpeed);
+        }
+
 
 
 
@@ -263,13 +280,13 @@ public class TankTeleOp extends NightfallOpMode {
         }
         switch (macroHeight) {
             case 1:
-                macro2 = 210;
+                macro2 = 130;
                 break;
             case 2:
-                macro2 = 785;
+                macro2 = 550;
                 break;
             case 3:
-                macro2 = 1440;
+                macro2 = 1300;
                 break;
 
         }
@@ -301,7 +318,7 @@ public class TankTeleOp extends NightfallOpMode {
 
       */
                     hatchUp();
-                    if (macroHeight != 1) {
+                    if (macroHeight != 0) {
                         if (lift.getCurrentPosition() > 65)
                             liftReset(.5);
                         else {
