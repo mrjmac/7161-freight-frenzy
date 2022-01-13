@@ -44,18 +44,19 @@ public class BruhLocalizer implements Localizer {
     public static double GEAR_RATIO = DriveConstants.GEAR_RATIO; // output (wheel) speed / input (encoder) spee
     public static double TRACKWIDTH = DriveConstants.TRACK_WIDTH * 2    ;
 
-    SampleTankDrive drive;
+    TankDrive drive;
     private Encoder leftEncoder, rightEncoder;
 
-    public BruhLocalizer(HardwareMap hardwareMap, SampleTankDrive drive) {
+    public BruhLocalizer(HardwareMap hardwareMap, TankDrive drive) {
         leftEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "FR"));
         rightEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "FL"));
         this.drive = drive;
     }
 
+
     double theta = 0;
     double angle = 0;
-    ElapsedTime jeffu = new ElapsedTime();
+    //ElapsedTime jeffu = new ElapsedTime();
     Pose2d previousPose = new Pose2d(0, 0, 0);
     Pose2d poseEstimate = new Pose2d(0, 0, 0);
     Pose2d poseVelocity;
@@ -86,7 +87,7 @@ public class BruhLocalizer implements Localizer {
         double currentInches = -1 * encoderTicksToInches(leftEncoder.getCurrentPosition());
         leftChange = currentInches - prevLeft;
         prevLeft = currentInches;
-        jeffu.reset();
+        //jeffu.reset();
         return currentInches;
     }
 
@@ -142,7 +143,7 @@ public class BruhLocalizer implements Localizer {
         angle = Math.toRadians(angleWrapDeg(Math.toDegrees(angle)));
         double movement = (leftChange + rightChange) / 2.0; // total change in movement by robot (dx)
         double dTheta = angleChangeRad;
-        double speed = ((fakeEncoderTicksToInches(encoderInchesToTicks(leftChange)) + fakeEncoderTicksToInches(encoderInchesToTicks(rightChange))) / 2) / jeffu.seconds();
+
 
         double sinTheta = Math.sin(dTheta);
         double cosTheta = Math.cos(dTheta);
@@ -166,33 +167,24 @@ public class BruhLocalizer implements Localizer {
 
         globalX += deltaVector.getX();
         globalY += deltaVector.getY();
+        //TODO: STUFF TO TRY IF THIS DOESN'T WORK (I WILL GENUINELY BE VERY SAD AND UPSET CUZ IT'S 1 AM AND I HAVEN'T STARTED WHAP AND I'M ALSO NO LONGER A DAY AHEAD ON HOMEWORK + I HAVE UIL STUDY)
+        // 1. check alt dms extheadvel code
+        // 2. STWL wheel vel function
+        // 3. SampleTankDrive pass in
+        // 4. CHECK DIVISON STUFF IN WHEEL VELOCITY FUNCTION, IF WHEEL VELOCITY FUNCTION IS FINE WE KNOW THE ISSUE IS IN TankKinematics.wheelToRobotVelocities in which case I will cry
 
         poseEstimate = new Pose2d(globalX, globalY, angle);
         //poseEstimate = new Pose2d(0, 0, angle);
-        poseVelocity = new Pose2d(speed, 0, 0);
-    }
-
-    public Pose2d calculatePoseDeltaEncoders() {
-        Pose2d poseVelocity;
-        List<Double> wheelVelocities = drive.getWheelVelocities();
-        if (wheelVelocities != null) {
+        List<Double> wheelVelcoities = drive.getWheelVelocities();
+        double extHeadingVel = drive.getExternalHeadingVelocity();
+        if (wheelVelcoities != null) {
             poseVelocity = TankKinematics.wheelToRobotVelocities(
-                    wheelVelocities,
+                    wheelVelcoities,
                     DriveConstants.TRACK_WIDTH
             );
-            double johnmoment = 0;
-            for (double velo : wheelVelocities)
-            {
-                johnmoment += velo;
-            }
-            johnmoment /= 2;
-
-            poseVelocity = new Pose2d(johnmoment, 0, drive.getExternalHeadingVelocity()!=null?drive.getExternalHeadingVelocity():0);
-
-            return poseVelocity;
         }
-        return null; //should be return 0, 0, 0 imo
     }
+
 
     public List<Double> getWheelVelocities() {
         return drive.getWheelVelocities();
@@ -202,8 +194,7 @@ public class BruhLocalizer implements Localizer {
         String bruh = "left encoder: " + getLeftEncoder() + "\n" + "right encoder: " + getRightEncoder() + "\n"
                 + "prev left: " + prevLeft + "\n" + "prev right: " + prevRight + "\n"
                 + "angle change rad: " + (((leftChange - rightChange) / TRACKWIDTH)) + "\n" +
-                "heading" + Math.toDegrees(angle) + "\nspeed" + ((leftChange + rightChange) / 2) / jeffu.seconds()
-                + "leftChange" ;
+                "heading" + Math.toDegrees(angle);
         return bruh;
     }
 }

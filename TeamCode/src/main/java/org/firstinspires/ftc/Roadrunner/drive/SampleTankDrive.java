@@ -90,13 +90,13 @@ public class SampleTankDrive extends TankDrive {
         }
 
 
-        /*// TODO: adjust the names of the following hardware devices to match your configuration
+        // TODO: adjust the names of the following hardware devices to match your configuration
         imu = hardwareMap.get(BNO055IMU.class, "imu");
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
         imu.initialize(parameters);
 
-         */
+
 
         // TODO: if your hub is mounted vertically, remap the IMU axes so that the z-axis points
         // upward (normal to the floor) using a command like the following:
@@ -281,24 +281,38 @@ public class SampleTankDrive extends TankDrive {
         for (DcMotorEx rightMotor : rightMotors) {
             rightSum += encoderTicksToInches(rightMotor.getCurrentPosition());
         }
-        return Arrays.asList((leftSum / 2.0) * -1, (rightSum / 2.0) * -1*.01);
+        return Arrays.asList(leftSum / leftMotors.size(), rightSum / rightMotors.size());
     }
 
 
     public List<Double> getWheelVelocities() { // Me when the when the me when the me me when the during the me when the the me when the me when the during the me when the mew when the me when the before me when during after me when the me me when
-       /* double leftSum = 0, rightSum = 0;
+        double leftSum = 0, rightSum = 0;
         for (DcMotorEx leftMotor : leftMotors) {
             leftSum += encoderTicksToInches(leftMotor.getVelocity());
-            encoderTicksToInches(leftMotors.get(0).getVelocity());
         }
         for (DcMotorEx rightMotor : rightMotors) {
             rightSum += encoderTicksToInches(rightMotor.getVelocity());
         }
-        return Arrays.asList(leftSum, rightSum);
+        return Arrays.asList(leftSum / leftMotors.size(), rightSum / rightMotors.size());
 
-        */
-        return Arrays.asList(encoderTicksToInches(leftMotors.get(0).getVelocity()), encoderTicksToInches(rightMotors.get(0).getVelocity()));
+    }
 
+    public String test() {
+        String a = "";
+        int count = 1;
+        double leftSum = 0, rightSum = 0;
+        for (DcMotorEx leftMotor : leftMotors) {
+            a += encoderTicksToInches(leftMotor.getVelocity()) + count + "\n";
+            leftSum += encoderTicksToInches(leftMotor.getVelocity());
+            count++;
+        }
+        count = 1;
+        for (DcMotorEx rightMotor : rightMotors) {
+           a += encoderTicksToInches(rightMotor.getVelocity()) + count + "\n";
+            rightSum += encoderTicksToInches(rightMotor.getVelocity());
+           count++;
+        }
+        return a + "\n" + leftSum / leftMotors.size() + " " + rightSum / rightMotors.size();
     }
 
 
@@ -338,7 +352,7 @@ public class SampleTankDrive extends TankDrive {
         // Rotate about the z axis is the default assuming your REV Hub/Control Hub is laying
         // flat on a surface
 
-        return (double) 0;//imu.getAngularVelocity().yRotationRate;
+        return (double) imu.getAngularVelocity().yRotationRate;
     }
 
     public static TrajectoryVelocityConstraint getVelocityConstraint(double maxVel, double maxAngularVel, double trackWidth) {
