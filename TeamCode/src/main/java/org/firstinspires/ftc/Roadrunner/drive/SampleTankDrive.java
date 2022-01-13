@@ -124,6 +124,9 @@ public class SampleTankDrive extends TankDrive {
         if (RUN_USING_ENCODER) {
             setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
+        else {
+            setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        }
 
         setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
@@ -283,14 +286,19 @@ public class SampleTankDrive extends TankDrive {
 
 
     public List<Double> getWheelVelocities() { // Me when the when the me when the me me when the during the me when the the me when the me when the during the me when the mew when the me when the before me when during after me when the me me when
-        double leftSum = 0, rightSum = 0;
+       /* double leftSum = 0, rightSum = 0;
         for (DcMotorEx leftMotor : leftMotors) {
             leftSum += encoderTicksToInches(leftMotor.getVelocity());
+            encoderTicksToInches(leftMotors.get(0).getVelocity());
         }
         for (DcMotorEx rightMotor : rightMotors) {
             rightSum += encoderTicksToInches(rightMotor.getVelocity());
         }
-        return Arrays.asList(leftSum / 2.0, rightSum / 2.0);
+        return Arrays.asList(leftSum, rightSum);
+
+        */
+        return Arrays.asList(encoderTicksToInches(leftMotors.get(0).getVelocity()), encoderTicksToInches(rightMotors.get(0).getVelocity()));
+
     }
 
 
