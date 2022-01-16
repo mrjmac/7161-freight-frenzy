@@ -293,7 +293,7 @@ public class SampleTankDrive extends TankDrive {
         for (DcMotorEx rightMotor : rightMotors) {
             rightSum += encoderTicksToInches(rightMotor.getVelocity());
         }
-        return Arrays.asList(leftSum / leftMotors.size(), rightSum / rightMotors.size());
+        return Arrays.asList(leftSum, rightSum * -1);
 
     }
 
@@ -302,17 +302,22 @@ public class SampleTankDrive extends TankDrive {
         int count = 1;
         double leftSum = 0, rightSum = 0;
         for (DcMotorEx leftMotor : leftMotors) {
-            a += encoderTicksToInches(leftMotor.getVelocity()) + count + "\n";
+            a += encoderTicksToInches(leftMotor.getVelocity()) +  " leftMotorVel " + count + " motor count\n";
             leftSum += encoderTicksToInches(leftMotor.getVelocity());
             count++;
         }
         count = 1;
         for (DcMotorEx rightMotor : rightMotors) {
-           a += encoderTicksToInches(rightMotor.getVelocity()) + count + "\n";
-            rightSum += encoderTicksToInches(rightMotor.getVelocity());
+           a += encoderTicksToInches(rightMotor.getVelocity()) + " rightMotorVel " + count + " motor count\n";
+           rightSum += encoderTicksToInches(rightMotor.getVelocity());
            count++;
         }
-        return a + "\n" + leftSum / leftMotors.size() + " " + rightSum / rightMotors.size();
+        return "leftSum: " + leftSum + "\nrightSum: " + rightSum;
+    }
+
+    public Double getData2()
+    {
+        return getLocalizer().getPoseVelocity().getX();
     }
 
 
@@ -325,6 +330,18 @@ public class SampleTankDrive extends TankDrive {
         for (DcMotorEx rightMotor : rightMotors) {
             rightMotor.setPower(v1);
         }
+    }
+
+    public void startMotors(double l, double r) {
+
+        for (DcMotorEx motor : leftMotors) {
+            motor.setPower(l);
+
+        }
+        for (DcMotorEx motor : rightMotors) {
+            motor.setPower(r);
+        }
+
     }
 
     @Override

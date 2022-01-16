@@ -44,10 +44,10 @@ public class BruhLocalizer implements Localizer {
     public static double GEAR_RATIO = DriveConstants.GEAR_RATIO; // output (wheel) speed / input (encoder) spee
     public static double TRACKWIDTH = DriveConstants.TRACK_WIDTH * 2    ;
 
-    TankDrive drive;
+    SampleTankDrive drive;
     private Encoder leftEncoder, rightEncoder;
 
-    public BruhLocalizer(HardwareMap hardwareMap, TankDrive drive) {
+    public BruhLocalizer(HardwareMap hardwareMap, SampleTankDrive drive) {
         leftEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "FR"));
         rightEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "FL"));
         this.drive = drive;
@@ -168,9 +168,7 @@ public class BruhLocalizer implements Localizer {
         globalX += deltaVector.getX();
         globalY += deltaVector.getY();
         //TODO: STUFF TO TRY IF THIS DOESN'T WORK (I WILL GENUINELY BE VERY SAD AND UPSET CUZ IT'S 1 AM AND I HAVEN'T STARTED WHAP AND I'M ALSO NO LONGER A DAY AHEAD ON HOMEWORK + I HAVE UIL STUDY)
-        // 1. check alt dms extheadvel code
-        // 2. STWL wheel vel function
-        // 3. SampleTankDrive pass in
+        // 2. get encoder vel instead of motor vel
         // 4. CHECK DIVISON STUFF IN WHEEL VELOCITY FUNCTION, IF WHEEL VELOCITY FUNCTION IS FINE WE KNOW THE ISSUE IS IN TankKinematics.wheelToRobotVelocities in which case I will cry
 
         poseEstimate = new Pose2d(globalX, globalY, angle);

@@ -59,6 +59,7 @@ public class TankTeleOp extends NightfallOpMode {
             speedControl = 1;
         }
 
+        /*
         double left = 0;
         double right = 0;
         double max;
@@ -77,6 +78,8 @@ public class TankTeleOp extends NightfallOpMode {
 
         startMotors(left * speedControl, right * speedControl);
 
+         */
+
         telemetry.addData("macro height", macro2);
         //telemetry.addData("gamepad2 left stick:", gamepad2.left_stick_y);
         telemetry.addData("manual:", manual);
@@ -94,7 +97,7 @@ public class TankTeleOp extends NightfallOpMode {
         telemetry.addData("macroTime:", macro.milliseconds());
         telemetry.addData("heightModTime:", heightMod.milliseconds());
         telemetry.addData("capbruhTime:", capbruh.milliseconds());
-        /*
+
         telemetry.addData("leftFront:", FL.getCurrentPosition());
         telemetry.addData("leftMiddle:", ML.getCurrentPosition());
         telemetry.addData("leftBack:", BL.getCurrentPosition());
@@ -104,7 +107,7 @@ public class TankTeleOp extends NightfallOpMode {
         telemetry.addData("motor:", motor);
         telemetry.addData("time:", macro);
         telemetry.update();
-        */
+
         //================================= INTAKE =================================================
 
         /*
@@ -376,6 +379,8 @@ public class TankTeleOp extends NightfallOpMode {
             capup = true;
             capbruh.reset();
         }
+        */
+
 
 
         if (gamepad1.x)
@@ -410,7 +415,7 @@ public class TankTeleOp extends NightfallOpMode {
 
 
 
- */
+
 
         }
 
