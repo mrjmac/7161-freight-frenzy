@@ -64,7 +64,7 @@ public abstract class NightfallOpMode extends OpMode {
         FR.setDirection(DcMotorSimple.Direction.FORWARD);
         MR.setDirection(DcMotorSimple.Direction.FORWARD);
         BR.setDirection(DcMotorSimple.Direction.FORWARD);
-        ML.setDirection(DcMotorSimple.Direction.REVERSE);
+        ML.setDirection(DcMotorSimple.Direction.FORWARD);
         BL.setDirection(DcMotorSimple.Direction.REVERSE);
 
         FR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
