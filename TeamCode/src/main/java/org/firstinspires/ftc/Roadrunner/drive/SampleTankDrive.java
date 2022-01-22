@@ -138,9 +138,9 @@ public class SampleTankDrive extends TankDrive {
         rightFront.setDirection(DcMotorSimple.Direction.FORWARD);
         rightMiddle.setDirection(DcMotorSimple.Direction.FORWARD);
         rightRear.setDirection(DcMotorSimple.Direction.FORWARD);
-        leftMiddle.setDirection(DcMotorSimple.Direction.REVERSE);//*
-        leftRear.setDirection(DcMotorSimple.Direction.REVERSE);
-        leftFront.setDirection(DcMotorSimple.Direction.FORWARD);
+        leftMiddle.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftRear.setDirection(DcMotorSimple.Direction.FORWARD);
+        leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
         hatch.setPosition(.87);
 
         leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

@@ -10,14 +10,12 @@ import NightfallLinearOpMode.Intake;
 @TeleOp(name = "TankTeleOp", group = "opMode")
 public class TankTeleOp extends NightfallOpMode {
 
-    public static double intakeSpeed = .65;
-    boolean capup = true;
+    public static double intakeSpeed = .85;
     double speedControl;
     int macroHeight = 3;
     boolean manual = false;
-   // boolean intakeManual = false;
     boolean hatchDown = false;
-    boolean gateDown = false;
+    double hatchbruh = 0;
     double macro2 = 0;
     int motor = 1;
     public enum LiftState {
@@ -26,22 +24,12 @@ public class TankTeleOp extends NightfallOpMode {
         LIFT_LOWER
     }
     int heightModifier = 610;
-    /*
-    public enum IntakeState {
-        INTAKE_START,
-        INTAKE_MOVE,
-        INTAKE_BACK
-    }
-
-     */
 
     ElapsedTime capbruh = new ElapsedTime();
     ElapsedTime heightMod = new ElapsedTime();
     boolean liftActive = false;
-    boolean intakeActive = false;
 
     LiftState liftState = LiftState.LIFT_START;
-   // IntakeState intakeState = IntakeState.INTAKE_START;
 
     public void loop() {
         //================================= DRIVE ==================================================
@@ -59,13 +47,13 @@ public class TankTeleOp extends NightfallOpMode {
             speedControl = 1;
         }
 
-        /*
+
         double left = 0;
         double right = 0;
         double max;
 
         double forward = deadstick((gamepad1.left_stick_y * Math.abs(gamepad1.left_stick_y)));
-        double side = deadstick(gamepad1.right_stick_x * Math.abs(gamepad1.right_stick_x));
+        double side = deadstick(-gamepad1.right_stick_x * Math.abs(gamepad1.right_stick_x));
 
         left = forward - side;
         right = forward + side;
@@ -78,26 +66,28 @@ public class TankTeleOp extends NightfallOpMode {
 
         startMotors(left * speedControl, right * speedControl);
 
-         */
+
 
         telemetry.addData("macro height", macro2);
         //telemetry.addData("gamepad2 left stick:", gamepad2.left_stick_y);
         telemetry.addData("manual:", manual);
         telemetry.addData("macroHeight:", macroHeight);
         telemetry.addData("lift height", getLiftEncoder());
+        telemetry.addData("hatch bruh", hatchbruh);
         //telemetry.addData("ducks on?", gamepad2.right_bumper);
         //telemetry.addData("ducks reverse?", gamepad2.left_bumper);
         //telemetry.addData("hatch open", gamepad2.y);
         //telemetry.addData("hatch closed", gamepad2.x);
         //telemetry.addData("leftmotor:", FL.getCurrentPosition());
         //telemetry.addData("right motor:", FR.getCurrentPosition());
+
         telemetry.addData("liftstate: ", liftState);
         telemetry.addData("liftEncoder:", lift.getCurrentPosition());
         telemetry.addData("liftPower:", lift.getPower());
         telemetry.addData("macroTime:", macro.milliseconds());
         telemetry.addData("heightModTime:", heightMod.milliseconds());
         telemetry.addData("capbruhTime:", capbruh.milliseconds());
-
+        /*
         telemetry.addData("leftFront:", FL.getCurrentPosition());
         telemetry.addData("leftMiddle:", ML.getCurrentPosition());
         telemetry.addData("leftBack:", BL.getCurrentPosition());
@@ -106,11 +96,13 @@ public class TankTeleOp extends NightfallOpMode {
         telemetry.addData("rightBack:", BR.getCurrentPosition());
         telemetry.addData("motor:", motor);
         telemetry.addData("time:", macro);
+
+         */
         telemetry.update();
 
         //================================= INTAKE =================================================
 
-        /*
+
         if (gamepad1.a)
         {
             spinLeft.setPower(-1);
@@ -125,119 +117,8 @@ public class TankTeleOp extends NightfallOpMode {
             spinRight.setPower(0);
         }
 
-         */
-/*
-        if (gamepad1.a) {
-            pivotDown();
-        }
-
-        if (gamepad1.left_bumper && gamepad1.right_bumper) {
-            intake.setPower(1);
-        } else if (gamepad1.right_bumper) {
-            pivotDown();
-            intake.setPower(-1);
-        } else if (gamepad1.left_bumper) {
-            pivotCross();
-            intake.setPower(0);
-        }
- */
-        //TODO: test this, if you want to make a manual toggle please do, other than that test auto and tune it
-        // BE VERY CAREFUL ESPECIALLY WITH THE INTAKE MOTOR SPINNING TOO MUCH, START WITH SMALL VALUES WHEN MOVING IT, OR AT LEAST TEST IN TELEOP
-        // FIRST, IF YOU SPIN IT TOO MUCH, THE INTAKE WALL WILL SNAP, AND I WILL CRY SO DONT DO THAT
- /*       if (gamepad1.right_bumper){
-            runIntake(1);
-        }
-        else {
-            runIntake(0);
-        }
-        if (gamepad2.a) {
-            gateUp();
-        }
-        if (gamepad2.b) {
-            gateDown();
-        }
 
 
-
-        if (gamepad1.a) {
-            intake.setPower(-.4);
-        } else if (gamepad1.b) {
-            intake.setPower(.4);
-        } else {
-            intake.setPower(0);
-        }
-        telemetry.addData("intakeEncoder:", getIntakeEncoder());
-
-  */
-
-        /*
-        if (!intakeManual) {
-            switch (intakeState) {
-                case INTAKE_START:
-                    if (gamepad1.right_bumper && !intakeActive) {
-                        intakeActive = true;
-                        intakeState = IntakeState.INTAKE_MOVE;
-                    }
-                    break;
-                case INTAKE_MOVE:
-                    gateDown();
-                    if (getIntakeEncoder() <= 290) {
-                        setIntake();
-                    } else {
-                        runIntake(1);
-                        intake.setPower(.06);
-                        if (gamepad1.right_bumper) {
-                            intakeState = IntakeState.INTAKE_BACK;
-                        }
-                    }
-                    break;
-                case INTAKE_BACK:
-                    if (getIntakeEncoder() > 20) {
-                        intakeReset(1);
-                    } else {
-                        runIntake(0);
-                        gateUp();
-                        intake.setPower(0);
-                        if (intake.getCurrentPosition() < 5)
-                            resetIntakeEncoder();
-                        intakeState = IntakeState.INTAKE_START;
-                        intakeActive = false;
-                    }
-                    break;
-                default:
-                    intakeState = IntakeState.INTAKE_START;
-            }
-        }
-
-        if (gamepad1.y && !intakeManual && macro.milliseconds() > 500) {
-            intakeManual = true;
-            macro.reset();
-        } else if (gamepad1.y && intakeManual && macro.milliseconds() > 500) {
-            intakeManual = false;
-            macro.reset();
-        }
-
-        if (intakeManual) {
-            if (Math.abs(gamepad1.right_trigger) > .1) {
-                intake.setPower(-.2);
-            } else if (Math.abs(gamepad1.left_trigger) > .1) {
-                intake.setPower(.2);
-            } else {
-                intake.setPower(0);
-            }
-
-            if (gamepad1.a && gateDown && macro.milliseconds() > 500) {
-                gateUp();
-                macro.reset();
-                gateDown = false;
-            } else if (gamepad1.a && !gateDown && macro.milliseconds() > 500) {
-                gateDown();
-                macro.reset();
-                gateDown = true;
-            }
-        }
-
-         */
         if(gamepad1.right_bumper){
             intake.setPower(intakeSpeed);
         }
@@ -247,11 +128,6 @@ public class TankTeleOp extends NightfallOpMode {
         if (gamepad1.left_bumper && gamepad1.right_bumper) {
             intake.setPower(-intakeSpeed);
         }
-
-
-
-
-
 
 
 
@@ -356,33 +232,39 @@ public class TankTeleOp extends NightfallOpMode {
             lift.setPower(-deadstick(gamepad2.left_stick_y));
             if (lift.getCurrentPosition() > 100 && Math.abs(gamepad2.left_stick_y) < .05)
                 lift.setPower(0.06);
-            if (gamepad2.a && macro.milliseconds() > 250 && hatchDown) {
+            if (gamepad2.a && macro.milliseconds() > 100 && hatchDown) {
                 macro.reset();
                 hatchUp();
                 hatchDown = false;
-            } else if (gamepad2.a && macro.milliseconds() > 250 && !hatchDown) {
+            } else if (gamepad2.a && macro.milliseconds() > 100 && !hatchDown) {
                 macro.reset();
                 hatchDown();
                 hatchDown = true;
             }
         }
 
+        /*
+        if(gamepad2.dpad_left && (capbruh.milliseconds() > 30))
+        {
+            hatchbruh -= 0.01;
+            capbruh.reset();
+        }
+        else if (gamepad2.dpad_right && capbruh.milliseconds() > 30)
+        {
+            hatchbruh += 0.01;
+            capbruh.reset();
+        }
+
+        if(gamepad2.b)
+        {
+            setHatch(hatchbruh);
+        }
+
+         */
+
+
 
 /*
-        if (gamepad2.x && capup && capbruh.milliseconds() > 200) {
-            capDown();
-            capup = false;
-            capbruh.reset();
-        }
-        if (gamepad2.x && !capup && capbruh.milliseconds() > 200) {
-            capUp();
-            capup = true;
-            capbruh.reset();
-        }
-        */
-
-
-
         if (gamepad1.x)
         {
             if (motor == 1) {
@@ -413,6 +295,8 @@ public class TankTeleOp extends NightfallOpMode {
         if (gamepad1.dpad_right)
             resetDT();
 
+
+ */
 
 
 

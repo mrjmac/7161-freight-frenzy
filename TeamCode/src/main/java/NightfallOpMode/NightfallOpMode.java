@@ -61,11 +61,12 @@ public abstract class NightfallOpMode extends OpMode {
         duckL = hardwareMap.crservo.get("duckL");
         duckR = hardwareMap.crservo.get("duckR");
 
-        FR.setDirection(DcMotorSimple.Direction.FORWARD);
-        MR.setDirection(DcMotorSimple.Direction.FORWARD);
-        BR.setDirection(DcMotorSimple.Direction.FORWARD);
+        FR.setDirection(DcMotorSimple.Direction.REVERSE);
+        MR.setDirection(DcMotorSimple.Direction.REVERSE);
+        BR.setDirection(DcMotorSimple.Direction.REVERSE);
         ML.setDirection(DcMotorSimple.Direction.FORWARD);
         BL.setDirection(DcMotorSimple.Direction.REVERSE);
+        FL.setDirection(DcMotorSimple.Direction.FORWARD);
 
         FR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         BR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -154,22 +155,7 @@ public abstract class NightfallOpMode extends OpMode {
     }
 
     //============================= Intake =========================================================
-/*
-    public void pivotCross() {
-        pivot1.setPosition(.28);
-        pivot2.setPosition(.72);
-    }
 
-    public void pivotDown() {
-        pivot1.setPosition(.425);
-        pivot2.setPosition(.575);
-    }
-
-    public void pivotUp() {
-        pivot1.setPosition(0);
-        pivot2.setPosition(1); //1
-    }
- */
     public void gateDown() {
         gate.setPosition(1);
     }
@@ -177,47 +163,10 @@ public abstract class NightfallOpMode extends OpMode {
         gate.setPosition(.9);
     }
 
-    public void runIntake(double power) {
-        spinLeft.setPower(-power);
-        spinRight.setPower(-power);
-    }
-
     public int getIntakeEncoder() {
         return (Math.abs(intake.getCurrentPosition()));
     }
 
-    /*
-    public void setIntake() {
-        //double kP = 1 / 10.0;
-        double error = (300 - getIntakeEncoder());
-        if (getIntakeEncoder() <= 300)
-            intake.setPower(-.5);
-        if (error < 50)
-            intake.setPower(0.06);
-            //  double ChangeP = error * kP;
-            //  double power = ChangeP;
-            //  power /= power;
-        /*   if (error < 50 || Math.abs(ChangeP) < .02) {
-                lift.setPower(0.06);
-            }
-
-
-      //  macro.reset();
-    }
-    */
-
-
-
-    /*
-    public void intakeReset(double kP) {
-        if (getIntakeEncoder() > 20)
-            //    double power = getLiftEncoder() * kP;
-            //    power /= power;
-            intake.setPower(.5);
-            runIntake(-1);
-    }
-
-     */
 
     public void resetIntakeEncoder() {
         intake.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -272,37 +221,14 @@ public abstract class NightfallOpMode extends OpMode {
         }
         resetLiftEncoder();
     }
-/*
-    public void macro(double macroHeight) {
-        if (macroHeight == 1) {
-            //lift.setTargetPosition(2);
-        }
-        else if (macroHeight == 2) {
-            //lift.setTargetPosition(3);
-        }
-        else {
-            //lift.setTargetPosition(4);x
-        }
-    }
- */
 
     public void hatchUp() {
-        hatch.setPosition(.87);
+        hatch.setPosition(1);
     }
 
     public void hatchDown() {
-        hatch.setPosition(.55);
+        hatch.setPosition(.7);
     }
-/*
-    public void capUp() {
-        cap.setPosition(.7);
-    }
-
-    public void capDown(){
-        cap.setPosition(.3);
-    }
-
- */
 
 
 }

@@ -48,11 +48,11 @@ public class Lift {
     public void capDown() {cap.setPosition(.3); }
 
     public void hatchUp() {
-        hatch.setPosition(.82);
+        hatch.setPosition(1);
     }
 
     public void hatchDown() {
-        hatch.setPosition(.55);
+        hatch.setPosition(.7);
     }
     public void topHatchDown() {hatch.setPosition(.63);}
 
