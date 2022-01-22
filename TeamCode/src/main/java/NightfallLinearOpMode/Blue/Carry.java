@@ -19,8 +19,8 @@ public class Carry extends LinearOpMode {
 
     public static double kpTurn5 = 0.2386; //PID
     public static double kdTurn5 = 0.1; //PID
-    public static double kpTurn45 = 0.2386;
-    public static double kdTurn45 = 0.06;
+    public static double kpTurn45 = 0.405;
+    public static double kdTurn45 = 0.05;
     public static double timeoutTurn = 1.5;
     public static double kpTurn90 = 0.176;
     public static double kdTurn90 = 0.07;
@@ -53,22 +53,21 @@ public class Carry extends LinearOpMode {
         liftHeight = pos;
 
         // PICK UP CAP AND SCORE PRE LOADED (blue)
-        drivetrain.gyroEncoderInch(1, 1, 2, 0);
+        drivetrain.gyroEncoderInch(1, 18, 2, 0);
         lift.capDown();
         //intake.intakeDown();
         sleep(300);
         lift.capUp();
         drivetrain.turnPD(-50, kpTurn45, kdTurn45, 1.5);
-        drivetrain.gyroEncoderInch(1, 17, 2, -50);
+        drivetrain.gyroEncoderInch(1, 16, 2, -50);
         lift.setLift(liftHeight, 1);
         // CAROUSEL, PICK UP DUCK AND SCORE
         drivetrain.gyroEncoderInch(-.5, 45.5, 3, -60);
-        drivetrain.duckStart(1);
+        drivetrain.duckStart(-1);
         sleep(5000);
         drivetrain.duckStop();
-        drivetrain.gyroEncoderInch(.5, 10, 3, -60);
-        drivetrain.turnPD(0, kpTurn45, kdTurn45, 2);
-        drivetrain.gyroEncoderInch(.5, 20, 3, 0);
+        drivetrain.turnPD(0, kpTurn45, kdTurn45, 1.5);
+        drivetrain.gyroEncoderInch(.5, 26, 3, 0);
 
 
 

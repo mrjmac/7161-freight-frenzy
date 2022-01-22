@@ -143,17 +143,6 @@ public class Drivetrain {
                 double ChangeP = error * kP;
                 double AngleDiff = getTrueDiff(heading);
 
-                double currentInchesL = Math.abs(FL.getCurrentPosition());
-                leftChange = currentInchesL - prevLeft;
-                prevLeft = currentInchesL;
-
-                double currentInchesR = Math.abs(FR.getCurrentPosition());
-                rightChange = currentInchesR - prevRight;
-                prevRight = currentInchesR;
-
-                double angleChangeRad = ((leftChange * 32) - (rightChange * 32)) / 14.72145669;
-                double angleChangeDeg = getTrueDiff(Math.toDegrees(angleChangeRad));
-
                 // double multiplierR = 1;
                 //double multiplierL = 1;
                 // double fudgeFactor = (1.0 - AngleDiff / 40.0)/.93;
@@ -188,7 +177,6 @@ public class Drivetrain {
                 }
                 startMotors(left, right);
                 this.opMode.telemetry.addData("MotorPowLeft:", left);
-                this.opMode.telemetry.addData("angle change manual", angleChangeDeg);
                 this.opMode.telemetry.addData("MotorPowRight:", right);
          //     this.opMode.telemetry.addData("fudge:", fudgeFactor);
                 this.opMode.telemetry.addData("encoders:", getEncoderAvg());
@@ -225,9 +213,9 @@ public class Drivetrain {
                 angleDiff = getTrueDiff(- angle);
                 changePID = (angleDiff * kP) + (dT * angleDiff * kI);
                 if (changePID <= 0) {
-                    startMotors(changePID - .10, -changePID + .10);
+                    startMotors((changePID - .10) * -1, (-changePID + .10) * -1);
                 } else {
-                    startMotors(changePID + .10, -changePID - .10);
+                    startMotors((changePID + .10) * -1, (-changePID - .10) * -1);
                 }
                 opMode.telemetry.addData("PID: ", changePID);
                 opMode.telemetry.addData("diff", angleDiff);
@@ -264,9 +252,9 @@ public class Drivetrain {
                 angleDiff = getTrueDiff(-angle);
                 changePID = (angleDiff * kP) + (dT * angleDiff * kI) + ((angleDiff - prevAngleDiff) / dT * kD);
                 if (changePID <= 0) {
-                    startMotors(changePID - .10, -changePID + .10);
+                    startMotors((changePID - .10) * -1, (-changePID + .10) * -1);
                 } else {
-                    startMotors(changePID + .10, -changePID - .10);
+                    startMotors((changePID + .10) * -1, (-changePID - .10) * -1);
                 }
                 opMode.telemetry.addData("PID: ", changePID);
                 opMode.telemetry.addData("diff", angleDiff);
@@ -291,7 +279,7 @@ public class Drivetrain {
     public void turnPD(double angle, double p, double d, double timeout) {
         runtime.reset();
         while (this.opMode.opModeIsActive() && !this.opMode.isStopRequested() && runtime.seconds() <= timeout) {
-            double kP = p / 33;
+            double kP = p / 15;
             double kD = d / .70;
             double currentTime = runtime.milliseconds();
             double pastTime = 0;
@@ -305,13 +293,14 @@ public class Drivetrain {
                 angleDiff = getTrueDiff(-angle);
                 changePID = (angleDiff * kP) + ((angleDiff - prevAngleDiff) / dT * kD);
                 if (changePID <= 0) {
-                    startMotors(changePID - .10, -changePID + .10);
+                    startMotors((changePID - .10) * -1, (-changePID + .10) * -1);
                 } else {
-                    startMotors(changePID + .10, -changePID - .10);
+                    startMotors((changePID + .10) * -1, (-changePID - .10) * -1);
                 }
                 this.opMode.telemetry.addData("P", (angleDiff * kP));
                 this.opMode.telemetry.addData("D", ((Math.abs(angleDiff) - Math.abs(prevAngleDiff)) / dT * kD));
                 this.opMode.telemetry.addData("angle:", getGyroYaw());
+                this.opMode.telemetry.addData("error", angleDiff);
                 this.opMode.telemetry.update();
                 if (runtime.seconds() > timeout)
                     break;

@@ -19,8 +19,8 @@ public class Duck extends LinearOpMode {
 
     public static double kpTurn5 = 0.2386; //PID
     public static double kdTurn5 = 0.1; //PID
-    public static double kpTurn45 = 0.135;
-    public static double kdTurn45 = 0.06;
+    public static double kpTurn45 = 0.405;
+    public static double kdTurn45 = 0.05;
     public static double timeoutTurn = 1.5;
     public static double kpTurn90 = 0.176;
     public static double kdTurn90 = 0.07;
