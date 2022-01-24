@@ -166,8 +166,8 @@ public class Drivetrain {
                 }
 
                  */
-                double left = (ChangeP + gyroScalePower);
-                double right = (ChangeP - gyroScalePower);
+                double left = (ChangeP - gyroScalePower);
+                double right = (ChangeP + gyroScalePower);
                 if (runtime.seconds() > timeoutS)
                     break;
                 double max = Math.max(Math.abs(left), Math.abs(right));
