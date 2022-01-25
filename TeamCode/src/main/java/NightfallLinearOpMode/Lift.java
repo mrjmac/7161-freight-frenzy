@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 @Config
 public class Lift {
-    public DcMotor lift; //lift motor - [port number]
+    public DcMotor lift; //lift motor - [0 c]
 
     public Servo hatch; //output servo - [port number]
     public Servo cap; //cap servo - [port number]

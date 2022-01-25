@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class Intake {
-    public DcMotor intake; //intake - [0 c]
+    public DcMotor intake; //intake - [1 c]
 
     CRServo spinRight; //surgical tubing servo - [0 c]
     CRServo spinLeft; //surgical tubing servo - [3 e2]

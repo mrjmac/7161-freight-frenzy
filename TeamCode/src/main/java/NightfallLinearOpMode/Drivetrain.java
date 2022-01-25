@@ -166,8 +166,8 @@ public class Drivetrain {
                 }
 
                  */
-                double left = (ChangeP - gyroScalePower);
-                double right = (ChangeP + gyroScalePower);
+                double left = (ChangeP + gyroScalePower);
+                double right = (ChangeP - gyroScalePower);
                 if (runtime.seconds() > timeoutS)
                     break;
                 double max = Math.max(Math.abs(left), Math.abs(right));
@@ -293,9 +293,9 @@ public class Drivetrain {
                 angleDiff = getTrueDiff(-angle);
                 changePID = (angleDiff * kP) + ((angleDiff - prevAngleDiff) / dT * kD);
                 if (changePID <= 0) {
-                    startMotors((changePID - .10) * -1, (-changePID + .10) * -1);
+                    startMotors(changePID - .10, -changePID + .10);
                 } else {
-                    startMotors((changePID + .10) * -1, (-changePID - .10) * -1);
+                    startMotors(changePID + .10, -changePID - .10);
                 }
                 this.opMode.telemetry.addData("P", (angleDiff * kP));
                 this.opMode.telemetry.addData("D", ((Math.abs(angleDiff) - Math.abs(prevAngleDiff)) / dT * kD));

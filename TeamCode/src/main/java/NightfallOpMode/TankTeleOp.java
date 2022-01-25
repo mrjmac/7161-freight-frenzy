@@ -53,7 +53,7 @@ public class TankTeleOp extends NightfallOpMode {
         double max;
 
         double forward = deadstick((gamepad1.left_stick_y * Math.abs(gamepad1.left_stick_y)));
-        double side = deadstick(-gamepad1.right_stick_x * Math.abs(gamepad1.right_stick_x));
+        double side = deadstick(gamepad1.right_stick_x * Math.abs(gamepad1.right_stick_x));
 
         left = forward - side;
         right = forward + side;
