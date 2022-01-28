@@ -42,7 +42,7 @@ public class BruhLocalizer implements Localizer {
     public static double TICKS_PER_REV = DriveConstants.TICKS_PER_REV;
     public static double WHEEL_RADIUS = DriveConstants.WHEEL_RADIUS; // in
     public static double GEAR_RATIO = DriveConstants.GEAR_RATIO; // output (wheel) speed / input (encoder) spee
-    public static double TRACKWIDTH = DriveConstants.TRACK_WIDTH * 2    ;
+    public static double TRACKWIDTH = DriveConstants.TRACK_WIDTH * 2;
 
     SampleTankDrive drive;
     private Encoder leftEncoder, rightEncoder;
