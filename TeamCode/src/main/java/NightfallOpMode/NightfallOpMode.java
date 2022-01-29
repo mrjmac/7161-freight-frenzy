@@ -57,7 +57,6 @@ public abstract class NightfallOpMode extends OpMode {
 
     //    cap = hardwareMap.servo.get("cap");
         hatch = hardwareMap.servo.get("hatch");
-
         duckL = hardwareMap.crservo.get("duckL");
         duckR = hardwareMap.crservo.get("duckR");
 
@@ -223,11 +222,15 @@ public abstract class NightfallOpMode extends OpMode {
     }
 
     public void hatchUp() {
-        hatch.setPosition(.95);
+        hatch.setPosition(1);
     }
 
     public void hatchDown() {
         hatch.setPosition(.55);
+    }
+
+    public void hatchHalf() {
+        hatch.setPosition(.68);
     }
 
 

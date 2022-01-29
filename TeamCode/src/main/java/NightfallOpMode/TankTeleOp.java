@@ -35,11 +35,13 @@ public class TankTeleOp extends NightfallOpMode {
         //================================= DRIVE ==================================================
         //speed constant allows driver 1 to scale the speed of the robot
         //servo on lift side goes from 0 to 1; servo on non lift side goes from 1 to 0
-        if (macroHeight == 4) {
+   /*     if (macroHeight == 4) {
             heightModifier = 533;
         } else {
             heightModifier = 570;
         }
+
+    */
 
         if (gamepad1.right_trigger > 0.1) {
             speedControl = .4;
@@ -157,6 +159,17 @@ public class TankTeleOp extends NightfallOpMode {
             macroHeight -= 1;
             heightMod.reset();
         }
+
+        if (gamepad2.a && macro.milliseconds() > 250 && hatchDown) {
+            macro.reset();
+            hatchUp();
+            hatchDown = false;
+        } else if (gamepad2.a && macro.milliseconds() > 250 && !hatchDown) {
+            macro.reset();
+            hatchDown();
+            hatchDown = true;
+        }
+
         switch (macroHeight) {
             case 1:
                 macro2 = 130;
@@ -165,9 +178,10 @@ public class TankTeleOp extends NightfallOpMode {
                 macro2 = 550;
                 break;
             case 3:
-                macro2 = 1300;
+                macro2 = 1450;
                 break;
-
+            case 4:
+                macro2 = 1600;
         }
 
         if (!manual) {
@@ -182,9 +196,13 @@ public class TankTeleOp extends NightfallOpMode {
                     if (lift.getCurrentPosition() < (macro2 - 50)) {//heightModifier * (macroHeight - 1) - 50)) {
                         setLiftReal(macro2);
                     } else {
-                        hatchDown();
+                        if (macroHeight != 4) {
+                            hatchDown();
+                        } else {
+                            hatchHalf();
+                        }
                         lift.setPower(.06);
-                        if (macro.milliseconds() > 1000) {
+                        if (macro.milliseconds() > 750) {
                             liftState = LiftState.LIFT_LOWER;
                         }
                     }
@@ -283,7 +301,7 @@ public class TankTeleOp extends NightfallOpMode {
         } else {
             stopMotors();
         }
-
+*/
         if (gamepad1.dpad_up && macro.milliseconds() > 250) {
             macro.reset();
             motor++;
@@ -294,16 +312,6 @@ public class TankTeleOp extends NightfallOpMode {
 
         if (gamepad1.dpad_right)
             resetDT();
-
-
-
-
-
- */
-
-
-
         }
-
 }
 

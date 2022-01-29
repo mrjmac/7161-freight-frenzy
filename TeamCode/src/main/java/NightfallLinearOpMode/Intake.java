@@ -45,6 +45,10 @@ public class Intake {
         spinRight.setPower(-power);
     }
 
+    public void goatIntake(double power) {
+        intake.setPower(power);
+    }
+
     public int getIntakeEncoder() {
         return (Math.abs(intake.getCurrentPosition()));
     }

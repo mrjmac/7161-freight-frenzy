@@ -56,12 +56,12 @@ public class Drivetrain {
         this.opMode.telemetry.addData(LOG_TAG + "init", "finished init");
         this.opMode.telemetry.update();
 
-        FR.setDirection(DcMotorSimple.Direction.REVERSE);
-        MR.setDirection(DcMotorSimple.Direction.REVERSE);
+        FR.setDirection(DcMotorSimple.Direction.FORWARD);
+        MR.setDirection(DcMotorSimple.Direction.FORWARD);
         BR.setDirection(DcMotorSimple.Direction.REVERSE);
-        ML.setDirection(DcMotorSimple.Direction.FORWARD);
+        ML.setDirection(DcMotorSimple.Direction.REVERSE);
         BL.setDirection(DcMotorSimple.Direction.REVERSE);
-        FL.setDirection(DcMotorSimple.Direction.FORWARD);
+        FL.setDirection(DcMotorSimple.Direction.REVERSE);
 
 
 
@@ -124,7 +124,7 @@ public class Drivetrain {
         return (Math.abs(FL.getCurrentPosition()) + Math.abs(FR.getCurrentPosition())) / 2;
     }
 
-    public void gyroEncoderInch(double speed, double inches, double timeoutS, int heading) throws InterruptedException {
+    public void gyroEncoderInch(double speed, double inches, double timeoutS, double heading) throws InterruptedException {
         runtime.reset();
         while (this.opMode.opModeIsActive() && !this.opMode.isStopRequested() && runtime.seconds() <= timeoutS) {
             // Ticks is the math for the amount of inches, ticks is paired with getcurrentposition
@@ -147,7 +147,7 @@ public class Drivetrain {
                 // double multiplierR = 1;
                 //double multiplierL = 1;
                 // double fudgeFactor = (1.0 - AngleDiff / 40.0)/.93;
-                double gyroScalePower = AngleDiff * .015;
+                double gyroScalePower = AngleDiff * .02;
 
                 /*
                 if (Math.abs(AngleDiff) > 2) {
