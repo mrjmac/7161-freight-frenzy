@@ -44,6 +44,8 @@ public class TankTeleOp extends NightfallOpMode {
     */
 
         if (gamepad1.right_trigger > 0.1) {
+            speedControl = .5;
+        } else if (gamepad1.left_trigger > 0.1) {
             speedControl = .4;
         } else {
             speedControl = 1;
@@ -160,12 +162,12 @@ public class TankTeleOp extends NightfallOpMode {
             heightMod.reset();
         }
 
-        if (gamepad2.a && macro.milliseconds() > 250 && hatchDown) {
-            macro.reset();
+        if (gamepad2.a && level.milliseconds() > 250 && hatchDown) {
+            level.reset();
             hatchUp();
             hatchDown = false;
-        } else if (gamepad2.a && macro.milliseconds() > 250 && !hatchDown) {
-            macro.reset();
+        } else if (gamepad2.a && level.milliseconds() > 250 && !hatchDown) {
+            level.reset();
             hatchDown();
             hatchDown = true;
         }
@@ -196,12 +198,12 @@ public class TankTeleOp extends NightfallOpMode {
                     if (lift.getCurrentPosition() < (macro2 - 50)) {//heightModifier * (macroHeight - 1) - 50)) {
                         setLiftReal(macro2);
                     } else {
-                        if (macroHeight != 4) {
+                        if (macroHeight != 4 || macroHeight != 2) {
                             hatchDown();
                         } else {
                             hatchHalf();
                         }
-                        lift.setPower(.06);
+                        lift.setPower(.1);
                         if (macro.milliseconds() > 750) {
                             liftState = LiftState.LIFT_LOWER;
                         }
@@ -302,13 +304,15 @@ public class TankTeleOp extends NightfallOpMode {
             stopMotors();
         }
 */
-        if (gamepad1.dpad_up && macro.milliseconds() > 250) {
-            macro.reset();
+     /*   if (gamepad1.dpad_up && level.milliseconds() > 250) {
+            level.reset();
             motor++;
-        } else if (gamepad1.dpad_down && macro.milliseconds() > 250) {
+        } else if (gamepad1.dpad_down && level.milliseconds() > 250) {
             motor--;
-            macro.reset();
+            level.reset();
         }
+
+      */
 
         if (gamepad1.dpad_right)
             resetDT();

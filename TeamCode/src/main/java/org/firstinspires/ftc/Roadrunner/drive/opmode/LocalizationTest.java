@@ -24,7 +24,7 @@ public class LocalizationTest extends LinearOpMode {
         SampleTankDrive drive = new SampleTankDrive(hardwareMap);
 
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
+       // drive.hatchUp();
         waitForStart();
 
         while (!isStopRequested()) {
@@ -49,9 +49,9 @@ public class LocalizationTest extends LinearOpMode {
             drive.update();
 
             Pose2d poseEstimate = drive.getPoseEstimate();
-            //telemetry.addData("x", poseEstimate.getX());
-            //telemetry.addData("y", poseEstimate.getY());
-            //telemetry.addData("", drive.getData());
+            telemetry.addData("x", poseEstimate.getX());
+            telemetry.addData("y", poseEstimate.getY());
+            telemetry.addData("", drive.getData());
             //telemetry.addData("heading", poseEstimate.getHeading());
             //telemetry.addData("rawHeading:", drive.getRawExternalHeading());
             //telemetry.addData("motor stuff: ", drive.test());

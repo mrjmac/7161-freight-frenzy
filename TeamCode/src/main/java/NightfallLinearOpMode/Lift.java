@@ -70,7 +70,7 @@ public class Lift {
         } else if (height == 2) {
             ticks = 700;
         } else {
-            ticks = 1300;
+            ticks = 1450;
         }
 
         //int heightModifier = 700;
@@ -99,7 +99,7 @@ public class Lift {
         }
         this.opMode.sleep(700);
         hatchUp();
-        liftReset(1/150.0);
+        liftReset(1/110.0);
     }
         /*
         while (getEncoder() < (height - 1) * heightModifier) {

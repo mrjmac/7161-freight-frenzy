@@ -31,6 +31,7 @@ public abstract class NightfallOpMode extends OpMode {
     CRServo duckR; //right duck - [1 e2]
 
     ElapsedTime macro = new ElapsedTime();
+    ElapsedTime level = new ElapsedTime();
 
 
     // lowest EXPANSION HUB = surgicalright
@@ -185,7 +186,7 @@ public abstract class NightfallOpMode extends OpMode {
     public void setLiftReal(double macro2) {
         double ticks = macro2;//(macroHeight - 1) * heightModifier;
         double kP = 1 / 10.0;
-        if (getLiftEncoder() <= ticks - 50) {
+        if (getLiftEncoder() <= ticks - 100) {
             //     double error = (ticks - getLiftEncoder());
             //  double ChangeP = error * kP;
             //  double power = ChangeP;

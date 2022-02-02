@@ -42,7 +42,7 @@ public class BruhLocalizer implements Localizer {
     public static double TICKS_PER_REV = DriveConstants.TICKS_PER_REV;
     public static double WHEEL_RADIUS = DriveConstants.WHEEL_RADIUS; // in
     public static double GEAR_RATIO = DriveConstants.GEAR_RATIO; // output (wheel) speed / input (encoder) spee
-    public static double TRACKWIDTH = DriveConstants.TRACK_WIDTH * 2;
+    public static double TRACKWIDTH = DriveConstants.TRACK_WIDTH;
 
     SampleTankDrive drive;
     private Encoder leftEncoder, rightEncoder;
@@ -71,16 +71,6 @@ public class BruhLocalizer implements Localizer {
 
     public static double encoderTicksToInches(double ticks) {
         return WHEEL_RADIUS * 2 * Math.PI * GEAR_RATIO * ticks / TICKS_PER_REV;
-    }
-
-    public static double fakeEncoderTicksToInches(double ticks)
-    {
-        return 1.889764 * 2 * Math.PI * GEAR_RATIO * ticks / TICKS_PER_REV;
-    }
-
-    public static double encoderInchesToTicks(double inches)
-    {
-        return (inches * TICKS_PER_REV) / (WHEEL_RADIUS * 2 * Math.PI * GEAR_RATIO);
     }
 
     public double getLeftEncoder() {
@@ -136,7 +126,7 @@ public class BruhLocalizer implements Localizer {
         double initialHeadingRad = angle;
         //double initialHeadingRad = Math.toRadians(initialHeading);
 
-        double angleChangeRad = (leftChange - rightChange) / TRACKWIDTH;
+        double angleChangeRad = (leftChange - rightChange) / (TRACKWIDTH / 2);
         angle = (angle + angleChangeRad);
         //double angleChangeDeg = Math.toDegrees(angleChangeRad);
         //theta = angleWrapDeg(theta + angleChangeDeg);
@@ -191,7 +181,7 @@ public class BruhLocalizer implements Localizer {
     public String toString() {
         String bruh = "left encoder: " + getLeftEncoder() + "\n" + "right encoder: " + getRightEncoder() + "\n"
                 + "prev left: " + prevLeft + "\n" + "prev right: " + prevRight + "\n"
-                + "angle change rad: " + (((leftChange - rightChange) / TRACKWIDTH)) + "\n" +
+                + "angle change rad: " + (((getLeftEncoder() - getRightEncoder()) / TRACKWIDTH)) + "\n" +
                 "heading" + Math.toDegrees(angle);
         return bruh;
     }

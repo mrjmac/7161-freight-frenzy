@@ -43,7 +43,7 @@ public class DriveConstants {
      * angular distances although most angular parameters are wrapped in Math.toRadians() for
      * convenience. Make sure to exclude any gear ratio included in MOTOR_CONFIG from GEAR_RATIO.
      */
-    public static double WHEEL_RADIUS =  3.77953; // in
+    public static double WHEEL_RADIUS =  3.77953/2; // in
     public static double GEAR_RATIO = 1; // output (wheel) speed / input (motor) speed
     public static double TRACK_WIDTH = 15; // in
 
@@ -71,7 +71,7 @@ public class DriveConstants {
 
 
     public static double encoderTicksToInches(double ticks) {
-        return ((WHEEL_RADIUS/2) * 2 * Math.PI * GEAR_RATIO * ticks / TICKS_PER_REV);
+        return WHEEL_RADIUS * 2 * Math.PI * GEAR_RATIO * ticks / TICKS_PER_REV;
     }
 
     public static double rpmToVelocity(double rpm) {

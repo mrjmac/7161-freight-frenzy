@@ -71,6 +71,7 @@ public class SampleTankDrive extends TankDrive {
 
     private List<DcMotorEx> motors, leftMotors, rightMotors;
     private BNO055IMU imu;
+    private List<Servo> hatch;
 
     private VoltageSensor batteryVoltageSensor;
 
@@ -121,6 +122,7 @@ public class SampleTankDrive extends TankDrive {
             motor.setMotorType(motorConfigurationType);
         }
 
+
         if (RUN_USING_ENCODER) {
             setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
@@ -137,9 +139,9 @@ public class SampleTankDrive extends TankDrive {
         // TODO: reverse any motors using DcMotor.setDirection()
         rightFront.setDirection(DcMotorSimple.Direction.FORWARD);
         rightMiddle.setDirection(DcMotorSimple.Direction.FORWARD);
-        rightRear.setDirection(DcMotorSimple.Direction.FORWARD);
+        rightRear.setDirection(DcMotorSimple.Direction.REVERSE);
         leftMiddle.setDirection(DcMotorSimple.Direction.REVERSE);
-        leftRear.setDirection(DcMotorSimple.Direction.FORWARD);
+        leftRear.setDirection(DcMotorSimple.Direction.REVERSE);
         leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
         hatch.setPosition(.87);
 
@@ -284,7 +286,13 @@ public class SampleTankDrive extends TankDrive {
         return Arrays.asList(leftSum / leftMotors.size(), rightSum / rightMotors.size());
     }
 
-
+    public void hatchUp()
+    {
+        for (Servo bruh : hatch)
+        {
+            bruh.setPosition(.8);
+        }
+    }
     public List<Double> getWheelVelocities() { // Me when the when the me when the me me when the during the me when the the me when the me when the during the me when the mew when the me when the before me when during after me when the me me when
         double leftSum = 0, rightSum = 0;
         for (DcMotorEx leftMotor : leftMotors) {
