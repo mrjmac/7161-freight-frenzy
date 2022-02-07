@@ -70,14 +70,13 @@ public class BruhLocalizer implements Localizer {
     double globalY = 0;
 
     public static double encoderTicksToInches(double ticks) {
-        return WHEEL_RADIUS * 2 * Math.PI * GEAR_RATIO * ticks / TICKS_PER_REV;
+        return (3.77953 / 2) * 2 * Math.PI * 1 * ticks / 384.5;
     }
 
     public double getLeftEncoder() {
         double currentInches = -1 * encoderTicksToInches(leftEncoder.getCurrentPosition());
         leftChange = currentInches - prevLeft;
         prevLeft = currentInches;
-        //jeffu.reset();
         return currentInches;
     }
 
@@ -126,7 +125,7 @@ public class BruhLocalizer implements Localizer {
         double initialHeadingRad = angle;
         //double initialHeadingRad = Math.toRadians(initialHeading);
 
-        double angleChangeRad = (leftChange - rightChange) / (TRACKWIDTH / 2);
+        double angleChangeRad = (leftChange - rightChange) / (TRACKWIDTH);
         angle = (angle + angleChangeRad);
         //double angleChangeDeg = Math.toDegrees(angleChangeRad);
         //theta = angleWrapDeg(theta + angleChangeDeg);
@@ -157,12 +156,10 @@ public class BruhLocalizer implements Localizer {
 
         globalX += deltaVector.getX();
         globalY += deltaVector.getY();
-        //TODO: STUFF TO TRY IF THIS DOESN'T WORK (I WILL GENUINELY BE VERY SAD AND UPSET CUZ IT'S 1 AM AND I HAVEN'T STARTED WHAP AND I'M ALSO NO LONGER A DAY AHEAD ON HOMEWORK + I HAVE UIL STUDY)
-        // 2. get encoder vel instead of motor vel
-        // 4. CHECK DIVISON STUFF IN WHEEL VELOCITY FUNCTION, IF WHEEL VELOCITY FUNCTION IS FINE WE KNOW THE ISSUE IS IN TankKinematics.wheelToRobotVelocities in which case I will cry
 
         poseEstimate = new Pose2d(globalX, globalY, angle);
         //poseEstimate = new Pose2d(0, 0, angle);
+
         List<Double> wheelVelcoities = drive.getWheelVelocities();
         double extHeadingVel = drive.getExternalHeadingVelocity();
         if (wheelVelcoities != null) {
@@ -171,6 +168,8 @@ public class BruhLocalizer implements Localizer {
                     DriveConstants.TRACK_WIDTH
             );
         }
+
+
     }
 
 
@@ -181,8 +180,9 @@ public class BruhLocalizer implements Localizer {
     public String toString() {
         String bruh = "left encoder: " + getLeftEncoder() + "\n" + "right encoder: " + getRightEncoder() + "\n"
                 + "prev left: " + prevLeft + "\n" + "prev right: " + prevRight + "\n"
-                + "angle change rad: " + (((getLeftEncoder() - getRightEncoder()) / TRACKWIDTH)) + "\n" +
-                "heading" + Math.toDegrees(angle);
+                + "angle change rad: " + (getLeftEncoder() - getRightEncoder()) / (TRACKWIDTH ) + "\n" +
+                "distance: " + (leftChange + rightChange) / 2.0 + "\n" +
+                "heading: " + Math.toDegrees(angle);
         return bruh;
     }
 }

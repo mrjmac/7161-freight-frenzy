@@ -72,12 +72,12 @@ public class TankTeleOp extends NightfallOpMode {
 
 
 
-        telemetry.addData("macro height", macro2);
+        //telemetry.addData("macro height", macro2);
         //telemetry.addData("gamepad2 left stick:", gamepad2.left_stick_y);
         telemetry.addData("manual:", manual);
         telemetry.addData("macroHeight:", macroHeight);
-        telemetry.addData("lift height", getLiftEncoder());
-        telemetry.addData("hatch bruh", hatchbruh);
+        //telemetry.addData("lift height", getLiftEncoder());
+        //telemetry.addData("hatch bruh", hatchbruh);
         //telemetry.addData("ducks on?", gamepad2.right_bumper);
         //telemetry.addData("ducks reverse?", gamepad2.left_bumper);
         //telemetry.addData("hatch open", gamepad2.y);
@@ -86,11 +86,11 @@ public class TankTeleOp extends NightfallOpMode {
         //telemetry.addData("right motor:", FR.getCurrentPosition());
 
         telemetry.addData("liftstate: ", liftState);
-        telemetry.addData("liftEncoder:", lift.getCurrentPosition());
-        telemetry.addData("liftPower:", lift.getPower());
+        //telemetry.addData("liftEncoder:", lift.getCurrentPosition());
+        //telemetry.addData("liftPower:", lift.getPower());
         telemetry.addData("macroTime:", macro.milliseconds());
         telemetry.addData("heightModTime:", heightMod.milliseconds());
-        telemetry.addData("capbruhTime:", capbruh.milliseconds());
+        //telemetry.addData("capbruhTime:", capbruh.milliseconds());
         /*
         telemetry.addData("leftFront:", FL.getCurrentPosition());
         telemetry.addData("leftMiddle:", ML.getCurrentPosition());

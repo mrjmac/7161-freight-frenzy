@@ -45,7 +45,7 @@ public class LocalizationTest extends LinearOpMode {
                 right /= max;
             }
 
-            drive.startMotors(left , right );
+            drive.startMotors(left , right);
             drive.update();
 
             Pose2d poseEstimate = drive.getPoseEstimate();
