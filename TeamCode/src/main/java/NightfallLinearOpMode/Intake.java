@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class Intake {
     public DcMotor intake; //intake - [1 c]
@@ -13,8 +14,8 @@ public class Intake {
     CRServo spinRight; //surgical tubing servo - [0 c]
     CRServo spinLeft; //surgical tubing servo - [3 e2]
     Servo gate; //gate servo - [2 e2]
-    ColorSensor color;
-
+    public ColorSensor color;
+    private ElapsedTime runtime = new ElapsedTime();
     LinearOpMode opMode;
 
     public Intake(LinearOpMode opMode) throws InterruptedException {
@@ -27,6 +28,7 @@ public class Intake {
         spinRight = this.opMode.hardwareMap.crservo.get("sR");
         spinLeft = this.opMode.hardwareMap.crservo.get("lR");
         color = this.opMode.hardwareMap.colorSensor.get("color");
+
         intake.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         intake.setDirection(DcMotorSimple.Direction.REVERSE);
         spinRight.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -48,6 +50,20 @@ public class Intake {
         spinRight.setPower(-power);
     }
 
+    public void getElement(double power, double timeout)
+    {
+        runtime.reset();
+        while (this.opMode.opModeIsActive() && !this.opMode.isStopRequested() && runtime.seconds() <= timeout) {
+            intake.setPower(power);
+            if (color.green() > 100 && color.red() > 100)
+            {
+                intake.setPower(0);
+                break;
+            }
+        }
+        intake.setPower(0);
+    }
+
     public void goatIntake(double power) {
         intake.setPower(power);
     }
@@ -56,10 +72,7 @@ public class Intake {
         return (Math.abs(intake.getCurrentPosition()));
     }
 
-    public boolean found()
-    {
-        return (color.green() > 100 && color.red() > 100);
-    }
+
     public void setIntake() {
         //double kP = 1 / 10.0;
         double error = (300 - getIntakeEncoder());

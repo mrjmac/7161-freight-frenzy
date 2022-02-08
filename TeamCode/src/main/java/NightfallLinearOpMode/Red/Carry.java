@@ -65,10 +65,10 @@ public class Carry extends LinearOpMode {
         drivetrain.gyroEncoderInch(-1, 6, 1, -30);
         drivetrain.turnPD(-90, kpTurn45, kdTurn45, 2);
         drivetrain.gyroEncoderInch(-1, 42, 3.5, -90);
-        intake.goatIntake(.85);
+        //intake.goatIntake(.85);
         drivetrain.turnPD(-45, kpTurn45, kdTurn45, 2);
         drivetrain.gyroEncoderInch(-.6, 8, 1.5, -45);
-        sleep(500);
+        intake.getElement(.85, 5);
     }
 
 }
