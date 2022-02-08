@@ -2,6 +2,7 @@
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -17,6 +18,8 @@ public abstract class NightfallOpMode extends OpMode {
     DcMotor FR; //front right - [0 e2]
     DcMotor intake; //intake - [0 c]
     DcMotor lift; //lift - [1 c]
+
+    ColorSensor color;
 
     CRServo spinRight; //surgical tubing servo - [0 c]
     CRServo spinLeft; //surgical tubing servo - [3 e2]
@@ -49,6 +52,8 @@ public abstract class NightfallOpMode extends OpMode {
 
         intake = hardwareMap.dcMotor.get("intake");
         lift = hardwareMap.dcMotor.get("lift");
+
+        color = hardwareMap.get(ColorSensor.class, "color");
 
     //    pivot1 = hardwareMap.servo.get("in1");
     //    pivot2 = hardwareMap.servo.get("in2");

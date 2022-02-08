@@ -2,6 +2,7 @@ package NightfallLinearOpMode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -12,6 +13,7 @@ public class Intake {
     CRServo spinRight; //surgical tubing servo - [0 c]
     CRServo spinLeft; //surgical tubing servo - [3 e2]
     Servo gate; //gate servo - [2 e2]
+    ColorSensor color;
 
     LinearOpMode opMode;
 
@@ -24,6 +26,7 @@ public class Intake {
         gate = this.opMode.hardwareMap.servo.get("gate");
         spinRight = this.opMode.hardwareMap.crservo.get("sR");
         spinLeft = this.opMode.hardwareMap.crservo.get("lR");
+        color = this.opMode.hardwareMap.colorSensor.get("color");
         intake.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         intake.setDirection(DcMotorSimple.Direction.REVERSE);
         spinRight.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -53,6 +56,10 @@ public class Intake {
         return (Math.abs(intake.getCurrentPosition()));
     }
 
+    public boolean found()
+    {
+        return (color.green() > 100 && color.red() > 100);
+    }
     public void setIntake() {
         //double kP = 1 / 10.0;
         double error = (300 - getIntakeEncoder());

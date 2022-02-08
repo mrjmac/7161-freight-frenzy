@@ -90,6 +90,9 @@ public class TankTeleOp extends NightfallOpMode {
         //telemetry.addData("liftPower:", lift.getPower());
         telemetry.addData("macroTime:", macro.milliseconds());
         telemetry.addData("heightModTime:", heightMod.milliseconds());
+        telemetry.addData("Red", color.red());
+        telemetry.addData("Green", color.green());
+        telemetry.addData("Blue", color.blue());
         //telemetry.addData("capbruhTime:", capbruh.milliseconds());
         /*
         telemetry.addData("leftFront:", FL.getCurrentPosition());
@@ -105,6 +108,7 @@ public class TankTeleOp extends NightfallOpMode {
         telemetry.update();
 
         //================================= INTAKE =================================================
+
 
 
         if (gamepad1.a)
@@ -143,7 +147,10 @@ public class TankTeleOp extends NightfallOpMode {
             duckL.setPower(-.8);
         } else if (Math.abs(gamepad2.left_trigger) > 0.1) {
             duckR.setPower(-.8);
-            duckL.setPower(.8 );
+            duckL.setPower(.8);
+        } else if (color.red() > 100 && color.green() > 100) {
+            duckR.setPower(.8);
+            duckL.setPower(-.8);
         } else {
             duckR.setPower(0);
             duckL.setPower(0);
@@ -317,5 +324,7 @@ public class TankTeleOp extends NightfallOpMode {
         if (gamepad1.dpad_right)
             resetDT();
         }
+
+
 }
 
