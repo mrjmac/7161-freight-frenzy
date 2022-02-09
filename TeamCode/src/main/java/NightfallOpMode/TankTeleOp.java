@@ -148,9 +148,11 @@ public class TankTeleOp extends NightfallOpMode {
         } else if (Math.abs(gamepad2.left_trigger) > 0.1) {
             duckR.setPower(-.8);
             duckL.setPower(.8);
-        } else if (color.red() > 100 && color.green() > 100) {
+  /*      } else if (color.red() > 60 && color.green() > 60) {
             duckR.setPower(.8);
             duckL.setPower(-.8);
+
+   */
         } else {
             duckR.setPower(0);
             duckL.setPower(0);

@@ -56,38 +56,47 @@ public class Cycles extends LinearOpMode {
             drivetrain.gyroEncoderInch(-1, 22, 1.5, -10);
         } else {
             drivetrain.gyroEncoderInch(1, 15, 1.5, 0);
-            drivetrain.turnPD(-12.5, kpTurn5, kdTurn5, 2);
+            drivetrain.turnPD(12.5, kpTurn5, kdTurn5, 2);
             drivetrain.gyroEncoderInch(1, 12, 1.5, -7.5);
             drivetrain.gyroEncoderInch(-1, 17.5, 1.5, -7.5);
         }
-        drivetrain.turnPD(30, kpTurn45, kdTurn45, 2);
+        //turn towards hub
+        drivetrain.turnPD(30, kpTurn45, kdTurn45, 1.5);
+        //drive to hub
         drivetrain.gyroEncoderInch(1, 19, 1.5, 30);
+        //deposit
         lift.setLift(liftHeight, 1);
-        drivetrain.gyroEncoderInch(-1, 6, 1, 30);
+        //drive back a little
+        drivetrain.gyroEncoderInch(-1, 12, 1, 30);
+        //turn towards crater
         drivetrain.turnPD(90, kpTurn45, kdTurn45, 2);
-        drivetrain.gyroEncoderInch(-1, 42, 3.5, 90);
+        //go into crater
+        drivetrain.gyroEncoderInch(-1, 48, 2, 90);
         //intake.goatIntake(.85);
+        //turn
         drivetrain.turnPD(45, kpTurn45, kdTurn45, 2);
-        drivetrain.gyroEncoderInch(-.6, 8, 1.5, 45);
-        intake.getElement(.85, 3);
-        drivetrain.gyroEncoderInch(.6, 8, 1.5, 45);
+        //forwards
+        drivetrain.getElementDrive(-.7, 10, 1.5, 45, .85, 1.5);
+        drivetrain.gyroEncoderInch(.7, 10, 1.5, 45);
+        intake.goatIntake(0);
         //turn to back out
         drivetrain.turnPD(90, kpTurn45, kdTurn45, 2);
         //back out
-        drivetrain.gyroEncoderInch(1, 42, 3.5, 90);
+        drivetrain.gyroEncoderInch(1, 45, 2.5, 90);
         //turn towards hub
-        drivetrain.turnPD(30, kpTurn45, kdTurn45, 2);
+        drivetrain.turnPD(50, kpTurn45, kdTurn45, 2);
+        drivetrain.gyroEncoderInch(1, 10, 1.5, 50);
         //deposit
         lift.setLift(3, 1);
-        drivetrain.turnPD(90, kpTurn45, kdTurn45, 2);
+        drivetrain.gyroEncoderInch(-1, 12, 1.5, 30);
+        drivetrain.turnPD(90, kpTurn45, kdTurn45, 1.5);
         //go into crater
         drivetrain.gyroEncoderInch(-1, 42, 3.5, 90);
         //intake.goatIntake(.85);
         //turn
         drivetrain.turnPD(45, kpTurn45, kdTurn45, 2);
         //forwards
-        drivetrain.gyroEncoderInch(-.6, 8, 1.5, 45);
-        //intake
-        intake.getElement(.85, 3);
+        drivetrain.getElementDrive(.6, -8, 1.5, 45, .65, 1.5);
+
     }
 }

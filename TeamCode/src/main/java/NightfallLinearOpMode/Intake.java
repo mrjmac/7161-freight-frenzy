@@ -55,7 +55,7 @@ public class Intake {
         runtime.reset();
         while (this.opMode.opModeIsActive() && !this.opMode.isStopRequested() && runtime.seconds() <= timeout) {
             intake.setPower(power);
-            if (color.green() > 100 && color.red() > 100)
+            if (color.green() > 60 && color.red() > 60)
             {
                 intake.setPower(0);
                 break;

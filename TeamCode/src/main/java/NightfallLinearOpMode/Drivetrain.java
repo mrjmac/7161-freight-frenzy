@@ -7,6 +7,7 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -25,10 +26,13 @@ public class Drivetrain {
     public DcMotor BR; //back right - [2 e1]
     public DcMotor MR; //middle right - [1 e1]
     public DcMotor FR; //front right - [0 e1]
+    public DcMotor intake;
 
 
     public CRServo duckL; //left duck - [port number]
     public CRServo duckR; //right duck - [port number]
+
+    public ColorSensor color;
 
     LinearOpMode opMode;
     private final String LOG_TAG = "DriveTrain";
@@ -36,6 +40,8 @@ public class Drivetrain {
 
     private Orientation angles;
     public BNO055IMU imu;
+    private boolean detect = false;
+
     private BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
 
 
@@ -49,9 +55,12 @@ public class Drivetrain {
         BL = this.opMode.hardwareMap.dcMotor.get("BL");
         ML = this.opMode.hardwareMap.dcMotor.get("ML");
         MR = this.opMode.hardwareMap.dcMotor.get("MR");
+        intake = this.opMode.hardwareMap.dcMotor.get("intake");
 
         duckL = this.opMode.hardwareMap.crservo.get("duckL");
         duckR = this.opMode.hardwareMap.crservo.get("duckR");
+
+        color = this.opMode.hardwareMap.colorSensor.get("color");
 
         this.opMode.telemetry.addData(LOG_TAG + "init", "finished init");
         this.opMode.telemetry.update();
@@ -64,13 +73,13 @@ public class Drivetrain {
         FL.setDirection(DcMotorSimple.Direction.REVERSE);
 
 
-
         FR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         BL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         BR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         FL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         ML.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         MR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
@@ -380,6 +389,69 @@ public class Drivetrain {
         return angleDiff;
     }
 
+    public void getElementDrive(double speed, double inches, double timeoutS, double heading, double intSpeed, double timeoutI) throws InterruptedException {
+        runtime.reset();
+        detect = false;
+        while (this.opMode.opModeIsActive() && !this.opMode.isStopRequested() && runtime.seconds() <= timeoutS) {
+            // Ticks is the math for the amount of inches, ticks is paired with getcurrentposition
+            double ticks = inches * 32;
+            double kP = speed / 29.3; //nice for 24 inches, should scale up to whatever movement up
+            heading = -heading;
+            //runtime isn't used, this is just a backup call which we don't need
+            //if the position is less than the number of inches, than it sets the motors to speed
+            double leftChange = 0;
+            double rightChange = 0;
+            double prevLeft = 0;
+            double prevRight = 0;
+            resetEncoders();
+            while (getEncoderAvg() <= ticks && this.opMode.opModeIsActive()) {
+                if (!detect)
+                    intake.setPower(intSpeed);
+                else
+                    intake.setPower(0);
+                if (color.green() > 60 && color.red() > 60 && !detect)
+                {
+                    detect = true;
+                }
+                double error = (ticks - getEncoderAvg()) / 32 ;
+                double ChangeP = error * kP;
+                double AngleDiff = getTrueDiff(heading);
+                double gyroScalePower = AngleDiff * .02;
+
+                double left = (ChangeP + gyroScalePower);
+                double right = (ChangeP - gyroScalePower);
+                if (runtime.seconds() > timeoutS)
+                    break;
+                double max = Math.max(Math.abs(left), Math.abs(right));
+                if (max > 1.0) {
+                    left /= max;
+                    right /= max;
+                }
+                startMotors(left, right);
+                this.opMode.telemetry.addData("MotorPowLeft:", left);
+                this.opMode.telemetry.addData("MotorPowRight:", right);
+                //     this.opMode.telemetry.addData("fudge:", fudgeFactor);
+                this.opMode.telemetry.addData("encoders:", getEncoderAvg());
+                this.opMode.telemetry.addData("error:", error);
+                this.opMode.telemetry.addData("changeP", ChangeP);
+                this.opMode.telemetry.addData("gyro", getTrueDiff(heading));
+                this.opMode.telemetry.addData("runtime:", runtime.seconds());
+                this.opMode.telemetry.addData("detect", detect);
+                this.opMode.telemetry.addData("red:", color.red());
+                this.opMode.telemetry.addData("green:", color.green());
+                this.opMode.telemetry.addData("intake", intake.getPower());
+                this.opMode.telemetry.update();
+                if (error < .25 || runtime.seconds() >= timeoutS || Math.abs(ChangeP) < .02) {
+                    stopMotors();
+                    break;
+                }
+            }
+            stopMotors();
+            break;
+        }
+
+
+    }
 
 
 
