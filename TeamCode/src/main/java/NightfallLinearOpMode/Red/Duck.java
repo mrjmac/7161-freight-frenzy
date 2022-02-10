@@ -63,7 +63,7 @@ public class Duck extends LinearOpMode {
         // CAROUSEL, PICK UP DUCK AND SCORE
         drivetrain.gyroEncoderInch(-.5, 42, 2.7, 62);
         drivetrain.duckStart(-1);
-        sleep(3450);
+        sleep(4000);
         //  drivetrain.duckStart(-.2);
         //sleep(800);
         intake.goatIntake(.5);

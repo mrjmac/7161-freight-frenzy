@@ -192,7 +192,7 @@ public class TankTeleOp extends NightfallOpMode {
                 macro2 = 1450;
                 break;
             case 4:
-                macro2 = 1600;
+                macro2 = 1700;
         }
 
         if (!manual) {
