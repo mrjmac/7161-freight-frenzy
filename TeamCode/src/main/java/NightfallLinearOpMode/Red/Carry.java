@@ -8,7 +8,7 @@ import NightfallLinearOpMode.Drivetrain;
 import NightfallLinearOpMode.Lift;
 import NightfallLinearOpMode.Vision;
 
-@Autonomous(name = "Red Carry", group = "red")
+@Autonomous(name = "Red Crater", group = "red")
 public class Carry extends LinearOpMode {
     private Drivetrain drivetrain;
     private Vision vision;
@@ -49,22 +49,24 @@ public class Carry extends LinearOpMode {
         idle();
         liftHeight = pos;
 
-        if (liftHeight != 3) {
+      /*  if (liftHeight != 3) {
             drivetrain.gyroEncoderInch(1, 30, 1.5, 0);
             sleep(100);
-            drivetrain.gyroEncoderInch(-1, 22, 1.5, 10);
-        } else {
-            drivetrain.gyroEncoderInch(1, 15, 1.5, 0);
-            drivetrain.turnPD(12.5, kpTurn5, kdTurn5, 2);
-            drivetrain.gyroEncoderInch(1, 12, 1.5, 7.5);
-            drivetrain.gyroEncoderInch(-1, 17.5, 1.5, 7.5);
-        }
+            drivetrain.gyroEncoderInch(-1, 22, 1.5, -10);
+       } else {
+
+       */
+        drivetrain.gyroEncoderInch(1, 15, 1.5, 0);
+        drivetrain.turnPD(12.5, kpTurn5, kdTurn5, 2);
+        drivetrain.gyroEncoderInch(1, 12, 1.5, 7.5);
+        drivetrain.gyroEncoderInch(-1, 17.5, 1.5, 7.5);
+        //  }
         drivetrain.turnPD(-30, kpTurn45, kdTurn45, 2);
         drivetrain.gyroEncoderInch(1, 19, 1.5, -30);
         lift.setLift(liftHeight, 1);
         drivetrain.gyroEncoderInch(-1, 6, 1, -30);
         drivetrain.turnPD(-90, kpTurn45, kdTurn45, 2);
-        drivetrain.gyroEncoderInch(-1, 42, 3.5, -90);
+        drivetrain.gyroEncoderInch(-1, 44, 3.5, -90);
         //intake.goatIntake(.85);
         drivetrain.turnPD(-45, kpTurn45, kdTurn45, 2);
         drivetrain.getElementDrive(-.95, 10, 1.5, -45, .65, 1.5);
