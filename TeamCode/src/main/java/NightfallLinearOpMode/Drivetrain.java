@@ -408,7 +408,7 @@ public class Drivetrain {
                 if (!detect)
                     intake.setPower(intSpeed);
                 else
-                    intake.setPower(0);
+                    intake.setPower(-1);
                 if (color.green() > 60 && color.red() > 60 && !detect)
                 {
                     detect = true;
@@ -443,9 +443,11 @@ public class Drivetrain {
                 this.opMode.telemetry.update();
                 if (error < .25 || runtime.seconds() >= timeoutS || Math.abs(ChangeP) < .02) {
                     stopMotors();
+                    intake.setPower(0);
                     break;
                 }
             }
+            intake.setPower(0);
             stopMotors();
             break;
         }
