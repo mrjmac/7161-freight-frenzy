@@ -77,7 +77,7 @@ public class Cycles extends LinearOpMode {
         drivetrain.turnPD(-45, kpTurn45, kdTurn45, 2);
         //forwards
         drivetrain.getElementDrive(-.7, 10, 1.5, -45, .85, 1.5);
-        drivetrain.getElementDrive(.7, 10, 1.5, -45, .85, 1.5);
+        drivetrain.getElementDrive(.7, 10, 1.5, -45, 0, 1.5);
         intake.goatIntake(0);
         //turn to back out
         drivetrain.turnPD(-90, kpTurn45, kdTurn45, 2);

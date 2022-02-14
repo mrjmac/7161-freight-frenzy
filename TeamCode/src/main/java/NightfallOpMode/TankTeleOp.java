@@ -15,6 +15,7 @@ public class TankTeleOp extends NightfallOpMode {
     int macroHeight = 3;
     boolean manual = false;
     boolean hatchDown = false;
+    boolean found = false;
     double hatchbruh = 0;
     double macro2 = 0;
     int motor = 1;
@@ -132,9 +133,14 @@ public class TankTeleOp extends NightfallOpMode {
         }
         if (gamepad1.left_bumper){
             intake.setPower(0);
+            found = false;
         }
-        if (gamepad1.left_bumper && gamepad1.right_bumper) {
+        if ((gamepad1.left_bumper && gamepad1.right_bumper) || found == true) {
             intake.setPower(-intakeSpeed);
+        }
+        if (color.red() > 60 && color.green() > 60)
+        {
+            found = true;
         }
 
 
@@ -186,7 +192,7 @@ public class TankTeleOp extends NightfallOpMode {
                 macro2 = 130;
                 break;
             case 2:
-                macro2 = 550;
+                macro2 = 700;
                 break;
             case 3:
                 macro2 = 1450;
@@ -207,10 +213,12 @@ public class TankTeleOp extends NightfallOpMode {
                     if (lift.getCurrentPosition() < (macro2 - 50)) {//heightModifier * (macroHeight - 1) - 50)) {
                         setLiftReal(macro2);
                     } else {
-                        if (macroHeight != 4 || macroHeight != 2) {
+                        if (macroHeight == 3 || macroHeight == 1) {
                             hatchDown();
+                            telemetry.addData("height:", "full");
                         } else {
                             hatchHalf();
+                            telemetry.addData("height:", "half");
                         }
                         lift.setPower(.1);
                         if (macro.milliseconds() > 750) {

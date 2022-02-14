@@ -82,9 +82,9 @@ public class Duck extends LinearOpMode {
         drivetrain.gyroEncoderInch(1, 12, 1.3, 30);
         intake.goatIntake(0);
         drivetrain.turnPD(-55, kpTurn90, kdTurn90, 2.3);
-        drivetrain.gyroEncoderInch(1, 25.5, 1.6, -55);
+        drivetrain.gyroEncoderInch(1, 21, 1.6, -55);
         lift.setLift(3, 1);
-        drivetrain.gyroEncoderInch(-1, 6.5, 1.1, -55);
+        drivetrain.gyroEncoderInch(-1, 3, 1.1, -55);
         drivetrain.turnPD(-90, kpTurn45, kdTurn45,2);
         drivetrain.gyroEncoderInch(-1, 30, 1.4, -90);
 

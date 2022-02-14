@@ -236,7 +236,7 @@ public abstract class NightfallOpMode extends OpMode {
     }
 
     public void hatchHalf() {
-        hatch.setPosition(.68);
+        hatch.setPosition(.74);
     }
 
 
