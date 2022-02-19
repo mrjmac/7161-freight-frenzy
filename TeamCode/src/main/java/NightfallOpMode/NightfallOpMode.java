@@ -205,6 +205,22 @@ public abstract class NightfallOpMode extends OpMode {
         macro.reset();
     }
 
+    public void setLiftCap(double macro2) {
+        double ticks = macro2;//(macroHeight - 1) * heightModifier;
+        double kP = 1 / 10.0;
+        if (getLiftEncoder() <= ticks - 100) {
+            //     double error = (ticks - getLiftEncoder());
+            //  double ChangeP = error * kP;
+            //  double power = ChangeP;
+            //  power /= power;
+            lift.setPower(.4);
+        /*   if (error < 50 || Math.abs(ChangeP) < .02) {
+                lift.setPower(0.06);
+            }
+         */
+        }
+        macro.reset();
+    }
 
 
 

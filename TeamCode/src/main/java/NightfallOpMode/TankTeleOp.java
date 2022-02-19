@@ -2,6 +2,7 @@ package NightfallOpMode;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import NightfallLinearOpMode.Intake;
@@ -22,9 +23,13 @@ public class TankTeleOp extends NightfallOpMode {
     public enum LiftState {
         LIFT_START,
         LIFT_RAISE,
-        LIFT_LOWER
+        LIFT_LOWER,
+        LIFT_CAP,
+        LIFT_CAPHIGH,
+        LIFT_CAPEDIT
     }
     int heightModifier = 610;
+    int capHeight = 105;
 
     ElapsedTime capbruh = new ElapsedTime();
     ElapsedTime heightMod = new ElapsedTime();
@@ -45,11 +50,9 @@ public class TankTeleOp extends NightfallOpMode {
     */
 
         if (gamepad1.right_trigger > 0.1) {
-            speedControl = .5;
-        } else if (gamepad1.left_trigger > 0.1) {
-            speedControl = .4;
+            speedControl = .3;
         } else {
-            speedControl = 1;
+            speedControl = .9;
         }
 
 
@@ -94,6 +97,9 @@ public class TankTeleOp extends NightfallOpMode {
         telemetry.addData("Red", color.red());
         telemetry.addData("Green", color.green());
         telemetry.addData("Blue", color.blue());
+        telemetry.addData("liftheight:", lift.getCurrentPosition());
+        telemetry.addData("2rightjoystick:", gamepad2.right_stick_y);
+        telemetry.addData("liftpower:", lift.getPower());
         //telemetry.addData("capbruhTime:", capbruh.milliseconds());
         /*
         telemetry.addData("leftFront:", FL.getCurrentPosition());
@@ -208,6 +214,40 @@ public class TankTeleOp extends NightfallOpMode {
                         liftActive = true;
                         liftState = LiftState.LIFT_RAISE;
                     }
+                    if (gamepad2.right_bumper && !liftActive) {
+                        liftActive = true;
+                        liftState = LiftState.LIFT_CAP;
+                    }
+                    break;
+                case LIFT_CAP:
+                    if (lift.getCurrentPosition() < capHeight)
+                        setLiftCap(capHeight);
+                    else {
+                        hatchHalf();
+                        lift.setPower(.1);
+                    }
+                    if (gamepad2.right_bumper && macro.milliseconds() > 750) {
+                        liftState = LiftState.LIFT_CAPHIGH;
+                        macro.reset();
+                    }
+                    break;
+                case LIFT_CAPHIGH:
+                    if (lift.getCurrentPosition() < 1750) {
+                        setLiftReal(1750);
+                    } else {
+                        liftState = LiftState.LIFT_CAPEDIT;
+                    }
+                    break;
+                case LIFT_CAPEDIT:
+                    if (gamepad2.right_stick_y < -.1) {
+                        lift.setPower(.4);
+                    } else if (gamepad2.right_stick_y > .1) {
+                        lift.setPower(-.2);
+                    } else {
+                        lift.setPower(.1);
+                    }
+                    if (gamepad2.right_bumper && macro.milliseconds() > 750)
+                        liftState = LiftState.LIFT_LOWER;
                     break;
                 case LIFT_RAISE:
                     if (lift.getCurrentPosition() < (macro2 - 50)) {//heightModifier * (macroHeight - 1) - 50)) {
@@ -222,6 +262,7 @@ public class TankTeleOp extends NightfallOpMode {
                         }
                         lift.setPower(.1);
                         if (macro.milliseconds() > 750) {
+                            macro.reset();
                             liftState = LiftState.LIFT_LOWER;
                         }
                     }
@@ -247,6 +288,7 @@ public class TankTeleOp extends NightfallOpMode {
                         break;
                     }
                     liftState = LiftState.LIFT_START;
+                    lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                     break;
                 default:
                     liftState = LiftState.LIFT_START;
@@ -276,6 +318,11 @@ public class TankTeleOp extends NightfallOpMode {
             } else if (gamepad2.a && macro.milliseconds() > 100 && !hatchDown) {
                 macro.reset();
                 hatchDown();
+                hatchDown = true;
+            }
+            else if (gamepad2.b && macro.milliseconds() > 100 && !hatchDown) {
+                macro.reset();
+                hatchHalf();
                 hatchDown = true;
             }
         }
