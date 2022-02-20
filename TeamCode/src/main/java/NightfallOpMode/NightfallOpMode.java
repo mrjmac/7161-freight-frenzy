@@ -206,9 +206,9 @@ public abstract class NightfallOpMode extends OpMode {
     }
 
     public void setLiftCap(double macro2) {
-        double ticks = macro2;//(macroHeight - 1) * heightModifier;
+       // double ticks = macro2;//(macroHeight - 1) * heightModifier;
         double kP = 1 / 10.0;
-        if (getLiftEncoder() <= ticks - 100) {
+        if (getLiftEncoder() <= macro2) {
             //     double error = (ticks - getLiftEncoder());
             //  double ChangeP = error * kP;
             //  double power = ChangeP;
@@ -253,6 +253,12 @@ public abstract class NightfallOpMode extends OpMode {
 
     public void hatchHalf() {
         hatch.setPosition(.74);
+    }
+    public void hatchCapUp() {
+        hatch.setPosition(.77);
+    }
+    public void hatchCapDown() {
+        hatch.setPosition(.725);
     }
 
 

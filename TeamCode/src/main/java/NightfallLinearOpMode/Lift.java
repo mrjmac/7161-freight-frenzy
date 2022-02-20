@@ -69,8 +69,10 @@ public class Lift {
             ticks = 200;
         } else if (height == 2) {
             ticks = 700;
-        } else {
+        } else if (height == 3) {
             ticks = 1450;
+        } else {
+            ticks = 1650;
         }
 
         //int heightModifier = 700;

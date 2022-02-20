@@ -29,13 +29,13 @@ public class TestAny extends LinearOpMode {
     public static double angle = 90;
     public static double kpTurn5 = 0.2386; //PID
     public static double kdTurn5 = 0.1; //PID
-    public static double kpTurn45 = 0.405;
-    public static double kdTurn45 = 0.05;
+    public static double kpTurn45 = 0.119;
+    public static double kdTurn45 = 0.49;
     public static double timeoutTurn = 1.5;
-    public static double kpTurn90 = 0.176;
-    public static double kdTurn90 = 0.07;
-    public static double kpTurn180 = 0.129;
-    public static double kdTurn180 = 0.00;
+    public static double kpTurn90 = 0.09;
+    public static double kdTurn90 = 0.31;
+    public static double kpTurn180 = 0.06;
+    public static double kdTurn180 = 0.25;
     public static double integral = 0;
 
 
@@ -61,7 +61,11 @@ public class TestAny extends LinearOpMode {
 
         if (isStopRequested()) return;
         while (!isStopRequested()) {
-           lift.setLift(3, 1);
+            for (int i = 1; i < 3; i++) {
+                drivetrain.turnPD(i * 180, kpTurn180, kdTurn180, 5);
+                sleep(4000);
+            }
+       //    lift.setLift(3, 1);
            //telemetry.addData("angle", drivetrain.getGyroYaw());
           //  drivetrain.arcTurnPD(90, kpTurn90, kdTurn90,5);
         }

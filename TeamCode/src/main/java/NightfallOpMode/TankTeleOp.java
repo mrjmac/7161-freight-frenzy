@@ -29,7 +29,8 @@ public class TankTeleOp extends NightfallOpMode {
         LIFT_CAPEDIT
     }
     int heightModifier = 610;
-    int capHeight = 105;
+    int capHeight = 350;
+    boolean achieved = false;
 
     ElapsedTime capbruh = new ElapsedTime();
     ElapsedTime heightMod = new ElapsedTime();
@@ -216,20 +217,29 @@ public class TankTeleOp extends NightfallOpMode {
                     }
                     if (gamepad2.right_bumper && !liftActive) {
                         liftActive = true;
+                        achieved = false;
                         liftState = LiftState.LIFT_CAP;
                     }
                     break;
                 case LIFT_CAP:
-                    if (lift.getCurrentPosition() < capHeight)
+                    if (lift.getCurrentPosition() < capHeight && !achieved) {
                         setLiftCap(capHeight);
-                    else {
-                        hatchHalf();
-                        lift.setPower(.1);
+                    } else {
+                        hatchCapDown();
+                        if (gamepad2.right_stick_y > .1)
+                            lift.setPower(-.05);
+                        else if (gamepad2.right_stick_y < -.1)
+                            lift.setPower(.2);
+                        else
+                            lift.setPower(.1);
                     }
+
                     if (gamepad2.right_bumper && macro.milliseconds() > 750) {
                         liftState = LiftState.LIFT_CAPHIGH;
                         macro.reset();
                     }
+                    if (lift.getCurrentPosition() > capHeight)
+                        achieved = true;
                     break;
                 case LIFT_CAPHIGH:
                     if (lift.getCurrentPosition() < 1750) {
@@ -237,6 +247,7 @@ public class TankTeleOp extends NightfallOpMode {
                     } else {
                         liftState = LiftState.LIFT_CAPEDIT;
                     }
+                    hatchCapUp();
                     break;
                 case LIFT_CAPEDIT:
                     if (gamepad2.right_stick_y < -.1) {
