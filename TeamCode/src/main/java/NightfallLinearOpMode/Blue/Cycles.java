@@ -70,22 +70,23 @@ public class Cycles extends LinearOpMode {
         drivetrain.gyroEncoderInch(-1, 17.5, 1.5, -12.5);
         //  }
         drivetrain.turnPD(30, kpTurn45, kdTurn45, 2);
-        drivetrain.gyroEncoderInch(1, 17, 1.5, 30);
+        drivetrain.gyroEncoderInch(1, 16, 1.5, 30);
         lift.setLift(liftHeight, 1);
         //   drivetrain.gyroEncoderInch(-1, 10, 1, 0);
         //   drivetrain.turnPD(90, kpTurn45, kdTurn45, 2);
-        drivetrain.arcInch(-1, 54, 2.5, 90);
+        drivetrain.arcInchStraight(-1, 54, 2.5, 90);
         //intake.goatIntake(.85);
-        drivetrain.turnPD(45, kpTurn45, kdTurn45, 2);
-        drivetrain.getElementDrive(-.95, 8, 1.5, 45, .65, 2);
-        drivetrain.arcInch(.95, 63, 3, 90);
-        drivetrain.turnPD(45, kpTurn45, kdTurn45, 2);
+        drivetrain.turnPD(52.5, kpTurn45, kdTurn45, 2);
+        drivetrain.getElementDrive(-.95, 6.5, 1.5, 52.5, .85, 2);
+        drivetrain.arcInch(.95, 58, 3, 90);
+        drivetrain.turnPD(25, kpTurn45, kdTurn45, 2);
         lift.setLift(4, 1);
-        drivetrain.arcInch(-1, 54, 2.5, 90);
-        drivetrain.turnPD(45, kpTurn45, kdTurn45, 2);
-        drivetrain.getElementDrive(-.95, 10, 1.5, 45, .65, 2);
-        drivetrain.arcInch(.95, 62, 3, 90);
-        drivetrain.turnPD(45, kpTurn45, kdTurn45, 2);
+        drivetrain.turnPD(90, kpTurn45, kdTurn90, 90);
+        drivetrain.arcInchStraight(-1, 54, 2.5, 90);
+        drivetrain.turnPD(37.5, kpTurn45, kdTurn45, 2);
+        drivetrain.getElementDrive(-.95, 8, 1.5, 37.5, .5, 2);
+        drivetrain.gyroEncoderInch(.95, 62, 3, 90);
+        drivetrain.turnPD(25, kpTurn45, kdTurn45, 2);
         lift.setLift(4, 1);
         drivetrain.arcInch(-1, 54, 3.5, 100);
     }

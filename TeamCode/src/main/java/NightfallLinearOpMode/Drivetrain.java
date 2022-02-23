@@ -277,9 +277,80 @@ public class Drivetrain {
             stopMotors();
             break;
         }
-
-
     }
+
+    public void arcInchStraight(double speed, double inches, double timeoutS, double heading) throws InterruptedException {
+        runtime.reset();
+        while (this.opMode.opModeIsActive() && !this.opMode.isStopRequested() && runtime.seconds() <= timeoutS) {
+            // Ticks is the math for the amount of inches, ticks is paired with getcurrentposition
+            double ticks = inches * 32;
+            double kP = speed / 29.3; //nice for 24 inches, should scale up to whatever movement up
+            heading = -heading;
+            //runtime isn't used, this is just a backup call which we don't need
+            //if the position is less than the number of inches, than it sets the motors to speed
+            double leftChange = 0;
+            double rightChange = 0;
+            double prevLeft = 0;
+            double prevRight = 0;
+
+            resetEncoders();
+            while (getEncoderAvg() <= ticks && this.opMode.opModeIsActive()) {
+                double error = (ticks - getEncoderAvg()) / 32;
+                double ChangeP = error * kP;
+                double AngleDiff = getTrueDiff(heading);
+
+                // double multiplierR = 1;
+                //double multiplierL = 1;
+                // double fudgeFactor = (1.0 - AngleDiff / 40.0)/.93;
+                double gyroScalePower = AngleDiff * .0325;
+
+                /*
+                if (Math.abs(AngleDiff) > 2) {
+                    multiplierR = 1.05;//more power left positive
+                    multiplierL = 0.95;
+                    GyroScalePower = 0;
+                }
+                else if ((AngleDiff) < -2) {
+                    multiplierL = 1.05;
+                    multiplierR = 0.95;
+                    GyroScalePower = 0;
+                }
+                else {
+                    multiplierL = 1;
+                    multiplierR = 1;
+                    GyroScalePower = AngleDiff * .02;
+                }
+
+                 */
+                double left = (ChangeP + gyroScalePower);
+                double right = (ChangeP - gyroScalePower);
+                if (runtime.seconds() > timeoutS)
+                    break;
+                double max = Math.max(Math.abs(left), Math.abs(right));
+                if (max > 1.0) {
+                    left /= max;
+                    right /= max;
+                }
+                startMotors(left, right);
+                this.opMode.telemetry.addData("MotorPowLeft:", left);
+                this.opMode.telemetry.addData("MotorPowRight:", right);
+                //     this.opMode.telemetry.addData("fudge:", fudgeFactor);
+                this.opMode.telemetry.addData("encoders:", getEncoderAvg());
+                this.opMode.telemetry.addData("error:", error);
+                this.opMode.telemetry.addData("changeP", ChangeP);
+                this.opMode.telemetry.addData("gyro", getTrueDiff(heading));
+                this.opMode.telemetry.addData("runtime:", runtime.seconds());
+                this.opMode.telemetry.update();
+                if (error < .25 || runtime.seconds() >= timeoutS || Math.abs(ChangeP) < .02) {
+                    stopMotors();
+                    break;
+                }
+            }
+            stopMotors();
+            break;
+        }
+    }
+
     public void turnPI(double angle, double p, double i, double timeout) {
         while (this.opMode.opModeIsActive() && !this.opMode.isStopRequested()) {
             runtime.reset();

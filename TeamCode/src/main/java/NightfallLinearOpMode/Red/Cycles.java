@@ -96,7 +96,7 @@ public class Cycles extends LinearOpMode {
         //turn
         drivetrain.turnPD(-45, kpTurn45, kdTurn45, 2);
         //forwards
-        drivetrain.getElementDrive(.6, -8, 1.5, -45, .65, 1.5);
+        drivetrain.getElementDrive(.6, -8, 1.5, -45, .65, 1.5); // bing bong
 
     }
 }
