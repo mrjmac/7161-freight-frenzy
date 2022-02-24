@@ -605,8 +605,8 @@ public class Drivetrain {
     //---------------------------------------DUCKS--------------------------------------------------
 
     public void duckStart(double pow) {
-        duckR.setPower(pow * .8);
-        duckL.setPower(-pow * .8);
+        duckR.setPower(-pow * .85);
+        duckL.setPower(pow * .85);
     }
 
     public void duckStop() {
