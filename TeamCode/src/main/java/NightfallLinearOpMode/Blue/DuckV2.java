@@ -39,13 +39,6 @@ public class DuckV2 extends LinearOpMode {
 
         while (!isStarted()) {
             pos = vision.getPosNewMethod();
-            if (pos == 1)
-                pos = 2;
-            else if
-            (pos == 2)
-                pos = 3;
-            else
-                pos = 1;
             telemetry.addData("team marker pos: ", pos);
             telemetry.update();
         }

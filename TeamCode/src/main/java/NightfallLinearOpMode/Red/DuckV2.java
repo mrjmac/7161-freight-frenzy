@@ -39,6 +39,13 @@ public class DuckV2 extends LinearOpMode {
 
         while (!isStarted()) {
             pos = vision.getPosNewMethod();
+            if (pos == 1)
+                pos = 2;
+            else if
+            (pos == 2)
+                pos = 3;
+            else
+                pos = 1;
             telemetry.addData("team marker pos: ", pos);
             telemetry.update();
         }
@@ -56,22 +63,23 @@ public class DuckV2 extends LinearOpMode {
 
      */
         drivetrain.gyroEncoderInch(1, 15, 1.5, 0);
-        drivetrain.turnPD(-15, kpTurn5, kdTurn5, 2);
-        drivetrain.gyroEncoderInch(.3, 39, 1.5, -15);
-        drivetrain.gyroEncoderInch(-1, 21, 1.5, -15);
+        drivetrain.turnPD(-20, kpTurn5, kdTurn5, 2);
+        drivetrain.gyroEncoderInch(.3, 39, 1.5, -20);
+        drivetrain.gyroEncoderInch(-1, 21, 1.5, -20);
         //   lift.capDown();
         //intake.intakeDown();
         //    sleep(300);
         //     lift.capUp();
-        drivetrain.turnPD(46, kpTurn45, kdTurn45, 1.5);
-        drivetrain.gyroEncoderInch(1, 15, 2, 46);
+        drivetrain.turnPD(42, kpTurn45, kdTurn45, 1.5);
+        drivetrain.gyroEncoderInch(1, 12, 2, 42);
         lift.setLift(liftHeight, 1);
         // CAROUSEL, PICK UP DUCK AND SCORE
-        drivetrain.gyroEncoderInch(-.5, 34, 2.7, 55);
+        drivetrain.gyroEncoderInch(-.5, 36, 2.7, 62);
         drivetrain.turnPD(22.5, kpTurn45, kdTurn45, 2);
-        drivetrain.gyroEncoderInch(-.5, 15.5, 1, 25);
+        drivetrain.gyroEncoderInch(-.5, 12, 1, 23.5);
         drivetrain.duckStart(-1);
-        sleep(4500);
+        intake.goatIntake(.4);
+        sleep(3750);
         intake.goatIntake(.7);
         //  drivetrain.duckStart(-.2);
         //sleep(800);
@@ -85,11 +93,12 @@ public class DuckV2 extends LinearOpMode {
         drivetrain.gyroEncoderInch(-1, 9, 1, 0);
         drivetrain.gyroEncoderInch(1, 20, 2, 0);
         intake.goatIntake(0);
-        drivetrain.turnPD(70, kpTurn45, kpTurn45, 2);
-        drivetrain.gyroEncoderInch(1, 24, 1.5, 70);
+        drivetrain.turnPD(65, kpTurn45, kpTurn45, 2);
+        drivetrain.gyroEncoderInch(1, 23, 1.5, 65);
         lift.setLift(4, 1);
         //drivetrain.turnPD(-90, kpTurn45, kdTurn45, 2);
-        drivetrain.gyroEncoderInch(-1, 31, 3, 80);
+        drivetrain.gyroEncoderInch(-1, 10, 1, 65);
         drivetrain.turnPD(90, kpTurn5, kdTurn5, 1);
+        drivetrain.gyroEncoderInch(-1, 26, 2, 94);
     }
 }
