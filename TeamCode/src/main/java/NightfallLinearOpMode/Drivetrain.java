@@ -471,6 +471,42 @@ public class Drivetrain {
         }
     }
 
+    public void setAngle(double angle, double p, double d, double timeout)
+    {
+        runtime.reset();
+        while (this.opMode.opModeIsActive() && !this.opMode.isStopRequested() && runtime.seconds() <= timeout) {
+            double kP = p / 15;
+            double kD = d / .70;
+            double currentTime = runtime.milliseconds();
+            double pastTime = 0;
+            double prevAngleDiff = getTrueDiff(-angle);
+            double angleDiff = prevAngleDiff;
+            double changePID;
+            while (runtime.seconds() < timeout && this.opMode.opModeIsActive()) {
+                pastTime = currentTime;
+                currentTime = runtime.milliseconds();
+                double dT = currentTime - pastTime;
+                angleDiff = getTrueDiff(-angle);
+                changePID = (angleDiff * kP) + ((angleDiff - prevAngleDiff) / dT * kD);
+                if (changePID <= 0) {
+                    startMotors(changePID - .10, -changePID + .10);
+                } else {
+                    startMotors(changePID + .10, -changePID - .10);
+                }
+                this.opMode.telemetry.addData("P", (angleDiff * kP));
+                this.opMode.telemetry.addData("D", ((Math.abs(angleDiff) - Math.abs(prevAngleDiff)) / dT * kD));
+                this.opMode.telemetry.addData("angle:", getGyroYaw());
+                this.opMode.telemetry.addData("error", angleDiff);
+                this.opMode.telemetry.update();
+                if (runtime.seconds() > timeout)
+                    break;
+                prevAngleDiff = angleDiff;
+            }
+            stopMotors();
+        }
+
+    }
+
     public void arcTurnPD(double angle, double p, double d, double timeout) {
         while (this.opMode.opModeIsActive() && !this.opMode.isStopRequested()) {
             runtime.reset();
