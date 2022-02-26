@@ -61,7 +61,8 @@ public class TestAny extends LinearOpMode {
 
         if (isStopRequested()) return;
         while (!isStopRequested()) {
-            drivetrain.setAngle(90, kpTurn45, kdTurn45, 20);
+            drivetrain.gyroEncoderInch(.1, 80, 20, 0);
+        //    drivetrain.setAngle(90, kpTurn45, kdTurn45, 20);
        //    lift.setLift(3, 1);
            //telemetry.addData("angle", drivetrain.getGyroYaw());
           //  drivetrain.arcTurnPD(90, kpTurn90, kdTurn90,5);
