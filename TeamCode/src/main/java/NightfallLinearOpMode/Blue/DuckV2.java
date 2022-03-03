@@ -60,11 +60,11 @@ public class DuckV2 extends LinearOpMode {
         drivetrain.gyroEncoderInch(.3, 39, 1.5, 15);
         drivetrain.gyroEncoderInch(-1, 21, 1.5, 15);
      //   lift.capDown();
-        //intake.intakeDown();
+        //intake.intakeDown();d
     //    sleep(300);
    //     lift.capUp();
         drivetrain.turnPD(-46, kpTurn45, kdTurn45, 1.5);
-        drivetrain.gyroEncoderInch(1, 15, 2, -46);
+        drivetrain.gyroEncoderInch(1, 13.5, 2, -46);
         lift.setLift(liftHeight, 1);
         // CAROUSEL, PICK UP DUCK AND SCORE
         drivetrain.gyroEncoderInch(-.5, 34, 2.7, -55);

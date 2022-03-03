@@ -212,7 +212,7 @@ public class Drivetrain {
         while (this.opMode.opModeIsActive() && !this.opMode.isStopRequested() && runtime.seconds() <= timeoutS) {
             // Ticks is the math for the amount of inches, ticks is paired with getcurrentposition
             double ticks = inches * 32;
-            double kP = speed / 29.3; //nice for 24 inches, should scale up to whatever movement up
+            double kP = speed / 25; //nice for 24 inches, should scale up to whatever movement up
             heading = -heading;
             //runtime isn't used, this is just a backup call which we don't need
             //if the position is less than the number of inches, than it sets the motors to speed
@@ -284,7 +284,7 @@ public class Drivetrain {
         while (this.opMode.opModeIsActive() && !this.opMode.isStopRequested() && runtime.seconds() <= timeoutS) {
             // Ticks is the math for the amount of inches, ticks is paired with getcurrentposition
             double ticks = inches * 32;
-            double kP = speed / 29.3; //nice for 24 inches, should scale up to whatever movement up
+            double kP = speed / 25; //nice for 24 inches, should scale up to whatever movement up
             heading = -heading;
             //runtime isn't used, this is just a backup call which we don't need
             //if the position is less than the number of inches, than it sets the motors to speed

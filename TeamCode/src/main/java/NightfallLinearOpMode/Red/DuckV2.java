@@ -8,7 +8,7 @@ import NightfallLinearOpMode.Drivetrain;
 import NightfallLinearOpMode.Lift;
 import NightfallLinearOpMode.Vision;
 
-@Autonomous(name = "Red DuckV2", group = "blue")
+@Autonomous(name = "Red DuckV2", group = "red")
 public class DuckV2 extends LinearOpMode {
 
     private Drivetrain drivetrain;
@@ -71,7 +71,7 @@ public class DuckV2 extends LinearOpMode {
         //    sleep(300);
         //     lift.capUp();
         drivetrain.turnPD(42, kpTurn45, kdTurn45, 1.5);
-        drivetrain.gyroEncoderInch(1, 12, 2, 42);
+        drivetrain.gyroEncoderInch(1, 10.5, 2, 42);
         lift.setLift(liftHeight, 1);
         // CAROUSEL, PICK UP DUCK AND SCORE
         drivetrain.gyroEncoderInch(-.5, 36, 2.7, 62);
