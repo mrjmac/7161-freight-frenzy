@@ -56,15 +56,15 @@ public class DuckV2 extends LinearOpMode {
 
      */
         drivetrain.gyroEncoderInch(1, 15, 1.5, 0);
-        drivetrain.turnPD(15, kpTurn5, kdTurn5, 2);
-        drivetrain.gyroEncoderInch(.3, 39, 1.5, 15);
-        drivetrain.gyroEncoderInch(-1, 21, 1.5, 15);
+        drivetrain.turnPD(18, kpTurn5, kdTurn5, 2);
+        drivetrain.gyroEncoderInch(.3, 39, 1.5, 18);
+        drivetrain.gyroEncoderInch(-1, 21, 1.5, 18);
      //   lift.capDown();
         //intake.intakeDown();d
     //    sleep(300);
    //     lift.capUp();
         drivetrain.turnPD(-46, kpTurn45, kdTurn45, 1.5);
-        drivetrain.gyroEncoderInch(1, 12, 2, -46);
+        drivetrain.gyroEncoderInch(1, 13, 2, -46);
         lift.setLift(liftHeight, 1);
         // CAROUSEL, PICK UP DUCK AND SCORE
         drivetrain.gyroEncoderInch(-.5, 32, 2.7, -55);
@@ -72,6 +72,7 @@ public class DuckV2 extends LinearOpMode {
         drivetrain.gyroEncoderInch(-.5, 15.5, 1, -25);
         drivetrain.duckStart(-1);
         lift.setLift(2, 1);
+        intake.goatIntake(.4);
         sleep(4500);
         intake.goatIntake(.7);
         //  drivetrain.duckStart(-.2);
@@ -90,7 +91,7 @@ public class DuckV2 extends LinearOpMode {
         drivetrain.gyroEncoderInch(1, 22, 1.5, -75);
         lift.setLift(4, 1);
         //drivetrain.turnPD(-90, kpTurn45, kdTurn45, 2);
-        drivetrain.gyroEncoderInch(-1, 31, 3, -100);
+        drivetrain.gyroEncoderInch(-1, 27, 3, -80);
         drivetrain.turnPD(-90, kpTurn5, kdTurn5, 1);
     }
 }
